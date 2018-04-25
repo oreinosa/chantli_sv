@@ -27,7 +27,6 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 import { SortByPipe } from './pipes/sort-by.pipe';
-import { AgentsSelectComponent } from './components/agents-select/agents-select.component';
 import { CapitalizePipe } from './pipes/capitalize.pipe';
 
 @NgModule({
@@ -75,6 +74,6 @@ import { CapitalizePipe } from './pipes/capitalize.pipe';
     MatDialogModule,
     MatProgressSpinnerModule,
   ],
-  declarations: [SortByPipe, AgentsSelectComponent, CapitalizePipe],
+  declarations: [SortByPipe, CapitalizePipe],
 })
 export class SharedModule { }
