@@ -1,0 +1,12 @@
+.mat-icon{
+  margin-right: 10px;
+}
+.active, .mat-list-item:hover{
+  background-color: rgba(0,0,0,0.1);
+}
+a{
+  text-decoration: none;
+}
+a:active{
+  text-decoration: none;
+}

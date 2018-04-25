@@ -1,0 +1,25 @@
+.navigation .mat-button{
+  text-decoration: none;
+}
+.navigation .mat-button.active{
+  color: black;
+}
+.mat-toolbar{
+  position: fixed;
+  z-index: 99;
+}
+.app-title, .menu-button, .logo{
+  margin-right: 10px;
+}
+.logo{
+  margin-top: 5px;
+  margin-bottom: 5px;
+  height: 60px ;
+}
+.home {
+  text-decoration: none;
+  color: white;
+}
+.home.active {
+  color: black;
+}

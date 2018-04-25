@@ -1,20 +1,39 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
-import { AppRoutingModule } from './app-routing.module';
+import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 
+import { SharedModule } from './shared/shared.module';
+import { CoreModule } from './core/core.module';
+import { AuthModule } from './auth/auth.module';
+import { AdminModule } from './admin/admin.module';
+
+import { AuthService } from './auth/auth.service';
+import { AuthGuard } from './auth/auth.guard';
+import { NotificationsService } from './notifications/notifications.service';
+import { AppRoutingModule } from './app-routing.module';
+
+import { AngularFireModule } from 'angularfire2';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireStorageModule } from 'angularfire2/storage';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { environment } from '../environments/environment';
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
   imports: [
     BrowserModule,
+    AngularFireModule.initializeApp(environment.firebase), // imports firebase/app needed for everything
+    AngularFirestoreModule.enablePersistence(), // imports firebase/firestore, only needed for database features
+    AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
+    AngularFireStorageModule, // imports firebase/storage only needed for storage features
+    SharedModule,
+    CoreModule,
+    AuthModule,
+    AdminModule,
     AppRoutingModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  declarations: [AppComponent],
+  bootstrap: [AppComponent],
+  providers: [AuthService, AuthGuard, NotificationsService]
 })
 export class AppModule { }

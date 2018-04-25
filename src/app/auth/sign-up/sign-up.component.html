@@ -1,0 +1,33 @@
+<div class="row">
+	<div class="col-12 col-sm-9 col-md-7 col-lg-4 mx-auto text-center">
+		<mat-card class="bg-light pb-5 pt-4">
+			<mat-card-content class='p-5'>
+				<form #f='ngForm' (ngSubmit)='onSubmit(f.value)'>
+					<div class="form">
+						<div class="form-title mb-5">
+							<h4>Sign up</h4>
+							<br>
+							<img src="goo.gl/GJas2y" alt="logo" class="img-fluid">
+						</div>
+						<div class="form-content my-3" *ngIf='signUp'>
+							<mat-form-field class="full-width">
+								<input matInput type="text" placeholder='Name' id='name' [(ngModel)]='signUp.name' name='name' required>
+							</mat-form-field>
+							<mat-form-field class="full-width">
+								<input matInput type="email" placeholder='Email address' id='email' [(ngModel)]='signUp.email' name='email' required email>
+							</mat-form-field>
+							<mat-form-field class="full-width">
+								<input matInput type="password" placeholder='Password' id='password' [(ngModel)]='signUp.password' name='password' required>
+							</mat-form-field>
+						</div>
+						<button type='submit' mat-button>Sign up</button>
+					</div>
+				</form>
+				<hr>
+				<div class="actions-buttons">
+					<button mat-button type='button' routerLink='/sign-in'>Already registered?</button>
+				</div>
+			</mat-card-content>
+		</mat-card>
+	</div>
+</div>

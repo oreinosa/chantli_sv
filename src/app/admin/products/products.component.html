@@ -1,0 +1,18 @@
+<div class="row">
+	<div class="col-12">
+		<mat-card>
+			<mat-card-content>
+				<nav mat-tab-nav-bar>
+					<a mat-tab-link *ngFor="let link of links" [routerLink]="link.route" routerLinkActive #rla="routerLinkActive" [active]="rla.isActive">
+            <mat-icon>{{ link.icon }}</mat-icon>
+						{{ link.label }}
+					</a>
+				</nav>
+			</mat-card-content>
+		</mat-card>
+	</div>
+  <div class="col-12">
+    <!-- {{ links | json}} -->
+    <router-outlet></router-outlet>
+  </div>
+</div>

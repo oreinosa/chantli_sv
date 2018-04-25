@@ -1,0 +1,16 @@
+<form #f='ngForm' (ngSubmit)='onSubmit(f.value);'>
+	<ng-container *ngIf='!f?.submitted; else loading'>
+		<h4>Agregar categoría</h4>
+		<mat-form-field class="form-group">
+			<input matInput type="text" placeholder='Nombre' [(ngModel)]='object.name' name='name' id='name'>
+		</mat-form-field>
+		<mat-form-field>
+			<textarea matInput rows='3' placeholder='Descripción' [(ngModel)]='object.description' name='description' id='description'></textarea>
+		</mat-form-field>
+		<button mat-button type='submit'>Agregar</button>
+		<button mat-button type='button' routerLink='../'>Atrás</button>
+	</ng-container>
+	<ng-template #loading>
+		<mat-spinner class="col-12 mx-auto"></mat-spinner>
+	</ng-template>
+</form>
