@@ -2,6 +2,7 @@ export interface SignUp {
   name?: string;
   email?: string;
   password?: string;
+  workplace?: string;
 }
 
 export class SignUp {
@@ -9,5 +10,6 @@ export class SignUp {
     public name?: string,
     public email?: string,
     public password?: string,
+    public workplace?: string,
   ) { }
 }

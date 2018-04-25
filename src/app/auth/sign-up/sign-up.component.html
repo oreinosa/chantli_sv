@@ -5,27 +5,38 @@
 				<form #f='ngForm' (ngSubmit)='onSubmit(f.value)'>
 					<div class="form">
 						<div class="form-title mb-5">
-							<h4>Sign up</h4>
+							<h4>Registrarse</h4>
 							<br>
 							<img src="goo.gl/GJas2y" alt="logo" class="img-fluid">
 						</div>
 						<div class="form-content my-3" *ngIf='signUp'>
 							<mat-form-field class="full-width">
-								<input matInput type="text" placeholder='Name' id='name' [(ngModel)]='signUp.name' name='name' required>
+								<input matInput type="text" placeholder='Nombre' id='name' [(ngModel)]='signUp.name' name='name' required>
 							</mat-form-field>
 							<mat-form-field class="full-width">
-								<input matInput type="email" placeholder='Email address' id='email' [(ngModel)]='signUp.email' name='email' required email>
+								<input matInput type="email" placeholder='Correo electrónico' id='email' [(ngModel)]='signUp.email' name='email' required
+								 email>
 							</mat-form-field>
 							<mat-form-field class="full-width">
-								<input matInput type="password" placeholder='Password' id='password' [(ngModel)]='signUp.password' name='password' required>
+								<input matInput type="password" placeholder='Contraseña' id='confirmPassword' ngModel name='confirmPassword' required>
+							</mat-form-field>
+							<mat-form-field class="full-width">
+								<input matInput type="password" placeholder='Confirmar contraseña' id='password' [(ngModel)]='signUp.password' name='password' required [pattern]='f.controls.confirmPassword?.value'>
+							</mat-form-field>
+							<mat-form-field class="full-width">
+								<mat-select placeholder='Lugar de trabajo' [(ngModel)]='signUp.workplace' name='workplace' required>
+									<mat-option *ngFor='let workplace of (workplaces | async)' [value]='workplace.name'>
+										{{ workplace.name }}
+									</mat-option>
+								</mat-select>
 							</mat-form-field>
 						</div>
-						<button type='submit' mat-button>Sign up</button>
+						<button type='submit' mat-button>Registrarse</button>
 					</div>
 				</form>
 				<hr>
 				<div class="actions-buttons">
-					<button mat-button type='button' routerLink='/sign-in'>Already registered?</button>
+					<button mat-button type='button' routerLink='/ingresar'>¿Ya te registraste?</button>
 				</div>
 			</mat-card-content>
 		</mat-card>
