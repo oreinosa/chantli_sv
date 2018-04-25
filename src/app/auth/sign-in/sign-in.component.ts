@@ -26,13 +26,13 @@ export class SignInComponent implements OnInit {
     console.log(signIn);
     this.authService
     .signInEmail(signIn)
-    .then(f => f ? this.router.navigate(['home']) : false);
+    .then(() => this.router.navigate(['']));
   }
 
   onSignInSocial(provider: string){
     this.authService
     .signInSocial(provider)
-    .then(f => f ? this.router.navigate(['home']) : false);
+    .then(f => this.router.navigate(['']));
   }
 
 }

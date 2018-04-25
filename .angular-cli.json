@@ -20,7 +20,7 @@
       "prefix": "app",
       "styles": [
         "../node_modules/bootstrap/dist/css/bootstrap.min.css",
-        "colors.scss",
+        "_colors.scss",
         "theme.scss",
         "styles.scss"
       ],

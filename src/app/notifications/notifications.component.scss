@@ -1,3 +1,4 @@
+@import "./src/_colors";
 
 .notification{
   width: 100%;
@@ -28,5 +29,5 @@
 }
 
 .info {
-  background-color: $my-app-secondary;
+  background-color: $primary;
 }

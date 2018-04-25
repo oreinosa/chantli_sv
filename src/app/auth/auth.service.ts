@@ -58,14 +58,6 @@ export class AuthService {
         } else {
           return Observable.of(null)
         }
-      })
-      .do(user => {
-        if (user) {
-          let body, type: string;
-          body = `Hola ${user.name}`;
-          type = 'info';
-          this.notificationsService.show(body, undefined, type);
-        }
       });
 
   }
@@ -95,7 +87,14 @@ export class AuthService {
 
   signInEmail(signIn: SignIn) {
     return this.afAuth.auth
-      .signInWithEmailAndPassword(signIn.email, signIn.password);
+      .signInWithEmailAndPassword(signIn.email, signIn.password)
+      .then((any) => {
+        console.log(any);
+        let body, type: string;
+        body = `Hola`;
+        type = 'info';
+        this.notificationsService.show(body, undefined, type);
+      });
   }
 
   signInSocial(provider: string) {
@@ -106,7 +105,14 @@ export class AuthService {
     }
     return this.afAuth
       .auth
-      .signInWithPopup(_provider);
+      .signInWithPopup(_provider)
+      .then((any) => {
+        console.log(any);
+        let body, type: string;
+        body = `Hola`;
+        type = 'info';
+        this.notificationsService.show(body, undefined, type);
+      });;
   }
 
   signUp(signUp: SignUp) {

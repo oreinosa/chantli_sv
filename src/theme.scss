@@ -1,6 +1,10 @@
-@import 'colors';
-$my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
+@import '_colors';
+// $my-app-primary: mat-palette($primary);
+// $my-app-accent:  mat-palette($accent, 500, 900, 100);
+// $my-app-warn:    mat-palette($warn, 200);
 
-@include angular-material-theme($my-app-theme);
+$app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
+
+@include angular-material-theme($app-theme);
 
 
