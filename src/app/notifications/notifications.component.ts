@@ -6,7 +6,7 @@ import { Notification } from './notification';
 @Component({
   selector: 'app-notifications',
   templateUrl: './notifications.component.html',
-  styleUrls: ['./notifications.component.css'],
+  styleUrls: ['./notifications.component.scss'],
   animations: [fadeIn, fadeOut]
 }) 
 export class NotificationsComponent implements OnInit {

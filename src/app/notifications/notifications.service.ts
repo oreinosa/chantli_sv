@@ -16,19 +16,19 @@ export class NotificationsService {
     switch (type) {
       case 'info':
         icon = 'info_outline';
-        background = 'light-blue lighten-1';
+        background = 'info lighten';
         break;
       case 'success':
         icon = 'check_circle';
-        background = 'green lighten-1';
+        background = 'success lighten';
         break;
       case 'danger':
         icon = 'sms_failed';
-        background = 'red lighten-1';
+        background = 'danger lighten';
         break;
       case 'warning':
         icon = 'sms_failed';
-        background = 'orange lighten-2';
+        background = 'warning lighten';
         break;
     }
     const notification = new Notification(title, body, background, icon);
