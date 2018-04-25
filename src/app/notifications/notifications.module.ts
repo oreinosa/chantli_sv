@@ -10,6 +10,7 @@ import { MatCardModule } from '@angular/material';
     MatCardModule
   ],
   declarations: [NotificationsComponent],
+  exports: [NotificationsComponent],
   providers: [NotificationsService]
 })
 export class NotificationsModule { }

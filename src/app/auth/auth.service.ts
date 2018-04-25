@@ -16,6 +16,7 @@ import { SignIn } from '../shared/classes/sign-in';
 import { SignUp } from '../shared/classes/sign-up';
 
 import { CategoriesService } from './../admin/categories/categories.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable()
 export class AuthService {
@@ -31,7 +32,8 @@ export class AuthService {
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
     private categoriesService: CategoriesService,
-    private router: Router
+    private router: Router,
+    private notificationsService: NotificationsService
   ) {
     this._links = [
       // { label: 'Inicio', route: '', icon: '' }
@@ -55,6 +57,14 @@ export class AuthService {
           return doc.valueChanges();
         } else {
           return Observable.of(null)
+        }
+      })
+      .do(user => {
+        if (user) {
+          let body, type: string;
+          body = `Hola ${user.name}`;
+          type = 'info';
+          this.notificationsService.show(body, undefined, type);
         }
       });
 
@@ -105,9 +115,10 @@ export class AuthService {
       .createUserWithEmailAndPassword(signUp.email, signUp.password)
       .then(credential => credential.updateProfile({
         displayName: signUp.name,
-        photoURL: 'http://www.personalbrandingblog.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640-300x300.png'
+        // photoURL: 'http://www.personalbrandingblog.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640-300x300.png'
       }).then(() => credential))
-      .then(credential => this.updateUserData(credential));
+      .then(credential => this.updateUserData(credential))
+      .then(() => this.notificationsService.show(`Bienvenido, ${signUp.name}`, undefined, 'success'));
   }
 
   signOut() {
@@ -115,6 +126,7 @@ export class AuthService {
       .signOut()
       .then(() => {
         this.router.navigate(['']);
+        this.notificationsService.show('Adiós!', undefined, 'info');
       });
   }
 
@@ -124,7 +136,8 @@ export class AuthService {
 
   updateWorkplace(workplace: string, user: User) {
     user.workplace = workplace;
-    return this.updateUserData(user);
+    return this.updateUserData(user)
+      .then(() => this.notificationsService.show('Lugar de trabajo actualizado!', undefined, 'success'));
   }
 
   private updateUserData(user) {
@@ -134,10 +147,11 @@ export class AuthService {
       id: user.uid,
       email: user.email,
       name: user.displayName,
-      photoURL: user.photoURL,
-      role: 'Client'
+      // photoURL: user.photoURL,
+      role: 'Cliente'
     };
-    return userRef.set(data, { merge: true })
+    return userRef
+      .set(data, { merge: true })
       .then(() => true)
       .catch(() => false);
   }

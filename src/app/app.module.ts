@@ -10,7 +10,6 @@ import { AdminModule } from './admin/admin.module';
 
 import { AuthService } from './auth/auth.service';
 import { AuthGuard } from './auth/auth.guard';
-import { NotificationsService } from './notifications/notifications.service';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AngularFireModule } from 'angularfire2';
@@ -18,6 +17,7 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireStorageModule } from 'angularfire2/storage';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @NgModule({
   imports: [
@@ -27,6 +27,7 @@ import { environment } from '../environments/environment';
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
     AngularFireStorageModule, // imports firebase/storage only needed for storage features
     SharedModule,
+    NotificationsModule,
     CoreModule,
     AuthModule,
     AdminModule,
@@ -34,6 +35,6 @@ import { environment } from '../environments/environment';
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
-  providers: [AuthService, AuthGuard, NotificationsService]
+  providers: [AuthService, AuthGuard]
 })
 export class AppModule { }
