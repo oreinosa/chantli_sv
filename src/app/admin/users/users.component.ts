@@ -24,7 +24,7 @@ export class UsersComponent extends Table<User> {
   ngAfterViewInit() { }
 
   sortData(sort: Sort) {
-    console.log(sort);
+    // console.log(sort);
     const data = this.data.slice();
     if (!sort || !sort.active || sort.direction == '') {
       this.dataSource.data = data;
