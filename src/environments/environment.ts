@@ -1,9 +1,11 @@
+import { FirebaseAppConfig } from "angularfire2";
+
 // The file contents for the current environment will overwrite these during build.
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
-export const environment = {
+export const environment: { production: boolean, firebase: FirebaseAppConfig } = {
   production: false,
   firebase: {
     apiKey: "AIzaSyC_r1-CQBoCTc6T19Wv5r1X0o678FU-Dcs",
@@ -11,7 +13,7 @@ export const environment = {
     databaseURL: "https://chantlisv-dev.firebaseio.com",
     projectId: "chantlisv-dev",
     storageBucket: "chantlisv-dev.appspot.com",
-    messagingSenderId: "214874254840"
+    messagingSenderId: "214874254840",
   }
   // firebase: {
   //   apiKey: "AIzaSyBUqASXpt7K1hP6j8zFLvxDkV-GjHipYik",
