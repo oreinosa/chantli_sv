@@ -24,6 +24,14 @@ import { ProductsComponent } from './products/products.component';
 import { ProductsService } from './products/products.service';
 import { WorkplacesComponent } from './workplaces/workplaces.component';
 import { WorkplacesService } from './workplaces/workplaces.service';
+import { AddProductComponent } from './products/add-product/add-product.component';
+import { DelProductComponent } from './products/del-product/del-product.component';
+import { EditProductComponent } from './products/edit-product/edit-product.component';
+import { AddMenuComponent } from './menus/add-menu/add-menu.component';
+import { DelMenuComponent } from './menus/del-menu/del-menu.component';
+import { EditMenuComponent } from './menus/edit-menu/edit-menu.component';
+import { MenusComponent } from './menus/menus.component';
+import { MenusService } from './menus/menus.service';
 
 @NgModule({
   imports: [
@@ -46,7 +54,14 @@ import { WorkplacesService } from './workplaces/workplaces.service';
     DelCategoryComponent,
     ProductsComponent,
     WorkplacesComponent,
+    AddProductComponent,
+    DelProductComponent,
+    EditProductComponent,
+    AddMenuComponent,
+    DelMenuComponent,
+    EditMenuComponent,
+    MenusComponent,
   ],
-  providers: [UsersService, CategoriesService, ProductsService, WorkplacesService]
+  providers: [UsersService, CategoriesService, ProductsService, WorkplacesService, MenusService]
 })
 export class AdminModule { }

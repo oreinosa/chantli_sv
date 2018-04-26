@@ -12,6 +12,9 @@ import { EditCategoryComponent } from './categories/edit-category/edit-category.
 import { DelCategoryComponent } from './categories/del-category/del-category.component';
 
 import { ProductsComponent } from './products/products.component';
+import { AddProductComponent } from './products/add-product/add-product.component';
+import { EditProductComponent } from './products/edit-product/edit-product.component';
+import { DelProductComponent } from './products/del-product/del-product.component';
 
 const routes: Routes = [
   {
@@ -28,6 +31,13 @@ const routes: Routes = [
           { path: 'agregar', component: AddCategoryComponent },
           { path: 'editar/:id', component: EditCategoryComponent },
           { path: 'borrar/:id', component: DelCategoryComponent }
+        ]
+      },
+      {
+        path: 'productos', component: ProductsComponent, children: [
+          { path: 'agregar', component: AddProductComponent },
+          { path: 'editar/:id', component: EditProductComponent },
+          { path: 'borrar/:id', component: DelProductComponent }
         ]
       },
     ]
