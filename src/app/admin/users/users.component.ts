@@ -12,6 +12,9 @@ import { MatPaginator, MatSort, Sort } from '@angular/material';
 export class UsersComponent extends Table<User> {
   public displayedColumns = ['id', 'name', 'email', 'role', 'workplace', 'actions'];
 
+  // @ViewChild(MatPaginator) paginator: MatPaginator;
+  // @ViewChild(MatSort) sort: MatSort;
+
   constructor(
     private usersService: UsersService,
   ) {

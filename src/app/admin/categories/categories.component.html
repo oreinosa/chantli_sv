@@ -15,10 +15,10 @@
 				<router-outlet></router-outlet>
 			</div>
 		</div>
-		<mat-table #table [dataSource]="dataSource" class='data-table'>
+		<mat-table #table matSort [dataSource]="dataSource" class='data-table'>
 			<!-- Name Column -->
 			<ng-container matColumnDef="name">
-				<mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+				<mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
 				<mat-cell *matCellDef="let element">
 					{{element.name}}
 				</mat-cell>

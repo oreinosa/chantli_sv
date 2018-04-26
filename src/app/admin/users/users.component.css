@@ -2,19 +2,19 @@
   flex: 0 0 15%;
 }
 .mat-column-email {
-  flex: 0 0 15%;
+  flex: 0 0 20%;
 }
 .mat-column-role {
-  flex: 0 0 15%;
+  flex: 0 0 20%;
 }
 .mat-column-id {
   flex: 0 0 15%;
 }
 .mat-column-workplace{
-  flex: 0 0 15%;
+  flex: 0 0 20%;
 }
 .mat-column-actions {
-  flex: 0 0 25%;
+  flex: 0 0 10%;
 }
 .mat-table, .mat-paginator{
   overflow: auto;
