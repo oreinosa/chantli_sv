@@ -15,11 +15,11 @@
 				<router-outlet></router-outlet>
 			</div>
 		</div>
-		<mat-table #table [dataSource]="dataSource" class='data-table'>
+		<mat-table #table matSort (matSortChange)='sortData($event)' [dataSource]="dataSource" class='data-table'>
 
 			<!-- ID Column -->
 			<ng-container matColumnDef="id">
-				<mat-header-cell *matHeaderCellDef> ID </mat-header-cell>
+				<mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
 				<mat-cell *matCellDef="let element">
 					{{element.id}}
 				</mat-cell>
@@ -27,7 +27,7 @@
 
 			<!-- Name Column -->
 			<ng-container matColumnDef="name">
-				<mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+				<mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
 				<mat-cell *matCellDef="let element">
 					{{element.name}}
 				</mat-cell>
@@ -43,7 +43,7 @@
 
 			<!-- Role Column -->
 			<ng-container matColumnDef="role">
-				<mat-header-cell *matHeaderCellDef> Rol </mat-header-cell>
+				<mat-header-cell *matHeaderCellDef mat-sort-header> Rol </mat-header-cell>
 				<mat-cell *matCellDef="let element">
 					{{element.role}}
 				</mat-cell>
