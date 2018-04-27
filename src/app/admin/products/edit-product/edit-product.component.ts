@@ -7,6 +7,7 @@ import { UploaderComponent } from '../../../uploader/uploader.component';
 import { CategoriesService } from '../../categories/categories.service';
 import { Category } from '../../../shared/classes/category';
 import { Observable } from 'rxjs/Observable';
+import { NotificationsService } from '../../../notifications/notifications.service';
 
 @Component({
   selector: 'app-edit-product',
@@ -21,9 +22,10 @@ export class EditProductComponent extends Edit<Product> {
     public productsService: ProductsService,
     public router: Router,
     public route: ActivatedRoute,
-    public categoriesService: CategoriesService
+    public categoriesService: CategoriesService,
+    public notificationsService: NotificationsService
   ) {
-    super(productsService, router, route);
+    super(productsService, router, route, notificationsService);
   }
 
   ngOnInit() {
