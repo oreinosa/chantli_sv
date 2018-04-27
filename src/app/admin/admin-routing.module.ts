@@ -21,6 +21,11 @@ import { AddWorkplaceComponent } from './workplaces/add-workplace/add-workplace.
 import { EditWorkplaceComponent } from './workplaces/edit-workplace/edit-workplace.component';
 import { DelWorkplaceComponent } from './workplaces/del-workplace/del-workplace.component';
 
+import { MenusComponent } from './menus/menus.component';
+import { AddMenuComponent } from './menus/add-menu/add-menu.component';
+import { EditMenuComponent } from './menus/edit-menu/edit-menu.component';
+import { DelMenuComponent } from './menus/del-menu/del-menu.component';
+
 const routes: Routes = [
   {
     path: 'admin', component: AdminComponent, children: [
@@ -39,6 +44,13 @@ const routes: Routes = [
         ]
       },
       {
+        path: 'lugares-de-trabajo', component: WorkplacesComponent, children: [
+          { path: 'agregar', component: AddWorkplaceComponent },
+          { path: 'editar/:id', component: EditWorkplaceComponent },
+          { path: 'borrar/:id', component: DelWorkplaceComponent }
+        ]
+      },
+      {
         path: 'productos', component: ProductsComponent, children: [
           { path: 'agregar', component: AddProductComponent },
           { path: 'editar/:id', component: EditProductComponent },
@@ -46,10 +58,10 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'lugares-de-trabajo', component: WorkplacesComponent, children: [
-          { path: 'agregar', component: AddWorkplaceComponent },
-          { path: 'editar/:id', component: EditWorkplaceComponent },
-          { path: 'borrar/:id', component: DelWorkplaceComponent }
+        path: 'menus', component: MenusComponent, children: [
+          { path: 'agregar', component: AddMenuComponent },
+          { path: 'editar/:id', component: EditMenuComponent },
+          { path: 'borrar/:id', component: DelMenuComponent }
         ]
       },
     ]

@@ -13,8 +13,9 @@ export class AdminComponent implements OnInit {
     this.links = [
       { label: 'Usuarios', route: 'usuarios', icon: 'people' },
       { label: 'Categorías', route: 'categorias', icon: 'assignment' },
-      { label: 'Productos', route: 'productos', icon: '' },
       { label: 'Lugares de trabajo', route: 'lugares-de-trabajo', icon: '' },
+      { label: 'Productos', route: 'productos', icon: '' },
+      { label: 'Menus', route: 'menus', icon: '' },
     ];
   }
 
