@@ -11,7 +11,7 @@ export class UsersService extends DAO<User> {
   constructor(
     public af: AngularFirestore
   ) {
-    super('users', af);
+    super('Usuario','users', af);
   }
 
 }
