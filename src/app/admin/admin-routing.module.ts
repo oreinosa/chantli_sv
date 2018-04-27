@@ -16,6 +16,11 @@ import { AddProductComponent } from './products/add-product/add-product.componen
 import { EditProductComponent } from './products/edit-product/edit-product.component';
 import { DelProductComponent } from './products/del-product/del-product.component';
 
+import { WorkplacesComponent } from './workplaces/workplaces.component';
+import { AddWorkplaceComponent } from './workplaces/add-workplace/add-workplace.component';
+import { EditWorkplaceComponent } from './workplaces/edit-workplace/edit-workplace.component';
+import { DelWorkplaceComponent } from './workplaces/del-workplace/del-workplace.component';
+
 const routes: Routes = [
   {
     path: 'admin', component: AdminComponent, children: [
@@ -38,6 +43,13 @@ const routes: Routes = [
           { path: 'agregar', component: AddProductComponent },
           { path: 'editar/:id', component: EditProductComponent },
           { path: 'borrar/:id', component: DelProductComponent }
+        ]
+      },
+      {
+        path: 'lugares-de-trabajo', component: WorkplacesComponent, children: [
+          { path: 'agregar', component: AddWorkplaceComponent },
+          { path: 'editar/:id', component: EditWorkplaceComponent },
+          { path: 'borrar/:id', component: DelWorkplaceComponent }
         ]
       },
     ]
