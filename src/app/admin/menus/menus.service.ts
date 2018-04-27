@@ -10,9 +10,7 @@ export class MenusService extends DAO<Menu> {
   constructor(
     public af: AngularFirestore
   ) {
-    super('menus', af);
-    const settings = { timestampsInSnapshots: true };
-    af.app.firestore().settings(settings);
+    super('Menu','menus', af);
   }
 
 }

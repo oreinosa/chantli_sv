@@ -15,7 +15,7 @@ export class DAO<T> {
   ) {
     this.objectCollection = af.collection<T>(collectionName);
   }
-  
+
   getAll(): Observable<T[]> {
     this.objectCollection = this.af.collection<T>(this.collectionName);
     return this.objectCollection
