@@ -17,7 +17,7 @@ export class AddCategoryComponent extends Add<Category> {
     public categoriesService: CategoriesService,
     public notificationsService: NotificationsService
   ) {
-    super('Categoría', categoriesService, router, route, notificationsService);
+    super(categoriesService, router, route, notificationsService);
   }
 
   initForm() {

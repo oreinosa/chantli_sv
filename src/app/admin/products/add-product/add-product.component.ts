@@ -24,7 +24,7 @@ export class AddProductComponent extends Add<Product>  {
     public notificationsService: NotificationsService,
     public categoriesService: CategoriesService
   ) {
-    super('Producto', productsService, router, route, notificationsService);
+    super(productsService, router, route, notificationsService);
   }
 
   initForm() {
