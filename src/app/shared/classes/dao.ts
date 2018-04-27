@@ -4,8 +4,8 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument 
 
 export class DAO<T> {
   // public objects = new Observable<T[]>();
-  public object = new BehaviorSubject<T>(null);
-  private objectCollection: AngularFirestoreCollection<T>;
+  object = new BehaviorSubject<T>(null);
+  objectCollection: AngularFirestoreCollection<T>;
   private objectDocument: AngularFirestoreDocument<T>;
 
   constructor(
