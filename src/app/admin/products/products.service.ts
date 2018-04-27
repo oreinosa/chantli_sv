@@ -10,7 +10,7 @@ export class ProductsService extends DAO<Product> {
   constructor(
     public af: AngularFirestore
   ) {
-    super('products', af);
+    super('Producto','products', af);
   }
 
   // getAllByCategory(category: string) {

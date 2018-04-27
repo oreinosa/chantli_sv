@@ -3,12 +3,13 @@ import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 
 export class DAO<T> {
-  public objects = new Observable<T[]>();
+  // public objects = new Observable<T[]>();
   public object = new BehaviorSubject<T>(null);
-  public objectCollection: AngularFirestoreCollection<T>;
-  public objectDocument: AngularFirestoreDocument<T>;
+  private objectCollection: AngularFirestoreCollection<T>;
+  private objectDocument: AngularFirestoreDocument<T>;
 
   constructor(
+    public className: string,
     private collectionName: string,
     public af: AngularFirestore
   ) {

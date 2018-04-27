@@ -11,7 +11,7 @@ export class CategoriesService extends DAO<Category> {
   constructor(
     public af: AngularFirestore
   ) {
-    super('categories', af);
+    super('Categoría','categories', af);
   }
 
 }
