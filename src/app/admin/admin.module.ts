@@ -32,6 +32,9 @@ import { DelMenuComponent } from './menus/del-menu/del-menu.component';
 import { EditMenuComponent } from './menus/edit-menu/edit-menu.component';
 import { MenusComponent } from './menus/menus.component';
 import { MenusService } from './menus/menus.service';
+import { AddWorkplaceComponent } from './workplaces/add-workplace/add-workplace.component';
+import { EditWorkplaceComponent } from './workplaces/edit-workplace/edit-workplace.component';
+import { DelWorkplaceComponent } from './workplaces/del-workplace/del-workplace.component';
 
 @NgModule({
   imports: [
@@ -61,6 +64,9 @@ import { MenusService } from './menus/menus.service';
     DelMenuComponent,
     EditMenuComponent,
     MenusComponent,
+    AddWorkplaceComponent,
+    EditWorkplaceComponent,
+    DelWorkplaceComponent,
   ],
   providers: [UsersService, CategoriesService, ProductsService, WorkplacesService, MenusService]
 })

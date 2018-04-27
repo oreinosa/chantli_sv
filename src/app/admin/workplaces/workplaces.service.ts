@@ -11,7 +11,7 @@ export class WorkplacesService extends DAO<Workplace> {
   constructor(
     public af: AngularFirestore
   ) {
-    super('workplaces', af);
+    super('Lugar de trabajo','workplaces', af);
   }
 
 }
