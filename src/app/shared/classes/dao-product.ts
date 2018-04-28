@@ -9,7 +9,7 @@ export class DAOProduct<T> extends DAO<T> {
     private categoryName: string,
     public af: AngularFirestore
   ) {
-    super('products', af);
+    super('Producto', 'products', af);
     this.objectCollection = af.collection<T>('products');
   }
 

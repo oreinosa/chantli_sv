@@ -1,3 +1,72 @@
-<p>
-  add-menu works!
-</p>
+<form #f='ngForm' (ngSubmit)='onSubmit(f.value);'>
+  <ng-container *ngIf='!f?.submitted; else loading'>
+    <div class="row">
+      <div class="col-12">
+        <h4>Agregar menu</h4>
+        <div class="col-6 mx-auto">
+          <mat-form-field>
+            <input matInput type="date" placeholder='Fecha' [(ngModel)]='object.date' name='date' id='date'>
+          </mat-form-field>
+          <mat-form-field>
+            <input matInput placeholder='Precio' [(ngModel)]='object.price' name='price' id='price'>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-12 col-sm-4">
+        <p>Agregar producto</p>
+        <mat-form-field *ngIf='products; else loadingProducts' style='width:100%'>
+          <input matInput placeholder="Productos" [matAutocomplete]="auto" [formControl]="stateCtrl">
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)='selectProduct($event.option.value)'>
+            <mat-option *ngFor="let product of filteredProducts | async" [value]="product.name">
+              <span>{{ product.name }}</span>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <button type='button' mat-button (click)='addProduct()' [disabled]='!selectedProduct'>
+          <mat-icon>add</mat-icon>
+          Agregar
+        </button>
+        <ng-template #loadingProducts>
+          <mat-spinner></mat-spinner>
+        </ng-template>
+      </div>
+      <div class="col-12 col-sm-8">
+        <div class="row">
+          <ng-container *ngIf='addedProducts.length; else noAddedProducts'>
+            <div class="col-12">
+              <p>Productos agregados</p>
+            </div>
+            <div class="col-12 col-sm-6" *ngIf='addedProducts | productsByCategory:"Principal":refresh as principales'>
+              <p>Platos principales</p>
+              <p *ngFor='let product of principales'>
+                <span>{{ product.name }}</span>
+                <button type='button' mat-icon-button (click)='removeProduct(product.id)'>
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </p>
+            </div>
+            <div class="col-12 col-sm-6" *ngIf='addedProducts | productsByCategory:"Acompañamiento":refresh as acomp'>
+              <p>Acompañamiento</p>
+              <p *ngFor='let product of acomp'>
+                <span>{{ product.name }}</span>
+                <button type='button' mat-icon-button (click)='removeProduct(product.id)'>
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </p>
+            </div>
+          </ng-container>
+          <ng-template #noAddedProducts>
+            <div class="col-12">
+              <p>No has agregado productos.</p>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+    <button mat-button type='submit'>Agregar</button>
+    <button mat-button type='button' routerLink='../'>Atrás</button>
+  </ng-container>
+  <ng-template #loading>
+    <mat-spinner class="col-12 mx-auto"></mat-spinner>
+  </ng-template>
+</form>

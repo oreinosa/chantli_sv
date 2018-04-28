@@ -17,7 +17,8 @@ import {
   MatIconModule,
   MatTabsModule,
   MatDialogModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatAutocompleteModule
 } from '@angular/material';
 
 import 'rxjs/add/operator/do';
@@ -28,6 +29,8 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
 import { SortByPipe } from './pipes/sort-by.pipe';
 import { CapitalizePipe } from './pipes/capitalize.pipe';
+import { ProductsByCategoryPipe } from './pipes/products-by-category.pipe';
+import { GetMenuProductsPipe } from './pipes/get-menu-products.pipe';
 
 @NgModule({
   imports: [
@@ -49,6 +52,7 @@ import { CapitalizePipe } from './pipes/capitalize.pipe';
     MatTabsModule,
     MatTooltipModule,
     MatDialogModule,
+    MatAutocompleteModule,
     MatProgressSpinnerModule,
   ],
   exports: [
@@ -72,8 +76,11 @@ import { CapitalizePipe } from './pipes/capitalize.pipe';
     MatTooltipModule,
     MatTabsModule,
     MatDialogModule,
+    ProductsByCategoryPipe,
+    GetMenuProductsPipe,
+    MatAutocompleteModule,
     MatProgressSpinnerModule,
   ],
-  declarations: [SortByPipe, CapitalizePipe],
+  declarations: [SortByPipe, CapitalizePipe, ProductsByCategoryPipe, GetMenuProductsPipe],
 })
 export class SharedModule { }

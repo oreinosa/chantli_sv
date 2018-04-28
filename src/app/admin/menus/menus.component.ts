@@ -9,12 +9,16 @@ import { MenusService } from './menus.service';
   styleUrls: ['./menus.component.css']
 })
 export class MenusComponent extends Table<Menu>  {
-  public displayedColumns = ['name', 'description', 'actions'];
+  public displayedColumns = ['date', 'products', 'price', 'actions'];
 
   constructor(
     private menusService: MenusService,
   ) {
     super(menusService);
+  }
+
+  toggleMenuAvailability(id: string, flag: boolean) {
+    return this.menusService.toggleMenuAvailability(id, flag);
   }
 
 }

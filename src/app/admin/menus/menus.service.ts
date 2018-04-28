@@ -1,3 +1,4 @@
+import { NotificationsService } from './../../notifications/notifications.service';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Menu } from '../../shared/classes/menu';
@@ -7,14 +8,13 @@ import { Product } from '../../shared/classes/product';
 
 @Injectable()
 export class MenusService extends DAO<Menu> {
-  menuProductsCollection: AngularFirestoreCollection<Product[]>;
 
   constructor(
-    public af: AngularFirestore
+    public af: AngularFirestore,
+    public notificationsService: NotificationsService
   ) {
     super('Menu', 'menus', af);
   }
-
   getAll(): Observable<Menu[]> {
     this.objectCollection = this.af.collection<Menu>('menus');
     return this.objectCollection
@@ -27,14 +27,28 @@ export class MenusService extends DAO<Menu> {
           data['id'] = a.payload.doc.id;
           return data;
         })
-      })
-      .map(menus => {
-        menus.map(menu => {
-          this.menuProductsCollection = this.objectCollection.doc(menu.id).collection('products');
-          return menu;
-        });
-        return menus;
       });
+  }
+
+  getMenuProducts(id: string): Observable<Product[]> {
+    let menuProductsCollection: AngularFirestoreCollection<Product[]> = this.objectCollection.doc(id).collection('products');
+    return menuProductsCollection
+      .snapshotChanges()
+      .map(actions => {
+        // console.log(actions);
+        return actions.map(a => {
+          let data = a.payload.doc.data() as Menu;
+          data['id'] = a.payload.doc.id;
+          return data;
+        })
+      });
+  }
+
+  toggleMenuAvailability(id: string, flag: boolean): Promise<void> {
+    return this.objectCollection.doc(id).update({
+      available: flag
+    })
+      .then(() => this.notificationsService.show(`Menu ${id} ${flag ? "disponible" : "cerrado"}`, undefined, `${flag ? "success" : "warning"}`));
   }
 
 }

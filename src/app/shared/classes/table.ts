@@ -33,9 +33,9 @@ export class Table<T> implements OnInit, AfterViewInit {
       .takeUntil(this.ngUnsubscribe)
       .do(data => console.log('Table data : ', data))
       .subscribe(data => {
-        this.data = data
-        // this.dataSource.data.length ? false : this.dataSource.data = data;
-        this.sortData(null);
+        this.loaded = false;
+        this.data = data;
+        this.dataSource.data.length ? this.sortData(this.sort) : this.sortData(null);
         this.loaded = true;
       });
   }
