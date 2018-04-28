@@ -1,3 +1,4 @@
+import { NotificationsService } from './../../../notifications/notifications.service';
 import { Component, ViewChild } from '@angular/core';
 import { Category } from '../../../shared/classes/category';
 import { Edit } from '../../../shared/classes/edit';
@@ -14,8 +15,9 @@ export class EditCategoryComponent extends Edit<Category> {
     public categoriesService: CategoriesService,
     public router: Router,
     public route: ActivatedRoute,
+    public notificationsService: NotificationsService
   ) {
-    super(categoriesService, router, route);
+    super(categoriesService, router, route, notificationsService);
   }
 
 }
