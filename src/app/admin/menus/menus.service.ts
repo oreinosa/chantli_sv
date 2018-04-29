@@ -51,4 +51,43 @@ export class MenusService extends DAO<Menu> {
       .then(() => this.notificationsService.show(`Menu ${id} ${flag ? "disponible" : "cerrado"}`, undefined, `${flag ? "success" : "warning"}`));
   }
 
+  add(menu: Menu, products?: Product[]) {
+    return super.add(menu)
+      .then(doc => {
+        let productsCollection = this.objectCollection.doc(doc.id).collection<Product>('products');
+        let batch = this.af.firestore.batch();
+        products.forEach(product => {
+          const id = this.af.createId();
+          let ref = productsCollection.doc(id).ref;
+          batch.set(ref, product);
+        });
+        return batch.commit()
+          .then(() => doc);
+      })
+  }
+
+  update(id: string, menu: Menu, products: Product[]) {
+    let productsCollection = this.objectCollection.doc(id).collection<Product>('products');
+    return super
+      .update(id, menu)
+      .then(() => {
+        let batch = this.af.firestore.batch();
+        products.forEach(product => {
+          let productsCollection = this.objectCollection.doc(id).collection<Product>('products');
+          let ref;
+          let _id = this.af.createId();
+          if (product.id) {
+            _id = product.id;
+          }
+          ref = productsCollection.doc(_id).ref;
+          batch.set(ref, product);
+        })
+        return batch.commit();
+      })
+  }
+
+  // private addProducts(products: Product[]): Promise<void> {
+  //   return
+  // }
+
 }

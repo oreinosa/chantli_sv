@@ -1,3 +1,12 @@
-<p>
-  del-menu works!
-</p>
+<form #f='ngForm' (ngSubmit)='onSubmit()'>
+    <ng-container *ngIf='!f.submitted;else loading'>
+      <p>
+        ¿Estás seguro que quieres borrar este menu (ID: {{ id }})?
+      </p>
+      <button mat-button type='submit'>Borrar</button>
+      <button mat-button type='button' routerLink='../../'>Atrás</button>
+    </ng-container>
+    <ng-template #loading>
+      <mat-spinner class="col-12 mx-auto"></mat-spinner>
+    </ng-template>
+  </form>

@@ -31,12 +31,12 @@ export class DAO<T> {
       });
   }
 
-  add(object: T) {
+  add(object: T, subcollection?: any[]) {
     return this.objectCollection
       .add(object);
   }
 
-  update(id: string, object: T) {
+  update(id: string, object: T, subcollection?: any[], deleted?: any[]) {
     // console.log(id);
     return this.objectCollection
       .doc(id)

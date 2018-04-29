@@ -24,11 +24,14 @@ import { Observable } from 'rxjs/Observable';
 export class AddMenuComponent extends Add<Menu> {
   private ngUnsubscribe = new Subject();
   stateCtrl: FormControl;
+  refresh: boolean;
+
   filteredProducts: Observable<Product[]>;
   products: Product[];
-  addedProducts: Product[] = [];
+
+  selectedProducts: Product[] = [];
   selectedProduct: Product;
-  refresh: boolean;
+
   constructor(
     public menusService: MenusService,
     private productsService: ProductsService,
@@ -55,12 +58,12 @@ export class AddMenuComponent extends Add<Menu> {
     this.productsService
       .getAll()
       .takeUntil(this.ngUnsubscribe)
+      .do(products => products.forEach(product => delete product.id))
       .map(products => products.filter(product => product.category === "Principal" || product.category === "Acompañamiento"))
       .subscribe(products => this.products = products);
   }
 
   selectProduct(name: string) {
-    console.log(name);
     this.selectedProduct = this.filterProducts(name)[0];
   }
 
@@ -70,20 +73,23 @@ export class AddMenuComponent extends Add<Menu> {
   }
 
   addProduct() {
-    console.log(this.selectedProduct);
-    this.addedProducts.push(this.selectedProduct);
+    this.selectedProducts.push(this.selectedProduct);
     this.selectedProduct = null;
     this.stateCtrl.setValue('');
     this.refresh = !this.refresh;
   }
 
   removeProduct(id: string) {
-    console.log(id);
-    console.log(this.addedProducts);
-    let index = this.addedProducts.findIndex(product => product.id === id);
-    this.addedProducts.splice(index, 1);
+    let index = this.selectedProducts.findIndex(product => product.id === id);
+    this.selectedProducts.splice(index, 1);
     this.refresh = !this.refresh;
   }
 
+  onSubmit(menu: Menu): Promise<void> {
+    console.log(menu);
+    return this.menusService.add(menu, this.selectedProducts)
+      .then(() => this.onBack())
+      .then(() => this.notificationsService.show(`Menu agregado`, undefined, 'success'));;
+  }
 
 }

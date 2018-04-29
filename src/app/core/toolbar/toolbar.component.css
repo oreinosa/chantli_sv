@@ -8,6 +8,9 @@
   position: fixed;
   z-index: 99;
 }
+.app-title {
+  cursor: pointer;
+}
 .app-title, .menu-button, .logo{
   margin-right: 10px;
 }

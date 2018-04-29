@@ -32,7 +32,7 @@ export class Delete<T> implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    this.service
+    return this.service
       .delete(this.id)
       .then(flag => this.onBack())
       .then(() => this.notificationsService.show(`${this.service['className']} borrado`, undefined, 'danger'));;

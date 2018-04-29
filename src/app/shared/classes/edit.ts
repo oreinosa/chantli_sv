@@ -7,7 +7,7 @@ import { OnInit, OnDestroy } from '@angular/core';
 import { NotificationsService } from '../../notifications/notifications.service';
 
 export abstract class Edit<T> implements OnInit, OnDestroy {
-  private ngUnsubscribe = new Subject();
+  public ngUnsubscribe = new Subject();
   public object: T;
 
   constructor(

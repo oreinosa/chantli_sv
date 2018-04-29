@@ -5,9 +5,11 @@
 			<i class="material-icons">menu</i>
 		</button>
 		<!-- LOGO -->
-		<img src="https://goo.gl/GJas2y" alt="logo" class="logo img-fluid d-none d-md-inline-flex">
 		<!-- APP TITLE -->
-		<span class="app-title">{{ appTitle }}</span>
+		<span class="app-title" routerLink=''>
+			<img src="https://goo.gl/GJas2y" alt="logo" class="logo img-fluid d-none d-md-inline-flex">
+			{{ appTitle }}
+		</span>
 		<div class='d-none d-md-inline-flex'>
 			<!-- LINKS NGFOR -->
 			<a mat-button *ngFor='let link of links' [routerLink]='link.route' routerLinkActive='active' [routerLinkActiveOptions]='{exact:true}'>

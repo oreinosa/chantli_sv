@@ -32,11 +32,11 @@
       </div>
       <div class="col-12 col-sm-8">
         <div class="row">
-          <ng-container *ngIf='addedProducts.length; else noAddedProducts'>
+          <ng-container *ngIf='selectedProducts.length; else noAddedProducts'>
             <div class="col-12">
               <p>Productos agregados</p>
             </div>
-            <div class="col-12 col-sm-6" *ngIf='addedProducts | productsByCategory:"Principal":refresh as principales'>
+            <div class="col-12 col-sm-6" *ngIf='selectedProducts | productsByCategory:"Principal":refresh as principales'>
               <p>Platos principales</p>
               <p *ngFor='let product of principales'>
                 <span>{{ product.name }}</span>
@@ -45,7 +45,7 @@
                 </button>
               </p>
             </div>
-            <div class="col-12 col-sm-6" *ngIf='addedProducts | productsByCategory:"Acompañamiento":refresh as acomp'>
+            <div class="col-12 col-sm-6" *ngIf='selectedProducts | productsByCategory:"Acompañamiento":refresh as acomp'>
               <p>Acompañamiento</p>
               <p *ngFor='let product of acomp'>
                 <span>{{ product.name }}</span>
@@ -63,7 +63,7 @@
         </div>
       </div>
     </div>
-    <button mat-button type='submit'>Agregar</button>
+    <button mat-button type='submit' [disabled]='f.invalid || addedProducts.length'>Agregar</button>
     <button mat-button type='button' routerLink='../'>Atrás</button>
   </ng-container>
   <ng-template #loading>
