@@ -27,7 +27,7 @@
           Agregar
         </button>
         <ng-template #loadingProducts>
-          <mat-spinner></mat-spinner>
+          <mat-spinner class='mx-auto'></mat-spinner>
         </ng-template>
       </div>
       <div class="col-12 col-sm-8">
@@ -63,7 +63,7 @@
         </div>
       </div>
     </div>
-    <button mat-button type='submit' [disabled]='f.invalid || addedProducts.length'>Agregar</button>
+    <button mat-button type='submit' [disabled]='f.invalid || !selectedProducts.length'>Agregar</button>
     <button mat-button type='button' routerLink='../'>Atrás</button>
   </ng-container>
   <ng-template #loading>

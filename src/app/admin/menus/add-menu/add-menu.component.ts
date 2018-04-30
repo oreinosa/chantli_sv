@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -21,7 +21,7 @@ import { Observable } from 'rxjs/Observable';
   templateUrl: './add-menu.component.html',
   styleUrls: ['./add-menu.component.css']
 })
-export class AddMenuComponent extends Add<Menu> {
+export class AddMenuComponent extends Add<Menu> implements OnDestroy{
   private ngUnsubscribe = new Subject();
   stateCtrl: FormControl;
   refresh: boolean;
@@ -58,9 +58,14 @@ export class AddMenuComponent extends Add<Menu> {
     this.productsService
       .getAll()
       .takeUntil(this.ngUnsubscribe)
-      .do(products => products.forEach(product => delete product.id))
+      // .do(products => products.forEach(product => delete product.id))
       .map(products => products.filter(product => product.category === "Principal" || product.category === "Acompañamiento"))
       .subscribe(products => this.products = products);
+  }
+
+  ngOnDestroy(){
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   selectProduct(name: string) {

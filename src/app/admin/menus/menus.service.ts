@@ -57,6 +57,7 @@ export class MenusService extends DAO<Menu> {
         let productsCollection = this.objectCollection.doc(doc.id).collection<Product>('products');
         let batch = this.af.firestore.batch();
         products.forEach(product => {
+          delete product.id;
           const id = this.af.createId();
           let ref = productsCollection.doc(id).ref;
           batch.set(ref, product);
@@ -66,24 +67,32 @@ export class MenusService extends DAO<Menu> {
       })
   }
 
-  update(id: string, menu: Menu, products: Product[]) {
+  update(id: string, menu: Menu, products: Product[], deletedProducts: Product[]) {
     let productsCollection = this.objectCollection.doc(id).collection<Product>('products');
     return super
       .update(id, menu)
       .then(() => {
         let batch = this.af.firestore.batch();
+        let productsCollection = this.objectCollection.doc(id).collection<Product>('products');
+        let ref;
         products.forEach(product => {
-          let productsCollection = this.objectCollection.doc(id).collection<Product>('products');
-          let ref;
-          let _id = this.af.createId();
-          if (product.id) {
-            _id = product.id;
-          }
-          ref = productsCollection.doc(_id).ref;
+          delete product.id;
+          const id = this.af.createId();
+          ref = productsCollection.doc(id).ref;
           batch.set(ref, product);
-        })
+        });
+        deletedProducts.forEach(product => {
+          ref = productsCollection.doc(product.id).ref;
+          batch.delete(ref);
+        });
         return batch.commit();
       })
+  }
+
+  deleteProduct(idProduct: string, idMenu: string) {
+    let productsCollection = this.objectCollection.doc(idMenu).collection<Product>('products');
+    let productDocument = productsCollection.doc(idProduct);
+    return productDocument.delete();
   }
 
   // private addProducts(products: Product[]): Promise<void> {

@@ -25,6 +25,7 @@ export class EditMenuComponent extends Edit<Menu> {
   products: Product[];
 
   selectedProducts: Product[] = [];
+  deletedProducts: Product[] = [];
   selectedProduct: Product;
 
   constructor(
@@ -38,8 +39,8 @@ export class EditMenuComponent extends Edit<Menu> {
     this.stateCtrl = new FormControl();
     this.filteredProducts = this.stateCtrl.valueChanges
       .pipe(
-      startWith(''),
-      map(product => product ? this.filterProducts(product) : this.products.slice())
+        startWith(''),
+        map(product => product ? this.filterProducts(product) : this.products.slice())
       );
   }
 
@@ -47,19 +48,19 @@ export class EditMenuComponent extends Edit<Menu> {
     this.service
       .object
       .takeUntil(this.ngUnsubscribe)
-      .do((object: Menu) => !!object ? false : this.onBack('../'))
+      .do(object => this.object = object)
+      .do((object: Menu) => !!this.object ? false : this.onBack('../'))
       // .do(object => console.log(object))
-      .do(object => this.object = object, e => this.onBack('../'))
       .filter(object => !!object)
       .switchMap(() => this.menusService.getMenuProducts(this.object.id))
       .takeUntil(this.ngUnsubscribe)
       .do(products => console.log(products))
-      .subscribe(products => this.selectedProducts = products);;
+      .subscribe(products => this.object.products = this.selectedProducts = products);
 
     this.productsService
       .getAll()
       .takeUntil(this.ngUnsubscribe)
-      .do(products => products.forEach(product => delete product.id))
+      // .do(products => products.forEach(product => delete product.id))
       .map(products => products.filter(product => product.category === "Principal" || product.category === "Acompañamiento"))
       .subscribe(products => this.products = products);
 
@@ -82,15 +83,23 @@ export class EditMenuComponent extends Edit<Menu> {
   }
 
   removeProduct(id: string) {
-    let index = this.selectedProducts.findIndex(product => product.id === id);
+    let index = this.object.products.findIndex(product => product.id === id);
+    if (index >= 0) {
+      let removedProduct = this.selectedProducts[index];
+      console.log(`Removed ${removedProduct.name}`);
+      this.deletedProducts.push(removedProduct);
+    }
+
+    index = this.selectedProducts.findIndex(product => product.id === id);
     this.selectedProducts.splice(index, 1);
+
     this.refresh = !this.refresh;
   }
 
   onSubmit(menu: Menu): Promise<void> {
     console.log(this.selectedProducts);
     return this.menusService
-      .update(this.object.id, menu, this.selectedProducts)
+      .update(this.object.id, menu, this.selectedProducts, this.deletedProducts)
       .then(flag => this.onBack('../'))
       .then(() => this.notificationsService.show(`Menu editado`, undefined, 'info'));
   }
