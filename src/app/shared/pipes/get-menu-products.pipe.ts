@@ -10,7 +10,7 @@ export class GetMenuProductsPipe implements PipeTransform {
   constructor(private menusService: MenusService) { }
 
   transform(id: string): Observable<Product[]> {
-    return this.menusService.getMenuProducts(id);
+    return this.menusService.getSubcollection(id);
   }
 
 }

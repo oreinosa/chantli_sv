@@ -2,10 +2,10 @@
 	<ng-container *ngIf='!f?.submitted; else loading'>
 		<h4>Agregar categoría</h4>
 		<mat-form-field class="form-group">
-			<input matInput type="text" placeholder='Nombre' [(ngModel)]='object.name' name='name' id='name'>
+			<input matInput type="text" placeholder='Nombre' [(ngModel)]='object.name' name='name' id='name' required>
 		</mat-form-field>
 		<mat-form-field>
-			<textarea matInput rows='3' placeholder='Descripción' [(ngModel)]='object.description' name='description' id='description'></textarea>
+			<textarea matInput rows='3' placeholder='Descripción' [(ngModel)]='object.description' name='description' id='description' required></textarea>
 		</mat-form-field>
 		<button mat-button type='submit' [disabled]='f.invalid'>Agregar</button>
 		<button mat-button type='button' routerLink='../'>Atrás</button>

@@ -22,7 +22,7 @@
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
-        <button type='button' mat-button (click)='addProduct()' [disabled]='!selectedProduct'>
+        <button type='button' mat-button (click)='addToSubcollection()' [disabled]='!selectedSubcollectionObject'>
               <mat-icon>add</mat-icon>
               Agregar
             </button>
@@ -32,24 +32,24 @@
       </div>
       <div class="col-12 col-sm-8">
         <div class="row">
-          <ng-container *ngIf='selectedProducts.length; else noAddedProducts'>
+          <ng-container *ngIf='selectedSubcollectionObjects | editingSubcollection:object?.products:refresh as productsSelected; else noAddedProducts'>
             <div class="col-12">
               <p>Productos agregados</p>
             </div>
-            <div class="col-12 col-sm-6" *ngIf='selectedProducts | productsByCategory:"Principal":refresh as principales'>
+            <div class="col-12 col-sm-6" *ngIf='productsSelected | productsByCategory:"Principal":refresh as principales'>
               <p>Platos principales</p>
               <p *ngFor='let product of principales'>
                 <span>{{ product.name }}</span>
-                <button type='button' mat-icon-button (click)='removeProduct(product.id)'>
+                <button type='button' mat-icon-button (click)='removeFromSubcollection(product.id)'>
                       <mat-icon>delete</mat-icon>
                     </button>
               </p>
             </div>
-            <div class="col-12 col-sm-6" *ngIf='selectedProducts | productsByCategory:"Acompañamiento":refresh as acomp'>
+            <div class="col-12 col-sm-6" *ngIf='productsSelected | productsByCategory:"Acompañamiento":refresh as acomp'>
               <p>Acompañamiento</p>
               <p *ngFor='let product of acomp'>
                 <span>{{ product.name }}</span>
-                <button type='button' mat-icon-button (click)='removeProduct(product.id)'>
+                <button type='button' mat-icon-button (click)='removeFromSubcollection(product.id)'>
                       <mat-icon>delete</mat-icon>
                     </button>
               </p>
@@ -63,7 +63,7 @@
         </div>
       </div>
     </div>
-    <button mat-button type='submit'>Editar</button>
+    <button mat-button type='submit' [disabled]='f.invalid || !(selectedSubcollectionObjects | editingSubcollection:object?.products:refresh)?.length'>Editar</button>
     <button mat-button type='button' routerLink='../../'>Atrás</button>
   </ng-container>
   <ng-template #loading>

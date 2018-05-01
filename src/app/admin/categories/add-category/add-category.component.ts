@@ -3,7 +3,6 @@ import { Category } from '../../../shared/classes/category';
 import { CategoriesService } from '../categories.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Add } from '../../../shared/classes/add';
-import { NotificationsService } from '../../../notifications/notifications.service';
 @Component({
   selector: 'app-add-category',
   templateUrl: './add-category.component.html',
@@ -15,9 +14,8 @@ export class AddCategoryComponent extends Add<Category> {
     public router: Router,
     public route: ActivatedRoute,
     public categoriesService: CategoriesService,
-    public notificationsService: NotificationsService
   ) {
-    super(categoriesService, router, route, notificationsService);
+    super(categoriesService, router, route);
   }
 
   initForm() {

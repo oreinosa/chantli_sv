@@ -1,17 +1,18 @@
 import { Observable } from "rxjs/Observable";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { NotificationsService } from "../../notifications/notifications.service";
+import { DocumentReference } from "@firebase/firestore-types";
 
-export class DAO<T> {
-  // public objects = new Observable<T[]>();
+export abstract class DAO<T> {
   object = new BehaviorSubject<T>(null);
   objectCollection: AngularFirestoreCollection<T>;
-  private objectDocument: AngularFirestoreDocument<T>;
 
   constructor(
     public className: string,
-    private collectionName: string,
-    public af: AngularFirestore
+    public collectionName: string,
+    public af: AngularFirestore,
+    public notificationsService: NotificationsService
   ) {
     this.objectCollection = af.collection<T>(collectionName);
   }
@@ -31,21 +32,33 @@ export class DAO<T> {
       });
   }
 
-  add(object: T, subcollection?: any[]) {
+  add(object: T, subcollection?: any[]): Promise<DocumentReference> {
     return this.objectCollection
-      .add(object);
+      .add(object)
+      .then(doc => {
+        this.notificationsService.show(`${this.className} agregado`, undefined, 'success');
+        return doc;
+      })
   }
 
-  update(id: string, object: T, subcollection?: any[], deleted?: any[]) {
+  update(id: string, object: T, subcollection?: any[], deleted?: any[]): Promise<T> {
     // console.log(id);
     return this.objectCollection
       .doc(id)
-      .set(object, { merge: true });
+      .set(object, { merge: true })
+      .then(doc => {
+        this.notificationsService.show(`${this.className} editado`, undefined, 'info');
+        return object;
+      });
   }
 
-  delete(id: string) {
+  delete(id: string, subcollection?: any[]): Promise<string> {
     return this.objectCollection
       .doc(id)
-      .delete();
+      .delete()
+      .then(() => {
+        this.notificationsService.show(`${this.className} borrado`, undefined, 'danger');
+        return id;
+      });
   }
 }

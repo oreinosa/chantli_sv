@@ -55,6 +55,24 @@ export class Table<T> implements OnInit, AfterViewInit {
     this.dataSource.data = this.data.slice();
   }
 
+  // sortData() {
+  //   console.log('sort data');
+  //   const data = this.data.slice();
+  //   if (!this.sort.active || this.sort.direction == '') {
+  //     this.dataSource.data = this.data;
+  //     return;
+  //   }
+
+  //   this.dataSource.data = data.sort((a, b) => {
+  //     let isAsc = this.sort.direction == 'asc';
+  //     switch (this.sort.active) {
+  //       case 'name': return this.compare(a.name, b.name, isAsc);
+  //       case 'category': return this.compare(a.category, b.category, isAsc);
+  //       default: return 0;
+  //     }
+  //   });
+  // }
+
   compare(a, b, isAsc) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }

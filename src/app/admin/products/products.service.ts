@@ -3,14 +3,16 @@ import { Observable } from 'rxjs/Observable';
 import { Product } from '../../shared/classes/product';
 import { DAO } from '../../shared/classes/dao';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { NotificationsService } from '../../notifications/notifications.service';
 
 @Injectable()
 export class ProductsService extends DAO<Product> {
 
   constructor(
-    public af: AngularFirestore
+    public af: AngularFirestore,
+    public notificationsService: NotificationsService
   ) {
-    super('Producto','products', af);
+    super('Producto','products', af, notificationsService);
   }
 
   // getAllByCategory(category: string) {

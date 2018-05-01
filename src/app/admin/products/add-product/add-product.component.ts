@@ -7,7 +7,6 @@ import { ProductsService } from '../products.service';
 import { CategoriesService } from '../../categories/categories.service';
 import { Category } from '../../../shared/classes/category';
 import { Observable } from 'rxjs/Observable';
-import { NotificationsService } from '../../../notifications/notifications.service';
 
 @Component({
   selector: 'app-add-product',
@@ -21,10 +20,9 @@ export class AddProductComponent extends Add<Product>  {
     public router: Router,
     public route: ActivatedRoute,
     public productsService: ProductsService,
-    public notificationsService: NotificationsService,
     public categoriesService: CategoriesService
   ) {
-    super(productsService, router, route, notificationsService);
+    super(productsService, router, route);
   }
 
   initForm() {

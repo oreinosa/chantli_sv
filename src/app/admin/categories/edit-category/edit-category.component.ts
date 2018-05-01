@@ -15,9 +15,8 @@ export class EditCategoryComponent extends Edit<Category> {
     public categoriesService: CategoriesService,
     public router: Router,
     public route: ActivatedRoute,
-    public notificationsService: NotificationsService
   ) {
-    super(categoriesService, router, route, notificationsService);
+    super(categoriesService, router, route);
   }
 
 }

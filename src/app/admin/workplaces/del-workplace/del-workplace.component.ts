@@ -3,7 +3,6 @@ import { Delete } from '../../../shared/classes/delete';
 import { Workplace } from '../../../shared/classes/workplace';
 import { WorkplacesService } from '../workplaces.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NotificationsService } from '../../../notifications/notifications.service';
 
 @Component({
   selector: 'app-del-workplace',
@@ -15,9 +14,8 @@ export class DelWorkplaceComponent extends Delete<Workplace> {
     public workplacesService: WorkplacesService,
     public router: Router,
     public route: ActivatedRoute,
-    public notificationsService: NotificationsService
   ) {
-    super(workplacesService, router, route, notificationsService);
+    super(workplacesService, router, route);
   }
 
 }

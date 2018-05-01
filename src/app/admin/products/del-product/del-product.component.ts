@@ -3,7 +3,6 @@ import { Delete } from '../../../shared/classes/delete';
 import { Product } from '../../../shared/classes/product';
 import { ProductsService } from '../products.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NotificationsService } from '../../../notifications/notifications.service';
 
 @Component({
   selector: 'app-del-product',
@@ -15,8 +14,7 @@ export class DelProductComponent extends Delete<Product> {
     public productsService: ProductsService,
     public router: Router,
     public route: ActivatedRoute,
-    public notificationsService: NotificationsService
   ) {
-    super(productsService, router, route, notificationsService);
+    super(productsService, router, route);
   }
 }

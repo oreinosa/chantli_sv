@@ -4,7 +4,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/takeUntil';
 import { OnInit, OnDestroy } from '@angular/core';
-import { NotificationsService } from '../../notifications/notifications.service';
 
 export abstract class Edit<T> implements OnInit, OnDestroy {
   public ngUnsubscribe = new Subject();
@@ -14,7 +13,6 @@ export abstract class Edit<T> implements OnInit, OnDestroy {
     public service: DAO<T>,
     public router: Router,
     public route: ActivatedRoute,
-    public notificationsService: NotificationsService
   ) { }
 
   ngOnInit() {
@@ -37,7 +35,7 @@ export abstract class Edit<T> implements OnInit, OnDestroy {
     return this.service
       .update(id, object)
       .then(flag => this.onBack('../'))
-      .then(() => this.notificationsService.show(`${this.service['className']} editado`, undefined, 'info'));
+      // .then(() => this.notificationsService.show(`${this.service['className']} editado`, undefined, 'info'));
   }
 
   onBack(noId: string = '') {

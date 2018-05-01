@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { Workplace } from '../../../shared/classes/workplace';
 import { Router, ActivatedRoute } from '@angular/router';
 import { WorkplacesService } from '../workplaces.service';
-import { NotificationsService } from '../../../notifications/notifications.service';
 import { Add } from '../../../shared/classes/add';
 
 @Component({
@@ -16,9 +15,8 @@ export class AddWorkplaceComponent extends Add<Workplace> {
     public router: Router,
     public route: ActivatedRoute,
     public workplacesService: WorkplacesService,
-    public notificationsService: NotificationsService
   ) {
-    super(workplacesService, router, route, notificationsService);
+    super(workplacesService, router, route);
   }
 
   initForm() {

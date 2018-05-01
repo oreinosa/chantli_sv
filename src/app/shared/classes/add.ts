@@ -1,6 +1,5 @@
 import { Router, ActivatedRoute } from "@angular/router";
 import { DAO } from "./dao";
-import { NotificationsService } from "../../notifications/notifications.service";
 export abstract class Add<T> {
   public object: T;
 
@@ -8,7 +7,6 @@ export abstract class Add<T> {
     public service: DAO<T>,
     public router: Router,
     public route: ActivatedRoute,
-    public notificationsService: NotificationsService
   ) { }
 
   ngOnInit() {
@@ -22,7 +20,6 @@ export abstract class Add<T> {
     return this.service
       .add(object)
       .then(flag => this.onBack())
-      .then(() => this.notificationsService.show(`${this.service['className']} agregado`, undefined, 'success'));
   }
 
   onBack() {

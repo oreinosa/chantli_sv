@@ -2,12 +2,12 @@
 	<ng-container *ngIf='!f?.submitted && object; else loading'>
 		<h4>Editar categoría</h4>
 		<mat-form-field>
-			<input matInput type="text" placeholder="Nombre" [ngModel]='object.name' name='name' id='name'>
+			<input matInput type="text" placeholder="Nombre" [ngModel]='object.name' name='name' id='name' required>
 		</mat-form-field>
 		<mat-form-field>
-			<textarea matInput rows='3' placeholder="Descripción" [ngModel]='object.description' name='description' id='description'></textarea>
+			<textarea matInput rows='3' placeholder="Descripción" [ngModel]='object.description' name='description' id='description' required></textarea>
 		</mat-form-field>
-		<button mat-button type='submit'>Editar</button>
+		<button mat-button type='submit' [disabled]='f.invalid'>Editar</button>
 		<button mat-button type='button' routerLink='../../'>Atrás</button>
 	</ng-container>
 	<ng-template #loading>

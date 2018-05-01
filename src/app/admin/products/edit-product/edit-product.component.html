@@ -2,10 +2,10 @@
   <ng-container *ngIf='!f?.submitted && object; else loading'>
     <h4>Editar producto</h4>
     <mat-form-field>
-      <input matInput type="text" placeholder="Nombre" [ngModel]='object.name' name='name' id='name'>
+      <input matInput type="text" placeholder="Nombre" [ngModel]='object.name' name='name' id='name' required>
     </mat-form-field>
     <mat-form-field>
-      <textarea matInput rows='3' placeholder="Descripción" [ngModel]='object.description' name='description' id='description'></textarea>
+      <textarea matInput rows='3' placeholder="Descripción" [ngModel]='object.description' name='description' id='description' required></textarea>
     </mat-form-field>
     <!-- <mat-form-field>
       <input matInput type="number" placeholder="Precio" [ngModel]='object.price' name='price' id='price'>
@@ -14,14 +14,14 @@
       <input matInput type="number" placeholder="Costo" [ngModel]='object.cost' name='cost' id='cost'>
     </mat-form-field> -->
     <mat-form-field>
-      <mat-select placeholder='Categoría' [ngModel]='object.category' name='category' id='category'>
+      <mat-select placeholder='Categoría' [ngModel]='object.category' name='category' id='category' required>
         <mat-option *ngFor='let category of categories | async' [value]='category.name'>
           {{ category.name }}
         </mat-option>
       </mat-select>
     </mat-form-field>
     <app-uploader #uploader [imageURL]='object.imageURL'></app-uploader>
-    <button mat-button type='submit'>Editar</button>
+    <button mat-button type='submit' [disabled]='f.invalid || !uploader.imageURL'>Editar</button>
     <button mat-button type='button' routerLink='../../'>Atrás</button>
   </ng-container>
   <ng-template #loading>
