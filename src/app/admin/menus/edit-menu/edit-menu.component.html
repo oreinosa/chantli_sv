@@ -5,10 +5,10 @@
         <h4>Editar menu</h4>
         <div class="col-6 mx-auto">
           <mat-form-field>
-            <input matInput type="date" placeholder='Fecha' [ngModel]='object.date' name='date' id='date'>
+            <input matInput type="date" placeholder='Fecha' [ngModel]='object.date' name='date' id='date' required>
           </mat-form-field>
           <mat-form-field>
-            <input matInput placeholder='Precio' [ngModel]='object.price' name='price' id='price'>
+            <input matInput placeholder='Precio' [ngModel]='object.price' name='price' id='price' required>
           </mat-form-field>
         </div>
       </div>
@@ -22,10 +22,10 @@
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
-        <button type='button' mat-button (click)='addToSubcollection()' [disabled]='!selectedSubcollectionObject'>
-              <mat-icon>add</mat-icon>
-              Agregar
-            </button>
+        <button type='button' mat-button (click)='addToSubcollection();stateCtrl.reset()' [disabled]='!selectedSubcollectionObject'>
+          <mat-icon>add</mat-icon>
+          Agregar
+        </button>
         <ng-template #loadingProducts>
           <mat-spinner></mat-spinner>
         </ng-template>
@@ -41,8 +41,8 @@
               <p *ngFor='let product of principales'>
                 <span>{{ product.name }}</span>
                 <button type='button' mat-icon-button (click)='removeFromSubcollection(product.id)'>
-                      <mat-icon>delete</mat-icon>
-                    </button>
+                  <mat-icon>delete</mat-icon>
+                </button>
               </p>
             </div>
             <div class="col-12 col-sm-6" *ngIf='productsSelected | productsByCategory:"Acompañamiento":refresh as acomp'>
@@ -50,8 +50,8 @@
               <p *ngFor='let product of acomp'>
                 <span>{{ product.name }}</span>
                 <button type='button' mat-icon-button (click)='removeFromSubcollection(product.id)'>
-                      <mat-icon>delete</mat-icon>
-                    </button>
+                  <mat-icon>delete</mat-icon>
+                </button>
               </p>
             </div>
           </ng-container>

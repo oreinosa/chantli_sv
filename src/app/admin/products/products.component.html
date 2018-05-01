@@ -21,6 +21,12 @@
 				<mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
 				<mat-cell *matCellDef="let element">
 					{{element.name}}
+					<ng-container *ngIf='element.noSides'>
+						<p>(Sin acompañamiento)</p>
+					</ng-container>
+					<ng-container *ngIf='element.extra'>
+						<p>(Costo extra: {{ element.extra | currency }})</p>
+					</ng-container>
 				</mat-cell>
 			</ng-container>
 

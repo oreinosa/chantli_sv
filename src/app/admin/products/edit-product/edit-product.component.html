@@ -5,7 +5,8 @@
       <input matInput type="text" placeholder="Nombre" [ngModel]='object.name' name='name' id='name' required>
     </mat-form-field>
     <mat-form-field>
-      <textarea matInput rows='3' placeholder="Descripción" [ngModel]='object.description' name='description' id='description' required></textarea>
+      <textarea matInput rows='3' placeholder="Descripción" [ngModel]='object.description' name='description' id='description'
+        required></textarea>
     </mat-form-field>
     <!-- <mat-form-field>
       <input matInput type="number" placeholder="Precio" [ngModel]='object.price' name='price' id='price'>
@@ -20,6 +21,12 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
+    <mat-form-field *ngIf='f.value?.category === "Bebida"'>
+      <input matInput type="number" placeholder="Costo extra" [ngModel]='object.extra' name='extra' id='extra' required>
+    </mat-form-field>
+    <p *ngIf='f.value?.category === "Principal"'>
+      <mat-checkbox [ngModel]='object.noSides' name='noSides' id='noSides'>Sin acompañamiento?</mat-checkbox>
+    </p>
     <app-uploader #uploader [imageURL]='object.imageURL'></app-uploader>
     <button mat-button type='submit' [disabled]='f.invalid || !uploader.imageURL'>Editar</button>
     <button mat-button type='button' routerLink='../../'>Atrás</button>

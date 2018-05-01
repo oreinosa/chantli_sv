@@ -52,8 +52,14 @@ export class AddMenuComponent extends AddSubcollection<Menu, Product> implements
     this.productsService
       .getAll()
       .takeUntil(this.ngUnsubscribe)
-      // .do(products => products.forEach(product => delete product.id))
       .map(products => products.filter(product => product.category === "Principal" || product.category === "Acompañamiento"))
+      .map(products => products.sort((a, b) => {
+        if (a.name < b.name)
+          return -1;
+        if (a.name > b.name)
+          return 1;
+        return 0;
+      }))
       .subscribe(products => this.products = products);
   }
 
