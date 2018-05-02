@@ -39,7 +39,6 @@ export class EditMenuComponent extends EditSubcollection<Menu, Product> {
 
   ngOnInit() {
     super.ngOnInit();
-
     this.productsService
       .getAll()
       .takeUntil(this.ngUnsubscribe)

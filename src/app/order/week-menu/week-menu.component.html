@@ -1,3 +1,17 @@
-<p>
-  week-menu works!
-</p>
+<div class="row">
+  <ng-container *ngIf='(_menus | async) as menus; else loading'>
+    <div class="col-12 text-center">
+      <h1>Menu de la semana</h1>
+      <h4 *ngIf='menus.length == 0'>Aún no está el menú de la semana.</h4>
+    </div>
+    <div class='col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 mb-3' *ngFor='let menu of menus'>
+      <!-- {{ menu | json }} -->
+      <app-day-menu [menu]='menu'></app-day-menu>
+    </div>
+  </ng-container>
+  <ng-template #loading>
+    <div class="mx-auto">
+      <mat-spinner></mat-spinner>
+    </div>
+  </ng-template>
+</div>

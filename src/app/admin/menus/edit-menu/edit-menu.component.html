@@ -5,7 +5,7 @@
         <h4>Editar menu</h4>
         <div class="col-6 mx-auto">
           <mat-form-field>
-            <input matInput type="date" placeholder='Fecha' [ngModel]='object.date' name='date' id='date' required>
+            <input matInput type="date" placeholder='Fecha' [ngModel]='object.date | date:"yyyy-MM-dd"' name='date' id='date' required>
           </mat-form-field>
           <mat-form-field>
             <input matInput placeholder='Precio' [ngModel]='object.price' name='price' id='price' required>

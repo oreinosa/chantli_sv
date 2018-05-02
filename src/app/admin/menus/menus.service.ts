@@ -16,6 +16,22 @@ export class MenusService extends DAOSubcollection<Menu, Product> {
     super('Menu', 'menus', af, notificationsService, 'products');
   }
 
+  add(menu: Menu, products: Product[]) {
+    let date = new Date(menu.date);
+    date.setUTCHours(12, 0, 0);
+    menu.date = date.getTime();
+    console.log(date.toISOString());
+    return super.add(menu, products);
+  }
+
+  update(id: string, menu: Menu, products: Product[], deletedProducts: Product[]) {
+    let date = new Date(menu.date);
+    date.setUTCHours(12, 0, 0);
+    menu.date = date.getTime();
+    console.log(date.toISOString());
+    return super.update(id, menu, products, deletedProducts);
+  }
+
   toggleMenuAvailability(id: string, flag: boolean): Promise<void> {
     return this.objectCollection.doc(id)
       .update({ available: flag })

@@ -32,6 +32,7 @@ import { CapitalizePipe } from './pipes/capitalize.pipe';
 import { ProductsByCategoryPipe } from './pipes/products-by-category.pipe';
 import { GetMenuProductsPipe } from './pipes/get-menu-products.pipe';
 import { EditingSubcollectionPipe } from './pipes/editing-subcollection.pipe';
+import { DowPipe } from './pipes/dow.pipe';
 
 @NgModule({
   imports: [
@@ -81,8 +82,9 @@ import { EditingSubcollectionPipe } from './pipes/editing-subcollection.pipe';
     GetMenuProductsPipe,
     MatAutocompleteModule,
     EditingSubcollectionPipe,
+    DowPipe,
     MatProgressSpinnerModule,
   ],
-  declarations: [SortByPipe, CapitalizePipe, ProductsByCategoryPipe, GetMenuProductsPipe, EditingSubcollectionPipe],
+  declarations: [SortByPipe, CapitalizePipe, ProductsByCategoryPipe, GetMenuProductsPipe, EditingSubcollectionPipe, DowPipe],
 })
 export class SharedModule { }

@@ -36,7 +36,7 @@ export class AuthService {
     private notificationsService: NotificationsService
   ) {
     this._links = [
-      { label: 'Ordenar', route: 'ordenar', icon: 'shopping_cart' }
+      { label: 'Menu', route: 'menu', icon: 'shopping_cart' }
     ];
     this._actions = [];
 

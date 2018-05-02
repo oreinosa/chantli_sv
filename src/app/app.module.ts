@@ -18,6 +18,7 @@ import { AngularFireStorageModule } from 'angularfire2/storage';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
 import { NotificationsModule } from './notifications/notifications.module';
+import { OrderModule } from './order/order.module';
 
 @NgModule({
   imports: [
@@ -29,6 +30,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     SharedModule,
     NotificationsModule,
     CoreModule,
+    OrderModule,
     AuthModule,
     AdminModule,
     AppRoutingModule

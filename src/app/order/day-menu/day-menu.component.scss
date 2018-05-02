@@ -1,0 +1,21 @@
+@import '../../../_colors';
+
+.menu-products{
+  word-wrap: break-word;
+}
+
+.M{
+  background-color: $primary;
+}
+.T{
+  background-color: $accent;
+}
+.W{
+  background-color: $warn;
+}
+.Th{
+  background-color: $success;
+}
+.F{
+  background-color: $danger;
+}
