@@ -82,6 +82,7 @@ export class AuthService {
         );
     }
     this.actionsSubject.next(this._actions);
+    this.router.navigate(['menu']);
     // this.linksSubject.next(this._links);
   }
 

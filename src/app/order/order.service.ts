@@ -2,14 +2,19 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Menu } from '../shared/classes/menu';
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class OrderService {
   private menusCol: AngularFirestoreCollection<Menu>;
+  menuSubject = new BehaviorSubject<Menu>(null);
 
   constructor(
-    private af: AngularFirestore
+    private af: AngularFirestore,
+    private router: Router
   ) { }
+
 
   getWeekMenus(): Observable<Menu[]> {
     const d = new Date();
@@ -35,6 +40,11 @@ export class OrderService {
         });
       })
     // .do(menus => this.logger.log('Menus : ', menus))
+  }
+
+  selectMenu(menu: Menu) {
+    this.menuSubject.next(menu);
+    this.router.navigate(['nueva-orden', menu.id, 1]);
   }
 
   private getMonday(d: Date): number {

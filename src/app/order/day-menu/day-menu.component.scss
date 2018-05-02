@@ -1,21 +1,19 @@
-@import '../../../_colors';
-
 .menu-products{
   word-wrap: break-word;
 }
 
-.M{
-  background-color: $primary;
+.Lunes{
+  background-color: #B2DFDB;
 }
-.T{
-  background-color: $accent;
+.Martes{
+  background-color: #B2EBF2;
 }
-.W{
-  background-color: $warn;
+.Miércoles{
+  background-color: #B3E5FC;
 }
-.Th{
-  background-color: $success;
+.Jueves{
+  background-color: #BBDEFB;
 }
-.F{
-  background-color: $danger;
+.Viernes{
+  background-color: #C8E6C9;
 }

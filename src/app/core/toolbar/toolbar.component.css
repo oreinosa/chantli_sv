@@ -1,7 +1,7 @@
 .navigation .mat-button{
   text-decoration: none;
 }
-.navigation .mat-button.active{
+.navigation .mat-button.active, .navigation .mat-button:hover{
   color: black;
 }
 .mat-toolbar{

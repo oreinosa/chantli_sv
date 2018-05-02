@@ -6,7 +6,8 @@ import { NewOrderComponent } from './new-order/new-order.component';
 
 const routes: Routes = [
   { path: 'menu', component: WeekMenuComponent },
-  { path: 'nueva-orden/:id', component: NewOrderComponent },
+  { path: 'nueva-orden', pathMatch: 'full', redirectTo: 'menu' },
+  { path: 'nueva-orden/:id/:step', component: NewOrderComponent },
 ];
 
 @NgModule({

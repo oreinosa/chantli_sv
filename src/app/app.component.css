@@ -5,5 +5,7 @@
 }
 .app-sidenav {
   min-width: 250px;
-  background-color: rgba(0, 150, 136, 0.8);
+  background-color: rgba(0, 150, 136);
+  position: fixed;
+  z-index: 99;
 }

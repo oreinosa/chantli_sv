@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Menu } from '../../shared/classes/menu';
 import { Observable } from 'rxjs/Observable';
 import { OrderService } from '../order.service';
+import { Product } from '../../shared/classes/product';
 
 @Component({
   selector: 'app-week-menu',
@@ -17,6 +18,10 @@ export class WeekMenuComponent implements OnInit {
 
   ngOnInit() {
     this._menus = this.orderService.getWeekMenus().do(a => console.log(a));
+  }
+
+  onSelectMenu(menu: Menu) {
+    this.orderService.selectMenu(menu);
   }
 
 }

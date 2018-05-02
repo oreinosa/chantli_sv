@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Menu } from '../../shared/classes/menu';
+import { Product } from '../../shared/classes/product';
 
 @Component({
   selector: 'app-day-menu',
@@ -8,9 +9,15 @@ import { Menu } from '../../shared/classes/menu';
 })
 export class DayMenuComponent implements OnInit {
   @Input() menu: Menu;
+  @Output() selected = new EventEmitter<Menu>();
   constructor() { }
 
   ngOnInit() {
+  }
+
+  onSelect(products: Product[]){
+    this.menu.products = products;
+    this.selected.emit(this.menu);
   }
 
 }

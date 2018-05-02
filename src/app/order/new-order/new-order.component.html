@@ -1,3 +1,25 @@
-<p>
-  new-order works!
-</p>
+<mat-card *ngIf='menu'>
+  <mat-card-header>
+    <mat-card-title>
+      <h1>Ordenando para {{ menu.date | date:"EEEE" | dow }}</h1>
+    </mat-card-title>
+    <mat-card-subtitle>
+      <h3>Paso {{ step }}</h3>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="row" *ngIf='menu.products as products'>
+      <div class="col-12 col-md-6">
+        <h4>Platos principales</h4>
+        <ng-container *ngFor='let product of products | productsByCategory:"Principal"'>
+          <img [src]="product.imageURL" *ngIf='product?.imageURL' class="img-fluid img-thumbnail rounded">
+          <p>{{ product.name }}</p>
+          <p>{{ product.description }}</p>
+        </ng-container>
+      </div>
+      <div class="col-12 col-md-6">
+
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
