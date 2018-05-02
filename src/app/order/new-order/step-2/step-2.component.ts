@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Menu } from '../../../shared/classes/menu';
 
 @Component({
   selector: 'app-step-2',
@@ -6,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./step-2.component.css']
 })
 export class Step2Component implements OnInit {
-
+  @Input() menu: Menu;
   constructor() { }
 
   ngOnInit() {

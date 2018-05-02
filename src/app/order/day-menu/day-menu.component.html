@@ -1,5 +1,4 @@
 <ng-container *ngIf='(menu.id | getMenuProducts | async) as products; else loadingProducts'>
-
   <mat-card [ngClass]='DOW' *ngIf='(menu.date | date:"EEEE" | dow) as DOW'>
     <mat-card-header>
       <mat-card-title>

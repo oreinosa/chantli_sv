@@ -1,3 +1,18 @@
-<p>
-  step-1 works!
-</p>
+<div class="row" *ngIf='menu.products as products'>
+  <div class="col-12 col-md-6">
+    <h4>Platos principales</h4>
+    <ng-container *ngFor='let product of products | productsByCategory:"Principal"'>
+      <img [src]="product.imageURL" *ngIf='product?.imageURL' class="img-fluid img-thumbnail rounded">
+      <p>{{ product.name }}</p>
+      <p>{{ product.description }}</p>
+    </ng-container>
+  </div>
+  <div class="col-12 col-md-6 text-center">
+    <h4>Acompañamientos</h4>
+    <ng-container *ngFor='let product of products | productsByCategory:"Acompañamiento"'>
+      <img [src]="product.imageURL" *ngIf='product?.imageURL' class="img-fluid img-thumbnail rounded">
+      <p>{{ product.name }}</p>
+      <p>{{ product.description }}</p>
+    </ng-container>
+  </div>
+</div>

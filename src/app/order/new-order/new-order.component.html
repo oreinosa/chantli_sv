@@ -8,18 +8,11 @@
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <div class="row" *ngIf='menu.products as products'>
-      <div class="col-12 col-md-6">
-        <h4>Platos principales</h4>
-        <ng-container *ngFor='let product of products | productsByCategory:"Principal"'>
-          <img [src]="product.imageURL" *ngIf='product?.imageURL' class="img-fluid img-thumbnail rounded">
-          <p>{{ product.name }}</p>
-          <p>{{ product.description }}</p>
-        </ng-container>
-      </div>
-      <div class="col-12 col-md-6">
-
-      </div>
-    </div>
+    <ng-container [ngSwitch]='step'>
+      <app-step-1 [menu]='menu' *ngSwitchCase='1'></app-step-1>
+      <app-step-2 [menu]='menu' *ngSwitchCase='2'></app-step-2>
+      <app-step-3 *ngSwitchCase='3'></app-step-3>
+      <app-step-4 *ngSwitchCase='4'></app-step-4>
+    </ng-container>
   </mat-card-content>
 </mat-card>
