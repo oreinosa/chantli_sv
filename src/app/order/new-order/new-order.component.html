@@ -1,31 +1,18 @@
-<mat-card *ngIf='menu'>
-  <mat-card-header>
-    <mat-card-title>
-      <h1>Ordenando para {{ menu.date | date:"EEEE" | dow }}</h1>
-    </mat-card-title>
-    <mat-card-subtitle>
-      <h3>Paso {{ step }}</h3>
-    </mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content>
+<div class="col-12 col-lg-10 mx-auto">
+  <mat-card *ngIf='menu'>
+    <mat-card-header>
+      <mat-card-title>
+        <h1>Ordenando para {{ menu.date | date:"EEEE" | dow }}</h1>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <h3>Paso {{ step }}</h3>
+      </mat-card-subtitle>
+    </mat-card-header>
     <ng-container [ngSwitch]='step'>
-      <app-step-1 [menu]='menu' *ngSwitchCase='1'></app-step-1>
+      <app-step-1 [menu]='menu' *ngSwitchCase='1' (select)='onStep1($event.principal, $event.acompanamientos)'></app-step-1>
       <app-step-2 [menu]='menu' *ngSwitchCase='2'></app-step-2>
       <app-step-3 *ngSwitchCase='3'></app-step-3>
       <app-step-4 *ngSwitchCase='4'></app-step-4>
     </ng-container>
-  </mat-card-content>
-  <mat-card-actions align='end'>
-    <ng-container *ngIf='step > 1'>
-      <button mat-button type='button' [routerLink]='["./", step-1]'>
-        Atrás
-      </button>
-    </ng-container>
-    <ng-container *ngIf='step < 4'>
-      <button mat-button type='button' [routerLink]='["./", step+1]'>
-        Siguiente
-      </button>
-    </ng-container>
-
-  </mat-card-actions>
-</mat-card>
+  </mat-card>
+</div>

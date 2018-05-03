@@ -5,18 +5,19 @@ import { User } from "firebase";
 export class Order {
   constructor(
     public id?: string,
-    public products?: Product[],
+    public products?: {
+      principal: string,
+      acompanamiento: string,
+      bebida: string
+    },
     public tortillas?: number,
-    public cost?: number,
+    public price?: number,
     public status?: string,
     public user?: User,
     public date?: {
-      for?: firebase.firestore.Timestamp,
-      by?: firebase.firestore.Timestamp
+      for?: Date,
+      by?: Date
     },
-    public paid?: {
-      flag: boolean,
-      date: firebase.firestore.Timestamp
-    },
+    public paid?: Date
   ) { }
 }

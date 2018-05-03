@@ -17,18 +17,18 @@ export class MenusService extends DAOSubcollection<Menu, Product> {
   }
 
   add(menu: Menu, products: Product[]) {
-    let date = new Date(menu.date);
-    date.setUTCHours(18, 0, 0);
-    menu.date = date.getTime();
-    console.log(date.toISOString());
+    // let date = new Date(menu.date);
+    menu.date.setUTCHours(12, 0, 0);
+    // menu.date = date.getTime();
+    console.log(menu.date);
     return super.add(menu, products);
   }
 
   update(id: string, menu: Menu, products: Product[], deletedProducts: Product[]) {
-    let date = new Date(menu.date);
-    date.setUTCHours(18, 0, 0);
-    menu.date = date.getTime();
-    console.log(date.toISOString());
+    // let date = new Date(menu.date);
+    menu.date.setUTCHours(12, 0, 0);
+    // menu.date = date.getTime();
+    // console.log(date.toISOString());
     return super.update(id, menu, products, deletedProducts);
   }
 

@@ -1,18 +1,43 @@
-<div class="row" *ngIf='menu.products as products'>
-  <div class="col-12 col-md-6">
-    <h4>Platos principales</h4>
-    <ng-container *ngFor='let product of products | productsByCategory:"Principal"'>
-      <img [src]="product.imageURL" *ngIf='product?.imageURL' class="img-fluid img-thumbnail rounded">
-      <p>{{ product.name }}</p>
-      <p>{{ product.description }}</p>
-    </ng-container>
+<mat-card-content>
+  <div class="row" *ngIf='menu.products as products'>
+    <div class="col-12 text-center">
+      <h2>Selecciona el plato principal y acompañamientos</h2>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-5 offset-lg-1 text-center hover">
+      <h4>Platos principales</h4>
+      <ng-container *ngFor='let product of products | productsByCategory:"Principal"'>
+        <figure>
+          <img [src]="product.imageURL" *ngIf='product?.imageURL' class="img-fluid img-thumbnail rounded" (click)='principal = product'
+            [ngClass]='principal?.id === product?.id ? "selected":""'>
+        </figure>
+        <p>{{ product.name }}</p>
+        <p>{{ product.description }}</p>
+      </ng-container>
+    </div>
+    <div class="col-12 col-sm-6 col-lg-5 text-center hover">
+      <h4>Acompañamientos</h4>
+      <ng-container *ngFor='let product of products | productsByCategory:"Acompañamiento"'>
+        <figure>
+          <img [src]="product.imageURL" *ngIf='product?.imageURL' class="img-fluid img-thumbnail rounded" (click)='onSelectAcompanamiento(product)'>
+        </figure>
+        <p>{{ product.name }}</p>
+        <p>{{ product.description }}</p>
+      </ng-container>
+      <mat-checkbox [(ngModel)]='doubleSide' (change)='onDobleAcompanamiento()'>
+        Doble acompañamiento?
+      </mat-checkbox>
+      <!-- <h6 *ngIf='!selProducts?.mainCourse?.noSides && selProducts?.sides?.length < 2 && !doubleSide' @shrinkX>
+      Selecciona los 2 acompañamientos
+    </h6>
+    <h6 *ngIf='doubleSide && selProducts?.sides?.length'>Doble {{ selSides[0] }}</h6> -->
+    </div>
   </div>
-  <div class="col-12 col-md-6 text-center">
-    <h4>Acompañamientos</h4>
-    <ng-container *ngFor='let product of products | productsByCategory:"Acompañamiento"'>
-      <img [src]="product.imageURL" *ngIf='product?.imageURL' class="img-fluid img-thumbnail rounded">
-      <p>{{ product.name }}</p>
-      <p>{{ product.description }}</p>
-    </ng-container>
-  </div>
-</div>
+</mat-card-content>
+<mat-card-actions align='end'>
+  <button mat-button type='button' routerLink='menu'>
+    Cancelar
+  </button>
+  <button mat-button type='button' (click)='select.emit(principal, acompanamientos)'>
+    Siguiente
+  </button>
+</mat-card-actions>

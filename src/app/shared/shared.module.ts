@@ -18,7 +18,9 @@ import {
   MatTabsModule,
   MatDialogModule,
   MatTooltipModule,
-  MatAutocompleteModule
+  MatAutocompleteModule,
+  MatDatepickerModule,
+  MatNativeDateModule
 } from '@angular/material';
 
 import 'rxjs/add/operator/do';
@@ -55,6 +57,8 @@ import { DowPipe } from './pipes/dow.pipe';
     MatTooltipModule,
     MatDialogModule,
     MatAutocompleteModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     MatProgressSpinnerModule,
   ],
   exports: [
@@ -83,6 +87,8 @@ import { DowPipe } from './pipes/dow.pipe';
     MatAutocompleteModule,
     EditingSubcollectionPipe,
     DowPipe,
+    MatDatepickerModule,
+    MatNativeDateModule,
     MatProgressSpinnerModule,
   ],
   declarations: [SortByPipe, CapitalizePipe, ProductsByCategoryPipe, GetMenuProductsPipe, EditingSubcollectionPipe, DowPipe],

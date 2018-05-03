@@ -26,7 +26,7 @@ export class OrderService {
       ref =>
         ref
           // .where('active', '==', true)
-          // .where('date', '>=', this.getMonday(d))
+          .where('date', '>=', this.getMonday(d))
           .where('date', '<=', this.getFriday(d))
     );
 
@@ -36,7 +36,6 @@ export class OrderService {
         return actions.map(a => {
           const data = a.payload.doc.data();
           const id = a.payload.doc.id;
-          if(!(data.date >= this.getMonday(d))) console.log(data.date - this.getMonday(d));
           return { id, ...data } as Menu;
         });
       })
@@ -48,7 +47,7 @@ export class OrderService {
     this.router.navigate(['nueva-orden', menu.id, 1]);
   }
 
-  private getMonday(d: Date): number {
+  private getMonday(d: Date): Date {
     d = new Date(d);
     var day = d.getDay(),
       diff = d.getDate() - day + 1;
@@ -56,12 +55,12 @@ export class OrderService {
       diff += 7;
     }
     d.setDate(diff);
-    d.setUTCHours(15, 0, 0);
-    console.log(d.toISOString());
-    return new Date(d).getTime();
+    d.setHours(0, 0, 0);
+    console.log(d);
+    return new Date(d);
   }
 
-  private getFriday(d: Date): number {
+  private getFriday(d: Date): Date {
     d = new Date(d);
     var day = d.getDay(),
       diff = d.getDate() - day + 5;
@@ -69,9 +68,9 @@ export class OrderService {
       // diff += day == 6 ? 3 : 7;
     }
     d.setDate(diff);
-    d.setUTCHours(20, 0, 0);
-    console.log(d.toISOString());
-    return new Date(d).getTime();
+    d.setHours(23, 0, 0);
+    console.log(d);
+    return new Date(d);
   }
 
 }

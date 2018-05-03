@@ -1,3 +1,5 @@
+import { Product } from './../../shared/classes/product';
+import { NewOrder } from './../../shared/classes/new-order';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../order.service';
@@ -11,6 +13,7 @@ import { Menu } from '../../shared/classes/menu';
 })
 export class NewOrderComponent implements OnInit {
   private ngUnsubscribe = new Subject();
+  order: NewOrder;
   step: number = 1;
   menu: Menu;
   constructor(
@@ -30,10 +33,19 @@ export class NewOrderComponent implements OnInit {
       .takeUntil(this.ngUnsubscribe)
       .map(params => +params.get('step'))
       .subscribe(step => this.step = step ? step : 1);
+
+    this.order = new NewOrder();
   }
 
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
+
+  onStep1(principal: Product, acompanamientos: Product[]) {
+    this.order.products.principal = principal;
+    this.order.products.acompanamientos = acompanamientos;
+  }
+
+
 }
