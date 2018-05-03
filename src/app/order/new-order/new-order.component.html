@@ -15,4 +15,17 @@
       <app-step-4 *ngSwitchCase='4'></app-step-4>
     </ng-container>
   </mat-card-content>
+  <mat-card-actions align='end'>
+    <ng-container *ngIf='step > 1'>
+      <button mat-button type='button' [routerLink]='["./", step-1]'>
+        Atrás
+      </button>
+    </ng-container>
+    <ng-container *ngIf='step < 4'>
+      <button mat-button type='button' [routerLink]='["./", step+1]'>
+        Siguiente
+      </button>
+    </ng-container>
+
+  </mat-card-actions>
 </mat-card>

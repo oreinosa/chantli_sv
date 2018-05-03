@@ -18,7 +18,7 @@ export class MenusService extends DAOSubcollection<Menu, Product> {
 
   add(menu: Menu, products: Product[]) {
     let date = new Date(menu.date);
-    date.setUTCHours(12, 0, 0);
+    date.setUTCHours(18, 0, 0);
     menu.date = date.getTime();
     console.log(date.toISOString());
     return super.add(menu, products);
@@ -26,7 +26,7 @@ export class MenusService extends DAOSubcollection<Menu, Product> {
 
   update(id: string, menu: Menu, products: Product[], deletedProducts: Product[]) {
     let date = new Date(menu.date);
-    date.setUTCHours(12, 0, 0);
+    date.setUTCHours(18, 0, 0);
     menu.date = date.getTime();
     console.log(date.toISOString());
     return super.update(id, menu, products, deletedProducts);

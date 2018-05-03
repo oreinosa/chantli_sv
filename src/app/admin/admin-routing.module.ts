@@ -64,6 +64,7 @@ const routes: Routes = [
           { path: 'borrar/:id', component: DelMenuComponent }
         ]
       },
+      { path: '', pathMatch: 'full', redirectTo: 'menus'}
     ]
   }
 ];
