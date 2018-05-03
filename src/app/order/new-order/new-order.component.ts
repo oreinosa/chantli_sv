@@ -5,6 +5,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../order.service';
 import { Subject } from 'rxjs/Subject';
 import { Menu } from '../../shared/classes/menu';
+import { Order } from '../../shared/classes/order';
+import { AuthService } from '../../auth/auth.service';
+import { User } from '../../shared/classes/user';
 
 @Component({
   selector: 'app-new-order',
@@ -13,16 +16,26 @@ import { Menu } from '../../shared/classes/menu';
 })
 export class NewOrderComponent implements OnInit {
   private ngUnsubscribe = new Subject();
-  order: NewOrder;
+  newOrder: NewOrder;
   step: number = 1;
   menu: Menu;
+  user: User;
+
   constructor(
+    private authService: AuthService,
     private orderService: OrderService,
     private route: ActivatedRoute,
     private router: Router
   ) { }
 
   ngOnInit() {
+    this.authService
+      .user
+      .takeUntil(this.ngUnsubscribe)
+      .do(user => !user ? this.router.navigate(['ingresar']) : false)
+      .do(user => !user.workplace ? this.router.navigate(['perfil']) : false)
+      .subscribe(user => this.user = user);
+
     this.orderService
       .menuSubject
       .takeUntil(this.ngUnsubscribe)
@@ -34,18 +47,55 @@ export class NewOrderComponent implements OnInit {
       .map(params => +params.get('step'))
       .subscribe(step => this.step = step ? step : 1);
 
-    this.order = new NewOrder();
+    this.newOrder = new NewOrder({ principal: null, acompanamientos: [], bebida: null });
   }
 
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+    this.orderService.selectMenu(null);
   }
 
-  onStep1(principal: Product, acompanamientos: Product[]) {
-    this.order.products.principal = principal;
-    this.order.products.acompanamientos = acompanamientos;
+  onSelect(principal: Product, acompanamientos: Product[]) {
+    this.newOrder.products.principal = principal;
+    this.newOrder.products.acompanamientos = acompanamientos;
+    this.router.navigate(['../', 2], { relativeTo: this.route });
   }
 
+  onSelectBebida(bebida: Product) {
+    console.log(bebida);
+    this.newOrder.products.bebida = bebida;
+    this.router.navigate(['../', 3], { relativeTo: this.route });
+  }
+
+  onConfirm(tortillas: number, price: number) {
+    let products = this.newOrder.products;
+    let acompanamientos: string[] = products.acompanamientos.map(product => product.name);
+    let orderedBy = new Date();
+    orderedBy.setUTCHours(12, 0, 0);
+
+    let order: Order = {
+      products: {
+        principal: products.principal.name,
+        acompanamiento: acompanamientos,
+        bebida: products.bebida.name,
+      },
+      tortillas: tortillas,
+      price: price,
+      date: {
+        for: this.menu.date,
+        by: orderedBy
+      },
+      status: "Nueva orden",
+      user: {
+        id: this.user.id,
+        name: this.user.name,
+        workplace: this.user.workplace,
+      }
+    };
+
+    this.orderService.submitNewOrder(order)
+      .then(() => this.router.navigate(['menu']));
+  }
 
 }

@@ -1,13 +1,11 @@
-import * as firebase from 'firebase';
-import { Product } from "./product";
-import { User } from "firebase";
+import { User } from './user';
 
 export class Order {
   constructor(
     public id?: string,
     public products?: {
       principal: string,
-      acompanamiento: string,
+      acompanamiento: string[],
       bebida: string
     },
     public tortillas?: number,

@@ -1,43 +1,66 @@
-<mat-card-content>
-  <div class="row" *ngIf='menu.products as products'>
-    <div class="col-12 text-center">
-      <h2>Selecciona el plato principal y acompañamientos</h2>
+<mat-card *ngIf='menu'>
+  <mat-card-header>
+    <mat-card-title>
+      <h1>Ordenando para {{ menu.date | date:"EEEE" | dow }}</h1>
+    </mat-card-title>
+    <mat-card-subtitle>
+      <h3>Paso 1</h3>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="row" *ngIf='menu.products as products'>
+      <div class="col-12 text-center">
+        <h2>Selecciona el plato principal y acompañamientos</h2>
+      </div>
+      <div class="col-12 col-sm-6 text-center hover" *ngIf='products | productsByCategory:"Principal" as principales'>
+        <h4>Platos principales</h4>
+        <div class="row">
+          <div class='col-12' *ngFor='let product of principales'>
+            <figure>
+              <img [src]="product.imageURL" *ngIf='product?.imageURL' class="img-fluid img-thumbnail rounded" (click)='principal = product'
+                [ngClass]='principal?.id === product?.id ? "selected":""'>
+            </figure>
+            <p *ngIf='product.noSides'>(¡Este plato principal no lleva acompanamientos!)</p>
+            <p>{{ product.name }}</p>
+            <p>{{ product.description }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 text-center hover" *ngIf='products | productsByCategory:"Acompañamiento" as _acompanamientos'>
+        <ng-container *ngIf='_acompanamientos.length; else noAcompanamientos'>
+          <h4>Acompañamientos</h4>
+          <div class="row">
+            <div class='col-12 col-lg-6' *ngFor='let product of _acompanamientos'>
+              <figure>
+                <img [src]="product.imageURL" *ngIf='product?.imageURL' class="img-fluid img-thumbnail rounded" (click)='onSelectAcompanamiento(product)'
+                  [ngClass]='(acompanamientos | selected:product:refresh) ? "selected":""'>
+              </figure>
+              <p>{{ product.name }}</p>
+              <p>{{ product.description }}</p>
+            </div>
+            <div class="col-12">
+              <mat-checkbox [formControl]='doubleFlag' (change)='onDoubleAcompanamiento()'>
+                Doble acompañamiento?
+              </mat-checkbox>
+              <!-- <h6 *ngIf='!selProducts?.mainCourse?.noSides && selProducts?.sides?.length < 2 && !doubleFlag' @shrinkX>
+                    Selecciona los 2 acompañamientos
+                  </h6>
+                  <h6 *ngIf='doubleFlag && selProducts?.sides?.length'>Doble {{ selSides[0] }}</h6> -->
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #noAcompanamientos>
+          <h4>Este menú no tiene acompañamientos.</h4>
+        </ng-template>
+      </div>
     </div>
-    <div class="col-12 col-sm-6 col-lg-5 offset-lg-1 text-center hover">
-      <h4>Platos principales</h4>
-      <ng-container *ngFor='let product of products | productsByCategory:"Principal"'>
-        <figure>
-          <img [src]="product.imageURL" *ngIf='product?.imageURL' class="img-fluid img-thumbnail rounded" (click)='principal = product'
-            [ngClass]='principal?.id === product?.id ? "selected":""'>
-        </figure>
-        <p>{{ product.name }}</p>
-        <p>{{ product.description }}</p>
-      </ng-container>
-    </div>
-    <div class="col-12 col-sm-6 col-lg-5 text-center hover">
-      <h4>Acompañamientos</h4>
-      <ng-container *ngFor='let product of products | productsByCategory:"Acompañamiento"'>
-        <figure>
-          <img [src]="product.imageURL" *ngIf='product?.imageURL' class="img-fluid img-thumbnail rounded" (click)='onSelectAcompanamiento(product)'>
-        </figure>
-        <p>{{ product.name }}</p>
-        <p>{{ product.description }}</p>
-      </ng-container>
-      <mat-checkbox [(ngModel)]='doubleSide' (change)='onDobleAcompanamiento()'>
-        Doble acompañamiento?
-      </mat-checkbox>
-      <!-- <h6 *ngIf='!selProducts?.mainCourse?.noSides && selProducts?.sides?.length < 2 && !doubleSide' @shrinkX>
-      Selecciona los 2 acompañamientos
-    </h6>
-    <h6 *ngIf='doubleSide && selProducts?.sides?.length'>Doble {{ selSides[0] }}</h6> -->
-    </div>
-  </div>
-</mat-card-content>
-<mat-card-actions align='end'>
-  <button mat-button type='button' routerLink='menu'>
-    Cancelar
-  </button>
-  <button mat-button type='button' (click)='select.emit(principal, acompanamientos)'>
-    Siguiente
-  </button>
-</mat-card-actions>
+  </mat-card-content>
+  <mat-card-actions align='end'>
+    <button mat-button type='button' (click)='onCancel()'>
+      Cancelar
+    </button>
+    <button mat-button type='button' (click)='onSelect()' [disabled]='!(principal && (acompanamientos.length == 2 || doubleFlag.disabled || principal.noSides) )'>
+      Siguiente
+    </button>
+  </mat-card-actions>
+</mat-card>

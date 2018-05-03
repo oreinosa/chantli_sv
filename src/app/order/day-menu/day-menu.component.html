@@ -10,21 +10,26 @@
     </mat-card-header>
     <mat-card-content>
       <div class="row menu-products">
-        <div class="col-12 col-md-6">
+        <div class="col-12 col-md-6" *ngIf='products | productsByCategory:"Principal" as principales'>
           <h3 class='text-center'>Platos principales</h3>
-          <ul *ngIf='products | productsByCategory:"Principal" as principales'>
+          <ul>
             <li *ngFor='let product of principales'>
               <h5>{{ product.name }}</h5>
             </li>
           </ul>
         </div>
-        <div class="col-12 col-md-6">
-          <h3 class='text-center'>Acompañamientos</h3>
-          <ul *ngIf='products | productsByCategory:"Acompañamiento" as acom'>
-            <li *ngFor='let product of acom'>
-              <h5>{{ product.name }}</h5>
-            </li>
-          </ul>
+        <div class="col-12 col-md-6" *ngIf='products | productsByCategory:"Acompañamiento" as acompanamientos'>
+          <ng-container *ngIf='acompanamientos.length; else noAcompanamientos'>
+            <h3 class='text-center'>Acompañamientos</h3>
+            <ul>
+              <li *ngFor='let product of acompanamientos'>
+                <h5>{{ product.name }}</h5>
+              </li>
+            </ul>
+          </ng-container>
+          <ng-template #noAcompanamientos>
+            <h3 class='text-center'>Este menú no tiene acompañamientos.</h3>
+          </ng-template>
         </div>
       </div>
     </mat-card-content>

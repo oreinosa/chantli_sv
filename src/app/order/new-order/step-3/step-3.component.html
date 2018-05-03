@@ -1,3 +1,60 @@
-<p>
-  step-3 works!
-</p>
+<mat-card *ngIf='menu'>
+  <mat-card-header>
+    <mat-card-title>
+      <h1>Confirmando orden para {{ menu.date | date:"EEEE" | dow }}</h1>
+    </mat-card-title>
+    <mat-card-subtitle>
+      <h3>Paso 3</h3>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <h3>Plato principal</h3>
+        <figure>
+          <img [src]="principal.imageURL" class="img-fluid img-thumbnail rounded">
+        </figure>
+        <p>{{ principal.name }}</p>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngIf='acompanamientos.length'>
+        <h3>Acompañamientos</h3>
+        <div class="row">
+          <div class="col-12" *ngFor='let acompanamiento of acompanamientos'>
+            <figure>
+              <img [src]="acompanamiento.imageURL" class="img-fluid img-thumbnail rounded">
+            </figure>
+            <p>{{ acompanamiento.name }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <h3>Bebida</h3>
+        <figure>
+          <img [src]="bebida.imageURL" class="img-fluid img-thumbnail rounded">
+        </figure>
+        <p>{{ bebida.name }}</p>
+      </div>
+      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <h3>
+          <mat-form-field class='my-3'>
+            <input matInput type="number" placeholder='Tortillas' [(ngModel)]='tortillas' required min='0' max='4'>
+          </mat-form-field>
+        </h3>
+        <h1>Total :
+          <b>{{ menu.price | calTotal:bebida:tortillas | currency }}</b>
+        </h1>
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-actions align='end'>
+    <button mat-button type='button' (click)='onBack(1)'>
+      Atras (Paso 1)
+    </button>
+    <button mat-button type='button' (click)='onBack(2)'>
+      Atras (Paso 2)
+    </button>
+    <button mat-button type='button' (click)='onConfirm(total)' *ngIf='menu.price | calTotal:bebida:tortillas as total'>
+      Confirmar
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Menu } from '../../../shared/classes/menu';
 import { Product } from '../../../shared/classes/product';
+import { Router } from '@angular/router';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-step-1',
@@ -9,24 +11,42 @@ import { Product } from '../../../shared/classes/product';
 })
 export class Step1Component implements OnInit {
   @Input() menu: Menu;
-  principal: Product;
-  acompanamientos: Product[] = [];
-  @Output() select = new EventEmitter<{ principal: Product, acompanamientos: Product[] }>();
-  doubleSide: boolean = false;
-  constructor() { }
+  @Output() select = new EventEmitter<{ principal: Product, acompanamientos?: Product[] }>();
+  @Input() principal: Product;
+  @Input() acompanamientos: Product[];
+  refresh: boolean;
+
+  // doubleFlag: boolean = false;
+  doubleFlag: FormControl = new FormControl(false);
+  // noSides: boolean = false;
+
+  constructor(private router: Router) { }
 
   ngOnInit() {
+    if (this.menu) {
+      let acompanamientos = this.menu.products.filter(product => product.category === "Acompañamiento");
+      if (!acompanamientos.length) {
+        this.doubleFlag.disable();
+      }
+    }
   }
 
-  onDobleAcompanamiento() {
-    if (this.doubleSide) {
+  // onSelectPrincipal(principal: Product) {
+  //   this.principal = principal;
+  //   if(principal.noSides){
+  //     this.nosi
+  //   }
+  // }
+
+  onDoubleAcompanamiento() {
+    if (this.doubleFlag.value) {
       this.acompanamientos = [];
     }
   }
 
   onSelectAcompanamiento(acompanamiento: Product) {
     let position = -1, lastPos;
-    if (this.doubleSide) {
+    if (this.doubleFlag.value) {
       this.acompanamientos = [];
     } else {
       if (this.acompanamientos.length) {
@@ -42,7 +62,7 @@ export class Step1Component implements OnInit {
       if (this.acompanamientos.length < 2) {
         action = 'Added ';
         this.acompanamientos.push(acompanamiento);
-        if (this.doubleSide) {
+        if (this.doubleFlag.value) {
           this.acompanamientos.push(acompanamiento);
         }
       } else {
@@ -52,7 +72,16 @@ export class Step1Component implements OnInit {
     }
 
     // console.log(action + side.name);
+    this.refresh = !this.refresh;
     console.log('Selected order.sides : ', this.acompanamientos);
+  }
+
+  onCancel() {
+    this.router.navigate(['menu']);
+  }
+
+  onSelect() {
+    this.select.emit({ principal: this.principal, acompanamientos: this.acompanamientos });
   }
 
 }

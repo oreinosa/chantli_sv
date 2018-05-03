@@ -6,6 +6,7 @@ export interface Product {
   price?: number;
   cost?: number;
   extra?: number;
+  noSides?: boolean,
   category?: string;
 }
 export class Product {
@@ -17,6 +18,7 @@ export class Product {
     public price?: number,
     public cost?: number,
     public extra?: number,
+    public noSides?: boolean,
     public category?: string
   ) { }
 }

@@ -35,6 +35,8 @@ import { ProductsByCategoryPipe } from './pipes/products-by-category.pipe';
 import { GetMenuProductsPipe } from './pipes/get-menu-products.pipe';
 import { EditingSubcollectionPipe } from './pipes/editing-subcollection.pipe';
 import { DowPipe } from './pipes/dow.pipe';
+import { SelectedPipe } from './pipes/selected.pipe';
+import { CalTotalPipe } from './pipes/cal-total.pipe';
 
 @NgModule({
   imports: [
@@ -89,8 +91,10 @@ import { DowPipe } from './pipes/dow.pipe';
     DowPipe,
     MatDatepickerModule,
     MatNativeDateModule,
+    SelectedPipe,
+    CalTotalPipe,
     MatProgressSpinnerModule,
   ],
-  declarations: [SortByPipe, CapitalizePipe, ProductsByCategoryPipe, GetMenuProductsPipe, EditingSubcollectionPipe, DowPipe],
+  declarations: [SortByPipe, CapitalizePipe, ProductsByCategoryPipe, GetMenuProductsPipe, EditingSubcollectionPipe, DowPipe, SelectedPipe, CalTotalPipe],
 })
 export class SharedModule { }

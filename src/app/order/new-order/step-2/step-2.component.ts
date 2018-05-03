@@ -1,5 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Menu } from '../../../shared/classes/menu';
+import { Product } from '../../../shared/classes/product';
+import { OrderService } from '../../order.service';
+import { Observable } from 'rxjs/Observable';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-step-2',
@@ -8,9 +12,26 @@ import { Menu } from '../../../shared/classes/menu';
 })
 export class Step2Component implements OnInit {
   @Input() menu: Menu;
-  constructor() { }
+  @Input() bebida: Product;
+  @Output() select = new EventEmitter<Product>();
+  _bebidas: Observable<Product[]>;
+
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private orderService: OrderService
+  ) { }
 
   ngOnInit() {
+    this._bebidas = this.orderService.getBebidas();
+  }
+
+  onBack() {
+    this.router.navigate(['../', 1], { relativeTo: this.route });
+  }
+
+  onSelect() {
+    this.select.emit(this.bebida);
   }
 
 }
