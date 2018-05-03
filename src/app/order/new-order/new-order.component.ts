@@ -8,6 +8,7 @@ import { Menu } from '../../shared/classes/menu';
 import { Order } from '../../shared/classes/order';
 import { AuthService } from '../../auth/auth.service';
 import { User } from '../../shared/classes/user';
+import { NotificationsService } from '../../notifications/notifications.service';
 
 @Component({
   selector: 'app-new-order',
@@ -29,12 +30,6 @@ export class NewOrderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.authService
-      .user
-      .takeUntil(this.ngUnsubscribe)
-      .do(user => !user ? this.router.navigate(['ingresar']) : false)
-      .do(user => !user.workplace ? this.router.navigate(['perfil']) : false)
-      .subscribe(user => this.user = user);
 
     this.orderService
       .menuSubject

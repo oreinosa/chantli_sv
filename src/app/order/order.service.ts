@@ -20,10 +20,10 @@ export class OrderService {
     private notificationsService: NotificationsService,
     private router: Router
   ) {
-    this.ordersCol = this.af.collection<Order>('orders');
   }
 
   submitNewOrder(order: Order) {
+    this.ordersCol = this.af.collection<Order>('orders');
     return this.ordersCol
       .add(order)
       .then(doc => this.notificationsService.show("Orden exitosa!", 'Nueva orden', "success"));

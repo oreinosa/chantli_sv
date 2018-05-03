@@ -16,7 +16,7 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
   declarations: [
     ProfileComponent,
     InformationComponent,
-    SignInComponent, 
+    SignInComponent,
     SignUpComponent, ForgotPasswordComponent
   ],
 })
