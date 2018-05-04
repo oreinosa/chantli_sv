@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { WeekMenuComponent } from './week-menu/week-menu.component';
-import { Step1Component } from './new-order/step-1/step-1.component';
 import { NewOrderComponent } from './new-order/new-order.component';
+import { AuthGuard } from '../auth/auth.guard';
+import { WorkplaceGuard } from '../auth/workplace.guard';
 
 const routes: Routes = [
   { path: 'menu', component: WeekMenuComponent },
-  { path: 'nueva-orden', pathMatch: 'full', redirectTo: 'menu' },
-  { path: 'nueva-orden/:id/:step', component: NewOrderComponent },
+  { path: 'nueva-orden', pathMatch: 'full', redirectTo: 'menu', canActivate: [AuthGuard, WorkplaceGuard] },
+  { path: 'nueva-orden/:id/:step', component: NewOrderComponent , canActivate: [AuthGuard, WorkplaceGuard]},
 ];
 
 @NgModule({

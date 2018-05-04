@@ -20,7 +20,6 @@ import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable()
 export class AuthService {
-  fbUser: firebase.User;
   user: Observable<User>;
 
   _links: Link[];
@@ -50,16 +49,31 @@ export class AuthService {
     this.user = this.afAuth
       .authState
       .switchMap(user => {
-        this.fbUser = user;
         // console.log('Firebase user : ', user);
         if (user) {
-          const doc = this.afs.collection<User>('users').doc(user.uid);
-          return doc.valueChanges();
+          const doc = this.afs.collection<User>('users').doc<User>(user.uid);
+          return doc
+            .snapshotChanges()
+            .map(doc => {
+              if (doc.payload.exists) {
+                let user: User = doc.payload.data();
+                user.id = doc.payload.id;
+                return user;
+              }
+              return null;
+            });
         } else {
           return Observable.of(null)
         }
       });
+  }
 
+  get currentUserObservable(): any {
+    return this.afAuth.authState;
+  }
+
+  get authenticated(): boolean {
+    return this.afAuth.auth.currentUser !== null;
   }
 
   setRouting(role: string = '') {
@@ -89,13 +103,13 @@ export class AuthService {
   signInEmail(signIn: SignIn) {
     return this.afAuth.auth
       .signInWithEmailAndPassword(signIn.email, signIn.password)
-      .then((any) => {
-        console.log(any);
+      .then((credential) => {
         let body, type: string;
-        body = `Hola`;
+        body = `Hola ${credential.user.displayName}!`;
         type = 'info';
         this.notificationsService.show(body, undefined, type);
-      });
+      })
+      .catch(() => this.notificationsService.show('Correo electrónico o contraseaña incorrecta', 'Error', 'danger'));
   }
 
   signInSocial(provider: string) {
@@ -107,25 +121,26 @@ export class AuthService {
     return this.afAuth
       .auth
       .signInWithPopup(_provider)
-      .then((any) => {
-        console.log(any);
+      .then(credential => {
         let body, type: string;
-        body = `Hola`;
+        body = `Hola ${credential.user.displayName}!`;
         type = 'info';
         this.notificationsService.show(body, undefined, type);
-      });;
+        return credential.user
+      })
+      .then(user => this.updateUserData(user))
+      .catch(() => this.notificationsService.show('Correo electrónico o contraseaña incorrecta', 'Error', 'danger'));
   }
 
   signUp(signUp: SignUp) {
     return this.afAuth
       .auth
       .createUserWithEmailAndPassword(signUp.email, signUp.password)
-      .then(credential => credential.updateProfile({
+      .then(credential => credential.updateProfile({ // UPDATE FIREBASE USER CREDENTIALS
         displayName: signUp.name,
-        // photoURL: 'http://www.personalbrandingblog.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640-300x300.png'
-      }).then(() => credential))
-      .then(credential => this.updateUserData(credential))
-      .then(() => this.notificationsService.show(`Bienvenido, ${signUp.name}`, undefined, 'success'));
+        photoURL: 'http://www.personalbrandingblog.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640-300x300.png'
+      }).then(() => this.updateUserData(credential, signUp)) // UPDATE FIRESTORE USER DATA
+        .then(() => this.notificationsService.show(`Bienvenido, ${signUp.name}`, undefined, 'success')));
   }
 
   signOut() {
@@ -142,24 +157,33 @@ export class AuthService {
   }
 
   updateWorkplace(workplace: string, user: User) {
-    user.workplace = workplace;
-    return this.updateUserData(user)
+    return this.afs
+      .doc(`users/${user.id}`)
+      .set({ workplace: workplace }, { merge: true })
       .then(() => this.notificationsService.show('Lugar de trabajo actualizado!', undefined, 'success'));
   }
 
-  private updateUserData(user) {
+  private updateUserData(user, signUp?: SignUp) {
     // Sets user data to firestore on login
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
-    const data: User = {
-      id: user.uid,
-      email: user.email,
-      name: user.displayName,
-      // photoURL: user.photoURL,
-      role: 'Cliente'
-    };
+    // console.log(user, signUp);
+    const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${user.uid}`);
     return userRef
-      .set(data, { merge: true })
-      .then(() => true)
-      .catch(() => false);
+      .ref
+      .get()
+      .then(doc => {
+        if (!doc.exists) {
+          let data: User = {
+            email: user.email,
+            name: user.displayName,
+            role: 'Cliente'
+            // image: user.photoURL,
+          };
+          if (signUp) {
+            console.log(`Workplace : ${signUp.workplace}`)
+            data.workplace = signUp.workplace;
+          }
+          return userRef.set(data, { merge: true });
+        }
+      });
   }
 }

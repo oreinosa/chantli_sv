@@ -11,6 +11,7 @@
     <div class="row" *ngIf='menu.products as products'>
       <div class="col-12 text-center">
         <h2>Selecciona el plato principal y acompañamientos</h2>
+        <hr>
       </div>
       <div class="col-12 col-sm-6 text-center hover" *ngIf='products | productsByCategory:"Principal" as principales'>
         <h4>Platos principales</h4>

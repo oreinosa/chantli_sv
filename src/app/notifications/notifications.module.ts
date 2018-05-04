@@ -2,12 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NotificationsService } from './notifications.service';
 import { NotificationsComponent } from './notifications.component';
-import { MatCardModule } from '@angular/material';
+import { MatCardModule, MatIconModule } from '@angular/material';
 
 @NgModule({
   imports: [
     CommonModule,
-    MatCardModule
+    MatCardModule,
+    MatIconModule
   ],
   declarations: [NotificationsComponent],
   exports: [NotificationsComponent],

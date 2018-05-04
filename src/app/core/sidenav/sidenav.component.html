@@ -3,18 +3,18 @@
 	<!-- {{ links | json }} -->
 	<a mat-list-item *ngFor='let link of links' [routerLink]='link.route' routerLinkActive='active' [routerLinkActiveOptions]='{exact:true}'
 	 (click)='navigated.emit()'>
-		<i class="material-icons">{{ link?.icon }} </i> {{ link.label }}
+		<mat-icon>{{ link?.icon }} </mat-icon> {{ link.label }}
 	</a>
 	<hr>
 	<!-- ACTION LINKS NGFOR -->
 	<a mat-list-item *ngFor='let action of actions' [routerLink]='action.route' routerLinkActive='active' (click)='navigated.emit()'>
-		<i class="material-icons">{{ action?.icon }} </i> {{ action.label }}
+		<mat-icon>{{ action?.icon }} </mat-icon> {{ action.label }}
 	</a>
 	<!-- SIGN OUT BUTTON -->
 	<ng-container *ngIf='user'>
 		<!-- <img [src]="user.photoURL" alt="profile" class="logo img-fluid "> -->
 		<a mat-list-item (click)='signOut.emit();navigated.emit()' class='sign-out'>
-			<i class="material-icons">exit_to_app</i> Cerrar sesión
+			<mat-icon>exit_to_app</mat-icon> Cerrar sesión
 		</a>
 	</ng-container>
 </mat-nav-list>

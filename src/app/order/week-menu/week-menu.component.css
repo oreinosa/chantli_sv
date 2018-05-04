@@ -1,7 +1,7 @@
-div.row{
-  min-height: 500px;
-}
-.mat-card.title{
+.title{
   background-color: #009688;
   color: white;
+  margin: 0;
+  height: 100px;
+  text-align: center;
 }

@@ -83,12 +83,7 @@ export class OrderService {
   // }
 
   selectMenu(menu: Menu) {
-    if (menu) {
-      this.menuSubject.next(menu);
-      this.router.navigate(['nueva-orden', menu.id, 1]);
-    } else {
-      this.menuSubject.next(null);
-    }
+    this.menuSubject.next(menu);
   }
 
   private getMonday(d: Date): Date {

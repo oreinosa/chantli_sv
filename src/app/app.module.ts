@@ -19,6 +19,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
 import { NotificationsModule } from './notifications/notifications.module';
 import { OrderModule } from './order/order.module';
+import { WorkplaceGuard } from './auth/workplace.guard';
 
 @NgModule({
   imports: [
@@ -37,6 +38,6 @@ import { OrderModule } from './order/order.module';
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
-  providers: [AuthService, AuthGuard]
+  providers: [AuthService, AuthGuard, WorkplaceGuard]
 })
 export class AppModule { }

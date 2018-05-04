@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChildren } from '@angular/core';
 // import { MenusService } from '../../admin/menus/menus.service';
 import { Menu } from '../../shared/classes/menu';
 import { Observable } from 'rxjs/Observable';
 import { OrderService } from '../order.service';
 import { Product } from '../../shared/classes/product';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-week-menu',
@@ -13,15 +14,17 @@ import { Product } from '../../shared/classes/product';
 export class WeekMenuComponent implements OnInit {
   _menus: Observable<Menu[]>;
   constructor(
-    private orderService: OrderService
+    private orderService: OrderService,
+    private router: Router
   ) { }
 
   ngOnInit() {
-    this._menus = this.orderService.getWeekMenus().do(a => console.log(a));
+    this._menus = this.orderService.getWeekMenus();
   }
 
   onSelectMenu(menu: Menu) {
     this.orderService.selectMenu(menu);
+    this.router.navigate(['nueva-orden', menu.id, 1]);
   }
 
 }

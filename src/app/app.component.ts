@@ -3,7 +3,7 @@ import { Link } from './shared/classes/link';
 import { User } from './shared/classes/user';
 import { Category } from './shared/classes/category';
 import { AuthService } from './auth/auth.service';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 // import { Subject } from 'rxjs/Subject';
 import { CategoriesService } from './admin/categories/categories.service'
 @Component({
@@ -25,6 +25,13 @@ export class AppComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.router.events.subscribe((evt) => {
+      if (!(evt instanceof NavigationEnd)) {
+        return;
+      }
+      window.scrollTo(0, 0)
+    });
+
     this.auth
       .user
       // .takeUntil(this.ngUnsubscribe)

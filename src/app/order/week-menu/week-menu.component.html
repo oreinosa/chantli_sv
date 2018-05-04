@@ -1,9 +1,9 @@
 <div class="row">
+  <div class="col-12 title" #title>
+    <h1>Menu de la semana</h1>
+  </div>
   <ng-container *ngIf='(_menus | async) as menus; else loading'>
     <div class="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto text-center mb-3">
-      <mat-card class='title'>
-        <h1>Menu de la semana</h1>
-      </mat-card>
       <h4 *ngIf='menus.length == 0'>Aún no está el menú de la semana.</h4>
     </div>
     <div class='col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 mb-3' *ngFor='let menu of menus'>

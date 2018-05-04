@@ -31,9 +31,14 @@ export class NewOrderComponent implements OnInit {
 
   ngOnInit() {
 
+    this.authService
+      .user
+      .take(1)
+      .subscribe(user => this.user = user);
+
     this.orderService
       .menuSubject
-      .takeUntil(this.ngUnsubscribe)
+      .take(1)
       .subscribe(menu => this.menu = menu);
 
     this.route
@@ -58,7 +63,6 @@ export class NewOrderComponent implements OnInit {
   }
 
   onSelectBebida(bebida: Product) {
-    console.log(bebida);
     this.newOrder.products.bebida = bebida;
     this.router.navigate(['../', 3], { relativeTo: this.route });
   }
