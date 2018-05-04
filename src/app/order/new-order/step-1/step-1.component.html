@@ -1,4 +1,4 @@
-<mat-card *ngIf='menu'>
+<mat-card *ngIf='menu' @fadeIn>
   <mat-card-header>
     <mat-card-title>
       <h1>Ordenando para {{ menu.date | date:"EEEE" | dow }}</h1>

@@ -3,11 +3,13 @@ import { Menu } from '../../../shared/classes/menu';
 import { Product } from '../../../shared/classes/product';
 import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
+import { fadeIn } from '../../../shared/animations';
 
 @Component({
   selector: 'app-step-1',
   templateUrl: './step-1.component.html',
-  styleUrls: ['./step-1.component.css']
+  styleUrls: ['./step-1.component.css'],
+  animations: [fadeIn]
 })
 export class Step1Component implements OnInit {
   @Input() menu: Menu;
