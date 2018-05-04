@@ -8,25 +8,30 @@
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
+    <div class="text-center">
+      <h2>Selecciona el plato principal y acompañamientos</h2>
+    </div>
+    <hr>
     <div class="row" *ngIf='menu.products as products'>
-      <div class="col-12 text-center">
-        <h2>Selecciona el plato principal y acompañamientos</h2>
-        <hr>
-      </div>
+      <!-- PLATOS PRINCIPALES -->
       <div class="col-12 col-sm-6 text-center hover" *ngIf='products | productsByCategory:"Principal" as principales'>
         <h4>Platos principales</h4>
         <div class="row">
+          <!-- PRODUCTS LOOP -->
           <div class='col-12' *ngFor='let product of principales'>
             <figure>
               <img [src]="product.imageURL" *ngIf='product?.imageURL' class="img-fluid img-thumbnail rounded" (click)='principal = product'
-                [ngClass]='principal?.id === product?.id ? "selected":""'>
+                [ngClass]='principal?.id === product?.id ? "selected":""'> 
+                <!-- PRODUCT IMAGE, NG CLASS TO SHOW AS SELECTED -->
             </figure>
+            <!-- IF NO SIDES EQUALS TRUE -->
             <p *ngIf='product.noSides'>(¡Este plato principal no lleva acompanamientos!)</p>
             <p>{{ product.name }}</p>
             <p>{{ product.description }}</p>
           </div>
         </div>
       </div>
+      <!-- END PLATOS PRINCIPALES -->
       <div class="col-12 col-sm-6 text-center hover" *ngIf='products | productsByCategory:"Acompañamiento" as _acompanamientos'>
         <ng-container *ngIf='_acompanamientos.length; else noAcompanamientos'>
           <h4>Acompañamientos</h4>

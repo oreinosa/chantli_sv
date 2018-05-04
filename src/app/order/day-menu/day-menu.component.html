@@ -10,7 +10,7 @@
     </mat-card-header>
     <mat-card-content>
       <div class="row menu-products">
-        <div class="col-12 col-md-6" *ngIf='products | productsByCategory:"Principal" as principales'>
+        <div class="col-12 col-md-6 col-xl-5 offset-xl-1" *ngIf='products | productsByCategory:"Principal" as principales'>
           <h3 class='text-center'>Platos principales</h3>
           <ul>
             <li *ngFor='let product of principales'>
@@ -18,7 +18,7 @@
             </li>
           </ul>
         </div>
-        <div class="col-12 col-md-6" *ngIf='products | productsByCategory:"Acompañamiento" as acompanamientos'>
+        <div class="col-12 col-md-6 col-xl-5" *ngIf='products | productsByCategory:"Acompañamiento" as acompanamientos'>
           <ng-container *ngIf='acompanamientos.length; else noAcompanamientos'>
             <h3 class='text-center'>Acompañamientos</h3>
             <ul>
