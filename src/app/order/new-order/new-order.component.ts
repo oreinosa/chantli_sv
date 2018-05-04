@@ -76,7 +76,7 @@ export class NewOrderComponent implements OnInit {
     let order: Order = {
       products: {
         principal: products.principal.name,
-        acompanamiento: acompanamientos,
+        acompanamientos: acompanamientos,
         bebida: products.bebida.name,
       },
       tortillas: tortillas,

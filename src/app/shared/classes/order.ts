@@ -5,7 +5,7 @@ export class Order {
     public id?: string,
     public products?: {
       principal: string,
-      acompanamiento: string[],
+      acompanamientos: string[],
       bebida: string
     },
     public tortillas?: number,
