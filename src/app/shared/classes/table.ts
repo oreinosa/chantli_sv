@@ -21,25 +21,25 @@ export class Table<T> implements OnInit, AfterViewInit {
 
   constructor(
     private service: DAO<T>,
-    private dialog: MatDialog
+    // private dialog: MatDialog
   ) { }
 
-  onAction(actionName: string, object: T) {
+  onAction(object: T, actionName?: string) {
     console.log('action ', object);
     this.service.object.next(object);
-    let template: any;
-    switch (actionName) {
-      case "add":
-        template = AddDialogComponent;
-        break;
-      case "edit":
-        template = EditDialogComponent;
-        break;
-      case "del":
-        template = DelDialogComponent;
-        break;
-    }
-    this.dialog.open(template);
+    // let template: any;
+    // switch (actionName) {
+    //   case "add":
+    //     template = AddDialogComponent;
+    //     break;
+    //   case "edit":
+    //     template = EditDialogComponent;
+    //     break;
+    //   case "del":
+    //     template = DelDialogComponent;
+    //     break;
+    // }
+    // this.dialog.open(template);
   }
 
   ngOnInit() {
