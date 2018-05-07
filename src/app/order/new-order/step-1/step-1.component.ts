@@ -33,12 +33,14 @@ export class Step1Component implements OnInit {
     }
   }
 
-  // onSelectPrincipal(principal: Product) {
-  //   this.principal = principal;
-  //   if(principal.noSides){
-  //     this.nosi
-  //   }
-  // }
+  onSelectPrincipal(principal: Product) {
+    this.principal = principal;
+    if (principal.noSides) {
+      if (this.acompanamientos.length) {
+        this.acompanamientos = [];
+      }
+    }
+  }
 
   onDoubleAcompanamiento() {
     if (this.doubleFlag.value) {
@@ -47,35 +49,39 @@ export class Step1Component implements OnInit {
   }
 
   onSelectAcompanamiento(acompanamiento: Product) {
-    let position = -1, lastPos;
-    if (this.doubleFlag.value) {
-      this.acompanamientos = [];
-    } else {
-      if (this.acompanamientos.length) {
-        position = this.acompanamientos.findIndex(_acompanamiento => _acompanamiento.name == acompanamiento.name);
-        lastPos = this.acompanamientos.length - 1;
-      }
-    }
-    let action;
-    if (position >= 0) {
-      action = 'Removed ';
-      this.acompanamientos.splice(position, 1);
-    } else {
-      if (this.acompanamientos.length < 2) {
-        action = 'Added ';
-        this.acompanamientos.push(acompanamiento);
-        if (this.doubleFlag.value) {
-          this.acompanamientos.push(acompanamiento);
-        }
-      } else {
-        action = 'Replaced ' + this.acompanamientos[lastPos].name + ' with ';
-        this.acompanamientos[lastPos] = acompanamiento;
-      }
-    }
+    if (this.principal && this.principal.noSides) {
 
-    // console.log(action + side.name);
-    this.refresh = !this.refresh;
-    console.log('Selected order.sides : ', this.acompanamientos);
+    } else {
+      let position = -1, lastPos;
+      if (this.doubleFlag.value) {
+        this.acompanamientos = [];
+      } else {
+        if (this.acompanamientos.length) {
+          position = this.acompanamientos.findIndex(_acompanamiento => _acompanamiento.name == acompanamiento.name);
+          lastPos = this.acompanamientos.length - 1;
+        }
+      }
+      let action;
+      if (position >= 0) {
+        action = 'Removed ';
+        this.acompanamientos.splice(position, 1);
+      } else {
+        if (this.acompanamientos.length < 2) {
+          action = 'Added ';
+          this.acompanamientos.push(acompanamiento);
+          if (this.doubleFlag.value) {
+            this.acompanamientos.push(acompanamiento);
+          }
+        } else {
+          action = 'Replaced ' + this.acompanamientos[lastPos].name + ' with ';
+          this.acompanamientos[lastPos] = acompanamiento;
+        }
+      }
+
+      // console.log(action + side.name);
+      this.refresh = !this.refresh;
+      console.log('Selected order.sides : ', this.acompanamientos);
+    }
   }
 
   onCancel() {
