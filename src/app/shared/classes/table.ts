@@ -1,8 +1,11 @@
 import { OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource, Sort } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, Sort, MatDialog } from '@angular/material';
 import { Subject } from 'rxjs/Subject';
 import { DAO } from './dao';
 import "rxjs/add/operator/takeUntil";
+import { AddDialogComponent } from '../../admin/dialogs/add-dialog/add-dialog.component';
+import { EditDialogComponent } from '../../admin/dialogs/edit-dialog/edit-dialog.component';
+import { DelDialogComponent } from '../../admin/dialogs/del-dialog/del-dialog.component';
 
 export class Table<T> implements OnInit, AfterViewInit {
   public ngUnsubscribe = new Subject();
@@ -18,11 +21,25 @@ export class Table<T> implements OnInit, AfterViewInit {
 
   constructor(
     private service: DAO<T>,
+    private dialog: MatDialog
   ) { }
 
-  onAction(object: T) {
+  onAction(actionName: string, object: T) {
     console.log('action ', object);
     this.service.object.next(object);
+    let template: any;
+    switch (actionName) {
+      case "add":
+        template = AddDialogComponent;
+        break;
+      case "edit":
+        template = EditDialogComponent;
+        break;
+      case "del":
+        template = DelDialogComponent;
+        break;
+    }
+    this.dialog.open(template);
   }
 
   ngOnInit() {

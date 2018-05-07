@@ -30,41 +30,46 @@ const routes: Routes = [
   {
     path: 'admin', component: AdminComponent, children: [
       {
-        path: 'usuarios', component: UsersComponent, children: [
-          { path: 'agregar', component: AddUserComponent },
-          { path: 'editar/:id', component: EditUserComponent },
-          { path: 'borrar/:id', component: DelUserComponent }
-        ]
+        path: 'usuarios/:action/:id', component: UsersComponent, 
+        // children: [
+        //   { path: 'agregar', component: AddUserComponent },
+        //   { path: 'editar/:id', component: EditUserComponent },
+        //   { path: 'borrar/:id', component: DelUserComponent }
+        // ]
       },
       {
-        path: 'categorias', component: CategoriesComponent, children: [
-          { path: 'agregar', component: AddCategoryComponent },
-          { path: 'editar/:id', component: EditCategoryComponent },
-          { path: 'borrar/:id', component: DelCategoryComponent }
-        ]
+        path: 'categorias/:action/:id', component: CategoriesComponent,
+        // children: [
+        //   { path: 'agregar', component: AddCategoryComponent },
+        //   { path: 'editar/:id', component: EditCategoryComponent },
+        //   { path: 'borrar/:id', component: DelCategoryComponent }
+        // ]
       },
       {
-        path: 'lugares-de-trabajo', component: WorkplacesComponent, children: [
-          { path: 'agregar', component: AddWorkplaceComponent },
-          { path: 'editar/:id', component: EditWorkplaceComponent },
-          { path: 'borrar/:id', component: DelWorkplaceComponent }
-        ]
+        path: 'lugares-de-trabajo/:action/:id', component: WorkplacesComponent,
+        // children: [
+        //   { path: 'agregar', component: AddWorkplaceComponent },
+        //   { path: 'editar/:id', component: EditWorkplaceComponent },
+        //   { path: 'borrar/:id', component: DelWorkplaceComponent }
+        // ]
       },
       {
-        path: 'productos', component: ProductsComponent, children: [
-          { path: 'agregar', component: AddProductComponent },
-          { path: 'editar/:id', component: EditProductComponent },
-          { path: 'borrar/:id', component: DelProductComponent }
-        ]
+        path: 'productos/:action/:id', component: ProductsComponent,
+        // children: [
+        //   { path: 'agregar', component: AddProductComponent },
+        //   { path: 'editar/:id', component: EditProductComponent },
+        //   { path: 'borrar/:id', component: DelProductComponent }
+        // ]
       },
       {
-        path: 'menus', component: MenusComponent, children: [
-          { path: 'agregar', component: AddMenuComponent },
-          { path: 'editar/:id', component: EditMenuComponent },
-          { path: 'borrar/:id', component: DelMenuComponent }
-        ]
+        path: 'menus/:action/:id', component: MenusComponent, 
+        // children: [
+        //   { path: 'agregar', component: AddMenuComponent },
+        //   { path: 'editar/:id', component: EditMenuComponent },
+        //   { path: 'borrar/:id', component: DelMenuComponent }
+        // ]
       },
-      { path: '', pathMatch: 'full', redirectTo: 'menus'}
+      { path: '', pathMatch: 'full', redirectTo: 'menus' }
     ]
   }
 ];
