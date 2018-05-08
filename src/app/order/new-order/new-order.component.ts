@@ -71,7 +71,7 @@ export class NewOrderComponent implements OnInit {
     let products = this.newOrder.products;
     let acompanamientos: string[] = products.acompanamientos.map(product => product.name);
     let orderedBy = new Date();
-    orderedBy.setUTCHours(12, 0, 0);
+    // orderedBy.setUTCHours(12, 0, 0);
 
     let order: Order = {
       products: {

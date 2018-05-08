@@ -1,0 +1,89 @@
+<div class="row">
+  <div class="col-12">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <h3>Pedidos</h3>
+        </mat-card-title>
+        <mat-card-subtitle>
+          <h5>{{ today | date:"fullDate" }}</h5>
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="row">
+          <div class="col-12 col-sm-8 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+            <!-- WORKPLACES FILTER -->
+            <mat-form-field>
+              <mat-select placeholder='Lugar de trabajo' [formControl]='workplaceCtrl' (selectionChange)='filterByWorkplace($event.value)'>
+                <mat-option *ngFor='let workplace of workplaces' [value]='workplace.name'>{{ workplace.name }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <!-- USERS AUTOCOMPLETE FILTER -->
+          <div class="col-12 col-sm-8 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
+            <ng-container *ngIf='users; else loadingUsers'>
+              <mat-form-field>
+                <input matInput placeholder="Clientes" [matAutocomplete]="auto" [formControl]="userCtrl" required>
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)='filterByUser($event.option.value)'>
+                  <mat-option *ngFor="let user of filteredUsers | async" [value]="user.name">
+                    {{ user.name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+              <button mat-button type='button' (click)='filterByUser("");userCtrl.setValue("")' [disabled]='userCtrl.invalid'>Todos los clientes</button>
+            </ng-container>
+            <ng-template #loadingUsers>
+              <mat-spinner class="mx-auto"></mat-spinner>
+            </ng-template>
+          </div>
+        </div>
+        <mat-table #table matSort [dataSource]="dataSource" class='data-table'>
+          <!-- Name Column -->
+          <ng-container matColumnDef="user">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <p> {{element.user.name}}</p>
+              <!-- <p>( {{element.user.workplace}} )</p> -->
+            </mat-cell>
+          </ng-container>
+
+          <!-- Productos Column -->
+          <ng-container matColumnDef="products">
+            <mat-header-cell *matHeaderCellDef> Productos </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              <p>
+                <b>Principal : </b> {{element.products.principal}}
+              </p>
+              <ng-container *ngIf='element.products?.acompanamientos?.length'>
+                <p>
+                  <b>Acompañamientos : </b>
+                </p>
+                <p *ngFor='let acompanamiento of element.products?.acompanamientos'> {{ acompanamiento }}
+                </p>
+              </ng-container>
+              <p>
+                <b>Bebida : </b> {{element.products?.bebida}}
+              </p>
+              <p>
+                <b>Tortillas : </b> {{ element.tortillas }}
+              </p>
+            </mat-cell>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              acciones
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+        <mat-paginator #paginator [pageSize]="20" [pageSizeOptions]="[10, 20, 40, 100]" [showFirstLastButtons]="true">
+        </mat-paginator>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

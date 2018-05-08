@@ -20,6 +20,7 @@ import { environment } from '../environments/environment';
 import { NotificationsModule } from './notifications/notifications.module';
 import { OrderModule } from './order/order.module';
 import { WorkplaceGuard } from './auth/workplace.guard';
+import { OrdersModule } from './orders/orders.module';
 
 @NgModule({
   imports: [
@@ -32,6 +33,7 @@ import { WorkplaceGuard } from './auth/workplace.guard';
     NotificationsModule,
     CoreModule,
     OrderModule,
+    OrdersModule,
     AuthModule,
     AdminModule,
     AppRoutingModule

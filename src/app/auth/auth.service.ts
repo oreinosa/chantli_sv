@@ -79,14 +79,21 @@ export class AuthService {
   setRouting(role: string = '') {
     console.log(`Set routing for ${role}`);
     this._actions = [];
+    this._links = [];
     switch (role) {
       case 'Admin':
         this._actions.push(
           { label: 'Admin', route: 'admin', icon: 'build' },
         );
+        this._links.push(
+          { label: 'Ordenes', route: 'ordenes', icon: 'assignment' }
+        );
       case 'Cliente':
         this._actions.push(
           { label: 'Perfil', route: 'perfil', icon: 'person' },
+        );
+        this._links.push(
+          { label: 'Menu', route: 'menu', icon: 'shopping_cart' }
         );
         break;
       default:
@@ -96,8 +103,8 @@ export class AuthService {
         );
     }
     this.actionsSubject.next(this._actions);
-    this.router.navigate(['menu']);
-    // this.linksSubject.next(this._links);
+    // this.router.navigate(['menu']);
+    this.linksSubject.next(this._links);
   }
 
   signInEmail(signIn: SignIn) {
@@ -109,6 +116,7 @@ export class AuthService {
         type = 'info';
         this.notificationsService.show(body, undefined, type);
       })
+      .then(() => this.router.navigate(['menu']))
       .catch(() => this.notificationsService.show('Correo electrónico o contraseaña incorrecta', 'Error', 'danger'));
   }
 
@@ -129,6 +137,7 @@ export class AuthService {
         return credential.user
       })
       .then(user => this.updateUserData(user))
+      .then(() => this.router.navigate(['menu']))
       .catch(() => this.notificationsService.show('Correo electrónico o contraseaña incorrecta', 'Error', 'danger'));
   }
 
@@ -140,6 +149,7 @@ export class AuthService {
         displayName: signUp.name,
         photoURL: 'http://www.personalbrandingblog.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640-300x300.png'
       }).then(() => this.updateUserData(credential, signUp)) // UPDATE FIRESTORE USER DATA
+        .then(() => this.router.navigate(['menu']))
         .then(() => this.notificationsService.show(`Bienvenido, ${signUp.name}`, undefined, 'success')));
   }
 

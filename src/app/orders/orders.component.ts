@@ -6,6 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./orders.component.css']
 })
 export class OrdersComponent implements OnInit {
+  public displayedColumns = ['user', 'products', ''];
 
   constructor() { }
 

@@ -17,7 +17,6 @@ export class AppComponent implements OnInit {
   links: Link[];
   actions: Link[];
   user: User;
-  refresh: boolean;
 
   constructor(
     private router: Router,
