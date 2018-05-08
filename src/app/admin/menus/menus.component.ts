@@ -12,7 +12,7 @@ export class MenusComponent extends Table<Menu>  {
   public displayedColumns = ['date', 'products', 'price', 'actions'];
 
   constructor(
-    private menusService: MenusService,
+    public menusService: MenusService,
   ) {
     super(menusService);
   }

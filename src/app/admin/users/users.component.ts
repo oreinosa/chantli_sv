@@ -16,7 +16,7 @@ export class UsersComponent extends Table<User> {
   // @ViewChild(MatSort) sort: MatSort;
 
   constructor(
-    private usersService: UsersService,
+    public usersService: UsersService,
   ) {
     super(usersService);
   }

@@ -12,7 +12,7 @@ export class WorkplacesComponent  extends Table<Workplace>  {
   public displayedColumns = ['name', 'actions'];
 
   constructor(
-    private workplacesService: WorkplacesService,
+    public workplacesService: WorkplacesService,
   ) {
     super(workplacesService);
   }

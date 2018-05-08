@@ -7,7 +7,8 @@ import { Link } from '../shared/classes/link';
 })
 export class AdminComponent implements OnInit {
   links: Link[];
-  constructor() { }
+  constructor(
+  ) { }
 
   ngOnInit() {
     this.links = [
@@ -17,8 +18,9 @@ export class AdminComponent implements OnInit {
       { label: 'Productos', route: 'productos', icon: '' },
       { label: 'Menus', route: 'menus', icon: '' },
     ];
+
   }
 
-  
+
 
 }

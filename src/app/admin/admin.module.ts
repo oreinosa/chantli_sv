@@ -35,9 +35,7 @@ import { MenusService } from './menus/menus.service';
 import { AddWorkplaceComponent } from './workplaces/add-workplace/add-workplace.component';
 import { EditWorkplaceComponent } from './workplaces/edit-workplace/edit-workplace.component';
 import { DelWorkplaceComponent } from './workplaces/del-workplace/del-workplace.component';
-import { AddDialogComponent } from './dialogs/add-dialog/add-dialog.component';
-import { EditDialogComponent } from './dialogs/edit-dialog/edit-dialog.component';
-import { DelDialogComponent } from './dialogs/del-dialog/del-dialog.component';
+
 
 @NgModule({
   imports: [
@@ -70,11 +68,8 @@ import { DelDialogComponent } from './dialogs/del-dialog/del-dialog.component';
     AddWorkplaceComponent,
     EditWorkplaceComponent,
     DelWorkplaceComponent,
-    AddDialogComponent,
-    EditDialogComponent,
-    DelDialogComponent,
+
   ],
   providers: [UsersService, CategoriesService, ProductsService, WorkplacesService, MenusService],
-  entryComponents: [AddDialogComponent, EditDialogComponent, DelDialogComponent]
 })
 export class AdminModule { }

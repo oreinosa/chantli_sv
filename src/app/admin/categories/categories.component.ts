@@ -12,7 +12,7 @@ export class CategoriesComponent extends Table<Category>  {
   public displayedColumns = ['name', 'description', 'actions'];
 
   constructor(
-    private categoriesService: CategoriesService,
+    public categoriesService: CategoriesService,
   ) {
     super(categoriesService);
   }

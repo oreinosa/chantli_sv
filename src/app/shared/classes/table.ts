@@ -3,9 +3,6 @@ import { MatPaginator, MatSort, MatTableDataSource, Sort, MatDialog } from '@ang
 import { Subject } from 'rxjs/Subject';
 import { DAO } from './dao';
 import "rxjs/add/operator/takeUntil";
-import { AddDialogComponent } from '../../admin/dialogs/add-dialog/add-dialog.component';
-import { EditDialogComponent } from '../../admin/dialogs/edit-dialog/edit-dialog.component';
-import { DelDialogComponent } from '../../admin/dialogs/del-dialog/del-dialog.component';
 
 export class Table<T> implements OnInit, AfterViewInit {
   public ngUnsubscribe = new Subject();
@@ -20,13 +17,15 @@ export class Table<T> implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(
-    private service: DAO<T>,
+    public service: DAO<T>,
     // private dialog: MatDialog
-  ) { }
+  ) {
+  }
 
   onAction(object: T, actionName?: string) {
     console.log('action ', object);
     this.service.object.next(object);
+    window.scrollTo(0, 145);
     // let template: any;
     // switch (actionName) {
     //   case "add":
