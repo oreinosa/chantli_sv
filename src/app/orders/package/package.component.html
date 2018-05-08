@@ -6,11 +6,16 @@
           <h3>Pedidos</h3>
         </mat-card-title>
         <mat-card-subtitle>
-          <h5>{{ today | date:"fullDate" }}</h5>
+          <h5>{{ selectedDate }}</h5>
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <div class="row">
+          <div class="col-12">
+            <button mat-button type='button' (click)='selectDate("today")'>Ahora ({{ today | date:"fullDate" }})</button>
+            <button mat-button type='button' (click)='selectDate("week")'>Esta semana</button>
+            <button mat-button type='button' (click)='selectDate("month")'>Este mes</button>
+          </div>
           <div class="col-12 col-sm-8 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
             <!-- WORKPLACES FILTER -->
             <mat-form-field>
@@ -30,7 +35,7 @@
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
-              <button mat-button type='button' (click)='filterByUser("");userCtrl.setValue("")' [disabled]='userCtrl.invalid'>Todos los clientes</button>
+              <button mat-button type='button' (click)='filterByUser("");userCtrl.setValue("")'>Todos los clientes</button>
             </ng-container>
             <ng-template #loadingUsers>
               <mat-spinner class="mx-auto"></mat-spinner>

@@ -27,6 +27,10 @@ export class PackageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   today = new Date();
 
+  selectedDate: string = 'Para ahora';
+
+  fromDate: Date;
+  toDate: Date;
   workplaces: Workplace[];
 
   users: User[];
