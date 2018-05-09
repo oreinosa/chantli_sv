@@ -17,6 +17,12 @@ export class MenusComponent extends Table<Menu>  {
     super(menusService);
   }
 
+  ngOnInit() {
+    super.ngOnInit();
+    this.dataSource.sort.active = 'date';
+    this.dataSource.sort.direction = 'desc';
+  }
+
   toggleMenuAvailability(id: string, flag: boolean) {
     return this.menusService.toggleMenuAvailability(id, flag);
   }

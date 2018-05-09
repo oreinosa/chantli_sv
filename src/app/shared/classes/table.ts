@@ -1,10 +1,10 @@
-import { OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, Sort, MatDialog } from '@angular/material';
 import { Subject } from 'rxjs/Subject';
 import { DAO } from './dao';
 import "rxjs/add/operator/takeUntil";
 
-export class Table<T> implements OnInit, AfterViewInit {
+export class Table<T> implements OnInit {
   public ngUnsubscribe = new Subject();
   public displayedColumns?: string[];
   // public sort?: MatSort;
@@ -26,23 +26,13 @@ export class Table<T> implements OnInit, AfterViewInit {
     console.log('action ', object);
     this.service.object.next(object);
     window.scrollTo(0, 145);
-    // let template: any;
-    // switch (actionName) {
-    //   case "add":
-    //     template = AddDialogComponent;
-    //     break;
-    //   case "edit":
-    //     template = EditDialogComponent;
-    //     break;
-    //   case "del":
-    //     template = DelDialogComponent;
-    //     break;
-    // }
-    // this.dialog.open(template);
   }
 
   ngOnInit() {
     // this.service.objectSubject.next(null);
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+
     console.log('init table');
     this.service
       .getAll()
@@ -56,10 +46,9 @@ export class Table<T> implements OnInit, AfterViewInit {
       });
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
+  // ngAfterViewInit() {
+
+  // }
 
   ngOnDestroy() {
     // console.log('destroy table');

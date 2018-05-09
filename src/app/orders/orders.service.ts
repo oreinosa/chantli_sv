@@ -38,9 +38,9 @@ export class OrdersService {
     if (from && to) {
       this.ordersCol = this.fs.collection<Order>('orders', ref =>
         ref
+          // .orderBy('date.by', 'desc')
           .where('date.for', ">=", from)
           .where('date.for', "<=", to)
-        // .orderBy('products.principal', 'desc')
       );
     } else {
       this.ordersCol = this.fs.collection<Order>('orders', ref =>

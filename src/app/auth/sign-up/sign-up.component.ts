@@ -13,6 +13,7 @@ import { Observable } from 'rxjs/Observable';
 export class SignUpComponent implements OnInit {
   signUp: SignUp;
   workplaces: Observable<Workplace[]>;
+  submitted = false;
   constructor(
     private workplacesService: WorkplacesService,
     private authService: AuthService,
@@ -29,10 +30,11 @@ export class SignUpComponent implements OnInit {
   }
 
   onSubmit(signUp: SignUp) {
-    console.log(signUp);
+    this.submitted = true;
     this.authService
       .signUp(signUp)
-      .then(f => f ? this.router.navigate(['home']) : false);
+      .catch(() => this.submitted = false)
+
   }
 
 

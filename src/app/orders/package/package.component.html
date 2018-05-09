@@ -11,7 +11,7 @@
       </mat-card-header>
       <mat-card-content>
         <div class="row">
-          <div class="col-12">
+          <div class="col-12 mb-4">
             <button mat-button type='button' (click)='selectDate("today")'>Ahora ({{ today | date:"fullDate" }})</button>
             <button mat-button type='button' (click)='selectDate("week")'>Esta semana</button>
             <button mat-button type='button' (click)='selectDate("month")'>Este mes</button>
@@ -19,7 +19,7 @@
           <div class="col-12 col-sm-8 col-md-6 offset-md-3 col-lg-4 offset-lg-4">
             <!-- WORKPLACES FILTER -->
             <mat-form-field>
-              <mat-select placeholder='Lugar de trabajo' [formControl]='workplaceCtrl' (selectionChange)='filterByWorkplace($event.value)'>
+              <mat-select placeholder='Lugar de trabajo' [formControl]='workplaceCtrl' (selectionChange)='applyFilter()'>
                 <mat-option *ngFor='let workplace of workplaces' [value]='workplace.name'>{{ workplace.name }}</mat-option>
               </mat-select>
             </mat-form-field>
@@ -29,25 +29,27 @@
             <ng-container *ngIf='users; else loadingUsers'>
               <mat-form-field>
                 <input matInput placeholder="Clientes" [matAutocomplete]="auto" [formControl]="userCtrl" required>
-                <mat-autocomplete #auto="matAutocomplete" (optionSelected)='filterByUser($event.option.value)'>
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)='applyFilter()'>
                   <mat-option *ngFor="let user of filteredUsers | async" [value]="user.name">
                     {{ user.name }}
                   </mat-option>
                 </mat-autocomplete>
               </mat-form-field>
-              <button mat-button type='button' (click)='filterByUser("");userCtrl.setValue("")'>Todos los clientes</button>
+              <button mat-button type='button' (click)='userCtrl.reset();applyFilter();'>Todos los clientes</button>
             </ng-container>
             <ng-template #loadingUsers>
               <mat-spinner class="mx-auto"></mat-spinner>
             </ng-template>
           </div>
         </div>
-        <mat-table #table matSort [dataSource]="dataSource" class='data-table'>
+        <mat-table #table [dataSource]="dataSource" class='data-table' matSort>
           <!-- Name Column -->
           <ng-container matColumnDef="user">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </mat-header-cell>
             <mat-cell *matCellDef="let element">
-              <p> {{element.user.name}}</p>
+              <p>
+                {{element.user.name}}
+              </p>
               <!-- <p>( {{element.user.workplace}} )</p> -->
             </mat-cell>
           </ng-container>
@@ -72,6 +74,14 @@
               <p>
                 <b>Tortillas : </b> {{ element.tortillas }}
               </p>
+            </mat-cell>
+          </ng-container>
+
+          <!-- Date Column -->
+          <ng-container matColumnDef="date">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Para</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              {{ element.date.for | date:"shortDate" }}
             </mat-cell>
           </ng-container>
 

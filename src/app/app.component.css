@@ -2,6 +2,9 @@
   /* padding-top: 64px; */
   padding-top: 74px;
   background-color: #d3d3d3;
+  /* min-height: 950px; */
+}
+.app-sidenav-content{
   min-height: 950px;
 }
 .app-sidenav {

@@ -80,7 +80,7 @@ export class Step1Component implements OnInit {
 
       // console.log(action + side.name);
       this.refresh = !this.refresh;
-      console.log('Selected order.sides : ', this.acompanamientos);
+      // console.log('Selected order.sides : ', this.acompanamientos);
     }
   }
 

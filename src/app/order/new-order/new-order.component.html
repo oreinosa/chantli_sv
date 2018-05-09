@@ -1,11 +1,16 @@
-<ng-container [ngSwitch]='step'>
-  <app-step-1 [menu]='menu' [principal]='newOrder?.products?.principal' [acompanamientos]='newOrder?.products?.acompanamientos'
-    (select)='onSelect($event.principal, $event.acompanamientos)' *ngSwitchCase='1'></app-step-1>
+<ng-container *ngIf='menu; else loading'>
+  <ng-container [ngSwitch]='step'>
+    <app-step-1 [menu]='menu' [principal]='newOrder?.products?.principal' [acompanamientos]='newOrder?.products?.acompanamientos'
+      (select)='onSelect($event.principal, $event.acompanamientos)' *ngSwitchCase='1'></app-step-1>
 
-  <app-step-2 [menu]='menu' [bebida]='newOrder?.products?.bebida' (select)='onSelectBebida($event)' *ngSwitchCase='2'></app-step-2>
+    <app-step-2 [menu]='menu' [bebida]='newOrder?.products?.bebida' (select)='onSelectBebida($event)' *ngSwitchCase='2'></app-step-2>
 
-  <app-step-3 [menu]='menu' [principal]='newOrder?.products?.principal' [acompanamientos]='newOrder?.products?.acompanamientos'
-    [bebida]='newOrder?.products?.bebida' (confirm)='onConfirm($event?.tortillas, $event?.total)' *ngSwitchCase='3'></app-step-3>
+    <app-step-3 [menu]='menu' [principal]='newOrder?.products?.principal' [acompanamientos]='newOrder?.products?.acompanamientos'
+      [bebida]='newOrder?.products?.bebida' (confirm)='onConfirm($event?.tortillas, $event?.total)' *ngSwitchCase='3'></app-step-3>
 
-  <app-step-4 *ngSwitchCase='4'></app-step-4>
+    <app-step-4 *ngSwitchCase='4'></app-step-4>
+  </ng-container>
 </ng-container>
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>

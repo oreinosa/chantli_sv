@@ -39,6 +39,7 @@ export class NewOrderComponent implements OnInit {
     this.orderService
       .menuSubject
       .take(1)
+      .do(menu => menu ? false : this.router.navigate(['menu']))
       .subscribe(menu => this.menu = menu);
 
     this.route

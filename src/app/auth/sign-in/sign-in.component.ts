@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class SignInComponent implements OnInit {
   signIn: SignIn;
+  submitted = false;
   constructor(
     private authService: AuthService,
     private router: Router
@@ -23,14 +24,20 @@ export class SignInComponent implements OnInit {
   }
 
   onSubmit(signIn: SignIn) {
+    this.submitted = true;
     console.log(signIn);
     this.authService
       .signInEmail(signIn)
+      .then(() => this.router.navigate(['menu']))
+      .catch(() => this.submitted = false)
   }
 
   onSignInSocial(provider: string) {
+    this.submitted = true;
     this.authService
       .signInSocial(provider)
+      .then(() => this.router.navigate(['menu']))
+      .catch(() => this.submitted = false)
   }
 
 }

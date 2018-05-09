@@ -7,8 +7,11 @@
 .mat-column-products {
   flex: 0 0 40%;
 }
+.mat-column-date {
+  flex: 0 0 15%;
+}
 .mat-column-actions {
-  flex: 0 0 35%;
+  flex: 0 0 20%;
 }
 .mat-table, .mat-paginator{
   overflow: auto;

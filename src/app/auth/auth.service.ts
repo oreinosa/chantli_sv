@@ -110,13 +110,7 @@ export class AuthService {
   signInEmail(signIn: SignIn) {
     return this.afAuth.auth
       .signInWithEmailAndPassword(signIn.email, signIn.password)
-      .then((credential) => {
-        let body, type: string;
-        body = `Hola ${credential.user.displayName}!`;
-        type = 'info';
-        this.notificationsService.show(body, undefined, type);
-      })
-      .then(() => this.router.navigate(['menu']))
+      .then((credential) => this.notificationsService.show(`Hola, ${credential.user.displayName}`, undefined, 'info'))
       .catch(() => this.notificationsService.show('Correo electrónico o contraseaña incorrecta', 'Error', 'danger'));
   }
 
@@ -129,15 +123,8 @@ export class AuthService {
     return this.afAuth
       .auth
       .signInWithPopup(_provider)
-      .then(credential => {
-        let body, type: string;
-        body = `Hola ${credential.user.displayName}!`;
-        type = 'info';
-        this.notificationsService.show(body, undefined, type);
-        return credential.user
-      })
-      .then(user => this.updateUserData(user))
-      .then(() => this.router.navigate(['menu']))
+      .then(credential => this.updateUserData(credential.user)
+        .then(() => this.notificationsService.show(`Hola, ${credential.user.displayName}`, undefined, 'info')))
       .catch(() => this.notificationsService.show('Correo electrónico o contraseaña incorrecta', 'Error', 'danger'));
   }
 
@@ -148,9 +135,8 @@ export class AuthService {
       .then(credential => credential.updateProfile({ // UPDATE FIREBASE USER CREDENTIALS
         displayName: signUp.name,
         photoURL: 'http://www.personalbrandingblog.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640-300x300.png'
-      }).then(() => this.updateUserData(credential, signUp)) // UPDATE FIRESTORE USER DATA
-        .then(() => this.router.navigate(['menu']))
-        .then(() => this.notificationsService.show(`Bienvenido, ${signUp.name}`, undefined, 'success')));
+      }).then(() => this.updateUserData(credential, signUp))) // UPDATE FIRESTORE USER DATA
+      .then(() => this.notificationsService.show(`Bienvenido, ${signUp.name}`, undefined, 'success'));
   }
 
   signOut() {
