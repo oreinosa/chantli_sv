@@ -110,8 +110,13 @@ export class AuthService {
   signInEmail(signIn: SignIn) {
     return this.afAuth.auth
       .signInWithEmailAndPassword(signIn.email, signIn.password)
-      .then((credential) => this.notificationsService.show(`Hola, ${credential.user.displayName}`, undefined, 'info'))
-      .catch(() => this.notificationsService.show('Correo electrónico o contraseaña incorrecta', 'Error', 'danger'));
+      .catch((e) =>
+        // console.log(e));
+        this.notificationsService.show('Correo electrónico o contraseaña incorrecta', 'Error', 'danger'))
+      .then((credential) =>
+        // console.log(credential))
+        this.notificationsService.show(`Hola, ${credential.displayName}`, undefined, 'info'));
+
   }
 
   signInSocial(provider: string) {
@@ -123,19 +128,21 @@ export class AuthService {
     return this.afAuth
       .auth
       .signInWithPopup(_provider)
+      .catch(e => console.log(e))
       .then(credential => this.updateUserData(credential.user)
         .then(() => this.notificationsService.show(`Hola, ${credential.user.displayName}`, undefined, 'info')))
-      .catch(() => this.notificationsService.show('Correo electrónico o contraseaña incorrecta', 'Error', 'danger'));
   }
 
   signUp(signUp: SignUp) {
     return this.afAuth
       .auth
       .createUserWithEmailAndPassword(signUp.email, signUp.password)
+      .catch((e) => this.notificationsService.show('Correo electrónico ya esta en uso', 'Error', 'danger'))
       .then(credential => credential.updateProfile({ // UPDATE FIREBASE USER CREDENTIALS
         displayName: signUp.name,
         photoURL: 'http://www.personalbrandingblog.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640-300x300.png'
-      }).then(() => this.updateUserData(credential, signUp))) // UPDATE FIRESTORE USER DATA
+      })
+        .then(() => this.updateUserData(credential, signUp))) // UPDATE FIRESTORE USER DATA
       .then(() => this.notificationsService.show(`Bienvenido, ${signUp.name}`, undefined, 'success'));
   }
 
@@ -171,8 +178,8 @@ export class AuthService {
           let data: User = {
             email: user.email,
             name: user.displayName,
-            role: 'Cliente'
-            // image: user.photoURL,
+            role: 'Cliente',
+            photoURL: user.photoURL,
           };
           if (signUp) {
             console.log(`Workplace : ${signUp.workplace}`)

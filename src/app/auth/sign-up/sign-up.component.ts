@@ -33,8 +33,8 @@ export class SignUpComponent implements OnInit {
     this.submitted = true;
     this.authService
       .signUp(signUp)
+      .then(() => this.router.navigate(['menu']))
       .catch(() => this.submitted = false)
-
   }
 
 

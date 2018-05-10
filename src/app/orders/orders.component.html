@@ -10,7 +10,7 @@
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <app-filters (selectRange)='onSelectRange($event)'></app-filters>
+        <app-filters (selectedRange)='onSelectRange($event)'></app-filters>
         <app-package [dataSource]='orders'></app-package>
       </mat-card-content>
     </mat-card>

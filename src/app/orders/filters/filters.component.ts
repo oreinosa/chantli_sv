@@ -12,6 +12,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { OrdersService } from '../orders.service';
 import { map } from 'rxjs/operators/map';
 import { Subject } from 'rxjs/Subject';
+import { MONTHS } from '../../shared/classes/months';
 
 @Component({
   selector: 'app-filters',
@@ -21,6 +22,8 @@ import { Subject } from 'rxjs/Subject';
 export class FiltersComponent implements OnInit {
   private ngUnsubscribe = new Subject();
   today = new Date();
+  refresh: boolean;
+  months = MONTHS;
 
   workplaces: Workplace[];
   allUsers: User[];
@@ -28,9 +31,12 @@ export class FiltersComponent implements OnInit {
 
   filteredUsers: Observable<User[]>;
 
-  dateFilter: BehaviorSubject<DateRange>;
+  // dateFilter: BehaviorSubject<DateRange>;
+  monthFilter: BehaviorSubject<number>;
+
   userCtrl: FormControl = new FormControl('');
   workplaceCtrl: FormControl = new FormControl('TELUS International');
+  selectedMonthCtrl: FormControl;
 
   allOrders: Order[];
   filteredOrders: Order[];
@@ -47,6 +53,8 @@ export class FiltersComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    let currentMonth = this.today.getMonth();
+    this.selectedMonthCtrl = new FormControl(currentMonth);
 
     this.ordersService
       .getUsers()
@@ -63,26 +71,23 @@ export class FiltersComponent implements OnInit {
     this.filteredUsers = this.userCtrl
       .valueChanges
       .pipe(
-      startWith(''),
-      map(user => user ? this.filterUsers(user) : this.users.slice())
+        startWith(''),
+        map(user => user ? this.filterUsers(user) : this.users.slice())
       );
 
-    let from = new Date();
-    from.setUTCHours(10, 0, 0);
-    let to = new Date();
-    to.setUTCHours(13, 0, 0);
+    this.monthFilter = new BehaviorSubject(currentMonth);
 
-    console.log(from, to);
-
-    this.dateFilter = new BehaviorSubject({ from, to });
-
-    this.dateFilter
+    this.monthFilter
       .takeUntil(this.ngUnsubscribe)
+      .map(month => {
+        let dateRange: DateRange = { from: this.getFirstDayMonth(month), to: this.getLastDayMonth(month) };
+        return dateRange;
+      })
       .switchMap(({ from, to }) => this.ordersService.getOrders(from, to))
       .takeUntil(this.ngUnsubscribe)
-      .map(orders => orders.sort((a, b) => this.compare(a.products.principal, b.products.principal, true)))
       .map(orders => orders.sort((a, b) => this.compare(a.date.by, b.date.by, false)))
       .map(orders => orders.sort((a, b) => this.compare(a.date.for, b.date.for, false)))
+      // .map(orders => orders.sort((a, b) => this.compare(a.products.principal, b.products.principal, true)))
       .do(orders => console.log('Orders : ', orders))
       .subscribe(orders => {
         this.allOrders = orders;
@@ -90,15 +95,18 @@ export class FiltersComponent implements OnInit {
       });
   }
 
+  selectMonth() {
+    let month = this.selectedMonthCtrl.value;
+    this.monthFilter.next(month);
+  }
+
   applyFilters() {
     this.filterByWorkplace();
     this.filterByUser();
-    this.filterOrders();
-  }
-
-  filterOrders() {
+    this.filterByDateRange();
     this.ordersService.filteredOrders.next(this.filteredOrders);
   }
+
 
   filterByWorkplace() {
     let workplace = this.workplaceCtrl.value;
@@ -107,6 +115,7 @@ export class FiltersComponent implements OnInit {
     this.filteredOrders = orders.filter(order => order.user.workplace === workplace);
     let users = this.allUsers.slice();
     this.users = users.filter(user => user.workplace === workplace);
+    this.userCtrl.setValue(this.userCtrl.value);
   }
 
   filterByUser() {
@@ -117,12 +126,14 @@ export class FiltersComponent implements OnInit {
     }
   }
 
-  selectDate(range: string) {
+  filterByDateRange() {
+    let dateRange = this.selectedRange;
     let from = new Date();
     let to = new Date();
-    this.selectedRange = range;
     let rangeString: string;
-    switch (range) {
+    console.log(`Filter by dateRange : `, dateRange);
+
+    switch (dateRange) {
       case "today":
         from.setUTCHours(11, 0, 0);
         to.setUTCHours(13, 0, 0);
@@ -131,16 +142,17 @@ export class FiltersComponent implements OnInit {
       case "week":
         from = this.getMonday();
         to = this.getFriday();
-        rangeString = `Esta semana (${from.toLocaleString()} al ${to.toLocaleString()})`;
+        rangeString = `Para la semana (${from.toLocaleString()} al ${to.toLocaleString()})`;
         break;
       case "month":
         from = this.getFirstDayMonth();
         to = this.getLastDayMonth();
-        rangeString = `Para este mes`;
+        rangeString = `Para el mes`;
         break;
     }
+
+    this.filteredOrders = this.filteredOrders.filter(order => order.date.for >= from && order.date.for <= to);
     this.selectRangeEmitter.emit(rangeString);
-    this.dateFilter.next({ from, to });
   }
 
   private filterUsers(name: string): User[] {
@@ -175,18 +187,22 @@ export class FiltersComponent implements OnInit {
     return d;
   }
 
-  private getFirstDayMonth(): Date {
+  private getFirstDayMonth(month?: number): Date {
     let d = new Date();
+    month ? d.setMonth(month) : false;
     d.setDate(1);
     d.setUTCHours(13, 0, 0);
+    // console.log(d);
     return d;
   }
 
 
-  private getLastDayMonth(): Date {
+  private getLastDayMonth(month?: number): Date {
     let d = new Date();
-    d.setFullYear(d.getFullYear(), d.getMonth() + 1, 0)
+    let _month = month ? month : d.getMonth();
+    d.setFullYear(d.getFullYear(), _month + 1, 0)
     d.setUTCHours(13, 0, 0);
+    // console.log(d);
     return d;
   }
 

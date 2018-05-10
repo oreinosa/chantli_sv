@@ -18,10 +18,11 @@
 								 email>
 							</mat-form-field>
 							<mat-form-field class="full-width">
-								<input matInput type="password" placeholder='Contraseña' id='confirmPassword' ngModel name='confirmPassword' required>
+								<input matInput type="password" placeholder='Contraseña' id='confirmPassword' ngModel name='confirmPassword' required pattern='^.{6,}$'>
 							</mat-form-field>
 							<mat-form-field class="full-width">
-								<input matInput type="password" placeholder='Confirmar contraseña' id='password' [(ngModel)]='signUp.password' name='password' required [pattern]='f.controls.confirmPassword?.value'>
+								<input matInput type="password" placeholder='Confirmar contraseña' id='password' [(ngModel)]='signUp.password' name='password'
+								 required [pattern]='f.controls.confirmPassword?.value'>
 							</mat-form-field>
 							<mat-form-field class="full-width">
 								<mat-select placeholder='Lugar de trabajo' [(ngModel)]='signUp.workplace' name='workplace' required>
