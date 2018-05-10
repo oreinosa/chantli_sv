@@ -1,3 +1,8 @@
+import { takeUntil } from 'rxjs/operators/takeUntil';
+import { Subject } from 'rxjs/Subject';
+import { OrdersService } from './../orders/orders.service';
+import { Order } from './../shared/classes/order';
+import { MatTableDataSource } from '@angular/material';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,11 +11,26 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./orders.component.css']
 })
 export class OrdersComponent implements OnInit {
-  public displayedColumns = ['user', 'products', ''];
+  private ngUnsubscribe = new Subject();
+  selectedRangeString: string = 'Para ahora';
+  orders: Order[];
 
-  constructor() { }
+  constructor(
+    private ordersService: OrdersService
+  ) { }
 
   ngOnInit() {
+    this.ordersService
+      .filteredOrders
+      .takeUntil(this.ngUnsubscribe)
+      .do(orders => console.log(orders))
+      .subscribe(orders => this.orders = orders);
   }
+
+  onSelectRange(selectedRangeString: string) {
+    this.selectedRangeString = selectedRangeString;
+  }
+
+
 
 }

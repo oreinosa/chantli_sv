@@ -7,6 +7,7 @@ import { OrdersService } from './orders.service';
 import { PackageComponent } from './package/package.component';
 import { PaymentComponent } from './payment/payment.component';
 import { MatTableModule, MatSortModule, MatPaginatorModule } from '@angular/material';
+import { FiltersComponent } from './filters/filters.component';
 
 @NgModule({
   imports: [
@@ -16,7 +17,7 @@ import { MatTableModule, MatSortModule, MatPaginatorModule } from '@angular/mate
     MatPaginatorModule,
     OrdersRoutingModule
   ],
-  declarations: [OrdersComponent, PackageComponent, PaymentComponent],
+  declarations: [OrdersComponent, PackageComponent, PaymentComponent, FiltersComponent],
   providers: [OrdersService]
 })
 export class OrdersModule { }

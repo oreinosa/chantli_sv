@@ -2,16 +2,22 @@
   width:100%;
 }
 .mat-column-user {
-  flex: 0 0 25%;
+  flex: 0 0 15%;
 }
-.mat-column-products {
-  flex: 0 0 40%;
+.mat-column-principal {
+  flex: 0 0 20%;
+}
+.mat-column-acompanamientos {
+  flex: 0 0 20%;
+}
+.mat-column-bebida {
+  flex: 0 0 10%;
 }
 .mat-column-date {
   flex: 0 0 15%;
 }
 .mat-column-actions {
-  flex: 0 0 20%;
+  flex: 0 0 15%;
 }
 .mat-table, .mat-paginator{
   overflow: auto;
@@ -21,8 +27,10 @@
   color: grey!important;
 }
 .mat-cell, .mat-header-cell {
-  overflow: hidden;
-  word-wrap: break-word;
+  /* overflow: hidden;
+  word-wrap: break-word; */
+  overflow: hidden;  
+  text-overflow: clip;
   padding: 5px 15px;   
 } 
 /* .mat-icon{

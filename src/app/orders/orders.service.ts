@@ -1,3 +1,4 @@
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 // import { Details } from './../shared/classes/details';
 import { Order } from './../shared/classes/order';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
@@ -12,6 +13,8 @@ export class OrdersService {
 
   private usersCol: AngularFirestoreCollection<User>;
   private userDoc: AngularFirestoreDocument<User>;
+
+  filteredOrders = new BehaviorSubject<Order[]>(null);
 
   constructor(
     private fs: AngularFirestore
