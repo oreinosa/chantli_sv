@@ -22,10 +22,10 @@ import { MONTHS } from '../../shared/classes/months';
 export class FiltersComponent implements OnInit {
   private ngUnsubscribe = new Subject();
   today = new Date();
-  refresh: boolean;
   months = MONTHS;
 
   workplaces: Workplace[];
+
   allUsers: User[];
   users: User[];
 
@@ -71,8 +71,8 @@ export class FiltersComponent implements OnInit {
     this.filteredUsers = this.userCtrl
       .valueChanges
       .pipe(
-        startWith(''),
-        map(user => user ? this.filterUsers(user) : this.users.slice())
+      startWith(''),
+      map(user => user ? this.filterUsers(user) : this.users.slice())
       );
 
     this.monthFilter = new BehaviorSubject(currentMonth);
