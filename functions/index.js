@@ -19,7 +19,7 @@ exports.aggregateBalance = functions.firestore
       .then(userDoc => {
         const user = userDoc.data();
         let balance = user.balance;
-        balance -= price;
+        balance = balance - price;
         console.log(`New balance : $${balance}`);
         // run update
         return userRef.update({
