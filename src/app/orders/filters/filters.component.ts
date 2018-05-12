@@ -142,8 +142,8 @@ export class FiltersComponent implements OnInit {
 
     switch (dateRange) {
       case "today":
-        from.setUTCHours(11, 0, 0);
-        to.setUTCHours(13, 0, 0);
+        from.setUTCHours(0, 0, 0);
+        to.setUTCHours(23, 0, 0);
         rangeString = `Para ahora `;
         break;
       case "week":
