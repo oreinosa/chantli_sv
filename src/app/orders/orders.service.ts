@@ -15,7 +15,7 @@ export class OrdersService {
   private usersCol: AngularFirestoreCollection<User>;
   private userDoc: AngularFirestoreDocument<User>;
 
-  filteredOrders = new Subject<Order[]>(]);
+  filteredOrders = new BehaviorSubject<Order[]>([]);
 
   constructor(
     private fs: AngularFirestore

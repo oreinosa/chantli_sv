@@ -6,8 +6,8 @@ exports.aggregateBalance = functions.firestore
   .document('orders/{orderId}')
   .onCreate(orderDoc => {
     // console.log(event);
-    const orderId = doc.id;
-    const order = doc.data();
+    // const orderId = doc.id;
+    const order = orderDoc.data();
     const userId = order.user.id;
     const price = order.price;
     // ref to the parent document
