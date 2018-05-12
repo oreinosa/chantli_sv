@@ -4,24 +4,25 @@ admin.initializeApp(functions.config().firebase);
 
 exports.aggregateBalance = functions.firestore
   .document('orders/{orderId}')
-  .onWrite(event => {
-    console.log(event);
-    const orderId = event.params.orderId;
-    const userId = event.params.user.id;
-    const price = event.params.price;
+  .onCreate(orderDoc => {
+    // console.log(event);
+    const orderId = doc.id;
+    const order = doc.data();
+    const userId = order.user.id;
+    const price = order.price;
     // ref to the parent document
-    const docRef = admin.firestore().collection('users').doc(userId)
+    const userRef = admin.firestore().collection('users').doc(userId)
 
     // get all comments and aggregate
-    return docRef
+    return userRef
       .get()
-      .then(querySnapshot => {
-        const user = doc.data();
+      .then(userDoc => {
+        const user = userDoc.data();
         let balance = user.balance;
         balance += price;
-        console.log(balance);
+        console.log(`New balance : $${balance}`);
         // run update
-        return docRef.update({
+        return userRef.update({
           balance: balance
         });
       })
