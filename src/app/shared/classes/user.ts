@@ -6,7 +6,8 @@ export interface User {
   email?: string;
   photoURL?: string;
   role?: string;
-  workplace?: string
+  workplace?: string,
+  balance?: number;
 }
 export class User {
   constructor(
@@ -15,6 +16,7 @@ export class User {
     public email?: string,
     public photoURL?: string,
     public role?: string,
-    public workplace?: string
+    public workplace?: string,
+    public balance?: number
   ) { }
 }

@@ -180,6 +180,7 @@ export class AuthService {
             name: user.displayName,
             role: 'Cliente',
             photoURL: user.photoURL,
+            balance: 0
           };
           if (signUp) {
             console.log(`Workplace : ${signUp.workplace}`)
