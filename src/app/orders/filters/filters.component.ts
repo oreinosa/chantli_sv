@@ -142,8 +142,8 @@ export class FiltersComponent implements OnInit {
 
     switch (dateRange) {
       case "today":
-        from.setUTCHours(0, 0, 0);
-        to.setUTCHours(23, 0, 0);
+        from.setHours(0, 0, 0);
+        to.setHours(22, 0, 0);
         rangeString = `Para ahora `;
         break;
       case "week":
@@ -157,13 +157,13 @@ export class FiltersComponent implements OnInit {
         rangeString = `Para el mes`;
         break;
     }
-
+    console.log(from, to);
     this.filteredOrders = this.filteredOrders.filter(order => order.date.for >= from && order.date.for <= to);
     this.selectRangeEmitter.emit(rangeString);
   }
 
   filterByCancelado() {
-    if(!this.includeCancelados){
+    if (!this.includeCancelados) {
       this.filteredOrders = this.filteredOrders.filter(order => order.status !== 'Cancelado');
     }
   }
