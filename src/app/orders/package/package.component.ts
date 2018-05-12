@@ -1,3 +1,5 @@
+import { OnDestroy } from '@angular/core';
+import { OrdersService } from './../orders.service';
 import { Order } from './../../shared/classes/order';
 import { Subject } from 'rxjs/Subject';
 import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
@@ -8,26 +10,58 @@ import { MatSort, MatTableDataSource, MatPaginator } from '@angular/material';
   templateUrl: './package.component.html',
   styleUrls: ['./package.component.scss']
 })
-export class PackageComponent implements  AfterViewInit {
+export class PackageComponent implements OnInit, AfterViewInit, OnDestroy {
   private ngUnsubscribe = new Subject();
-  @Input() dataSource: MatTableDataSource<Order>;
+  orders: Order[];
+  @Input() dataSource = new MatTableDataSource<Order>([]);
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   public displayedColumns = ['user', 'principal', 'acompanamientos', 'bebida', "date", 'actions'];
 
-  constructor() {
+  constructor(
+    private ordersService: OrdersService
+  ) { }
 
+  ngOnInit() {
+    this.ordersService
+      .filteredOrders
+      .takeUntil(this.ngUnsubscribe)
+      .do(orders => console.log(orders))
+      .do(orders => this.orders = orders)
+      .subscribe(orders => this.sortData());
   }
 
   ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
+    // this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
 
-  // ngOnDestroy() {
-  //   this.ngUnsubscribe.next();
-  //   this.ngUnsubscribe.complete();
-  // }
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
+
+  sortData() {
+    console.log('sort data');
+    const data = this.orders.slice();
+    if (!this.sort.active || this.sort.direction == '') {
+      this.dataSource.data = data;
+      return;
+    }
+
+    this.dataSource.data = data.sort((a, b) => {
+      let isAsc = this.sort.direction == 'asc';
+      switch (this.sort.active) {
+        case 'name': case 'principal': case 'bebida': return this.compare(a[this.sort.active], b[this.sort.active], isAsc);
+        case 'date': return this.compare(a.date.for, b.date.for, isAsc);
+        default: return 0;
+      }
+    });
+  }
+
+  compare(a, b, isAsc) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
 
 }

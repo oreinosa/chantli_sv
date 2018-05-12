@@ -95,7 +95,7 @@ export class OrderService {
     }
     d.setDate(diff);
     d.setHours(0, 0, 0);
-    // console.log(d);
+    console.log(d);
     return new Date(d);
   }
 
@@ -103,12 +103,13 @@ export class OrderService {
     d = new Date(d);
     var day = d.getDay(),
       diff = d.getDate() - day + 5;
-    if (day == 6 || day == 0) {
-      // diff += day == 6 ? 3 : 7;
-    }
+    if(day==6) diff += 7;
+    // if (day == 6 || day == 0) {
+    // diff += day == 6 ? 3 : 7;
+    // }
     d.setDate(diff);
     d.setHours(23, 0, 0);
-    // console.log(d);
+    console.log(d);
     return new Date(d);
   }
 

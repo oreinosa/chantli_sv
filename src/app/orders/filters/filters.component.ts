@@ -1,3 +1,4 @@
+import { OnDestroy } from '@angular/core';
 import { Order } from './../../shared/classes/order';
 import { MatTableDataSource } from '@angular/material';
 import { DateRange } from './../../shared/classes/date-range';
@@ -19,7 +20,7 @@ import { MONTHS } from '../../shared/classes/months';
   templateUrl: './filters.component.html',
   styleUrls: ['./filters.component.css']
 })
-export class FiltersComponent implements OnInit {
+export class FiltersComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject();
   today = new Date();
   months = MONTHS;
@@ -92,14 +93,19 @@ export class FiltersComponent implements OnInit {
       })
       .switchMap(({ from, to }) => this.ordersService.getOrders(from, to))
       .takeUntil(this.ngUnsubscribe)
-      .map(orders => orders.sort((a, b) => this.compare(a.date.by, b.date.by, false)))
-      .map(orders => orders.sort((a, b) => this.compare(a.date.for, b.date.for, false)))
+      // .map(orders => orders.sort((a, b) => this.compare(a.date.by, b.date.by, false)))
+      // .map(orders => orders.sort((a, b) => this.compare(a.date.for, b.date.for, false)))
       // .map(orders => orders.sort((a, b) => this.compare(a.products.principal, b.products.principal, true)))
       .do(orders => console.log('Orders : ', orders))
       .subscribe(orders => {
         this.allOrders = orders;
         this.applyFilters();
       });
+  }
+
+  ngOnDestroy(){
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   selectMonth() {
@@ -149,7 +155,7 @@ export class FiltersComponent implements OnInit {
       case "week":
         from = this.getMonday();
         to = this.getFriday();
-        rangeString = `Para la semana (${from.toLocaleString()} al ${to.toLocaleString()})`;
+        rangeString = `Para la semana (${from.toLocaleDateString()} al ${to.toLocaleDateString()})`;
         break;
       case "month":
         from = this.getFirstDayMonth();
@@ -191,9 +197,7 @@ export class FiltersComponent implements OnInit {
     let d = new Date();
     var day = d.getDay(),
       diff = d.getDate() - day + 5;
-    if (day == 6 || day == 0) {
-      // diff += day == 6 ? 3 : 7;
-    }
+    if(day == 6) diff += 7;
     d.setDate(diff);
     d.setUTCHours(13, 0, 0);
     // console.log(d);
@@ -223,11 +227,5 @@ export class FiltersComponent implements OnInit {
     return d;
   }
 
-  private compare(a, b, isAsc) {
-    if (a == b) {
-      return 0;
-    }
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-  }
 
 }

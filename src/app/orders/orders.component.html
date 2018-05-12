@@ -11,9 +11,8 @@
       </mat-card-header>
       <mat-card-content>
         <app-filters (selectedRange)='onSelectRange($event)'></app-filters>
-        <ng-container [ngSwitch]='mode'>
-          <app-package [dataSource]='dataSource' *ngSwitchCase='"empacar"'></app-package>
-        </ng-container>
+        <hr>
+        <router-outlet></router-outlet>
       </mat-card-content>
     </mat-card>
   </div>

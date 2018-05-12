@@ -1,3 +1,75 @@
-<p>
-  payment works!
-</p>
+<div class="col-12 text-center">
+  <div class="col-12 col-sm-8 col-md-4 mx-auto">
+    <h5>Pagar pedidos</h5>
+    <mat-form-field>
+      <input matInput type="number" placeholder='Total a pagar' [(ngModel)]='totalDue'>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" placeholder='Paga con' [(ngModel)]='payment' (change)='change = payment - totalDue' min='0'>
+    </mat-form-field>
+    <mat-form-field>
+      <input matInput type="number" placeholder='Cambio' [(ngModel)]='change'>
+    </mat-form-field>
+    <p *ngIf='change > 0'>
+      <mat-checkbox>¿Agregar vuelto como crédito?</mat-checkbox>
+    </p>
+  </div>
+</div>
+<div class="table-container">
+  <mat-table #table [dataSource]="dataSource" class='data-table' matSort>
+
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="($event ? masterToggle() : null);calculateTotalDue()" [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+      </mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()" (change)="($event ? selection.toggle(row) : null);calculateTotalDue()" [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="user">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <p>
+          {{element.user.name}}
+        </p>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Price Column -->
+    <ng-container matColumnDef="price">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Precio </mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <p>
+          {{element.price | currency}}
+        </p>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Date Column -->
+    <ng-container matColumnDef="date">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Para</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        <p> {{ element.date.for | spanishDate }}</p>
+      </mat-cell>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        acciones
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]='row.status === "Cancelado" ? "cancelled" : ""' [matTooltip]='row?.id'></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [pageSize]="20" [pageSizeOptions]="[10, 20, 40, 100]" [showFirstLastButtons]="true">
+  </mat-paginator>
+</div>

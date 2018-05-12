@@ -2,16 +2,16 @@
   <mat-card [ngClass]='DOW' *ngIf='(menu.date | date:"EEEE" | dow) as DOW'>
     <mat-card-header>
       <mat-card-title>
-        <h1>{{ DOW }} - {{ menu.date | date:"shortDate"}}</h1>
+        <h2>{{ menu.date | spanishDate }}</h2>
       </mat-card-title>
       <mat-card-subtitle>
-        <h2>Precio : {{ menu.price | currency }}</h2>
+        <h3>Precio : {{ menu.price | currency }}</h3>
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
       <div class="row menu-products">
         <div class="col-12 col-md-6 col-xl-5 offset-xl-1" *ngIf='products | productsByCategory:"Principal" as principales'>
-          <h3 class='text-center'>Platos principales</h3>
+          <h4 class='text-center'>Platos principales</h4>
           <ul>
             <li *ngFor='let product of principales'>
               <h5>{{ product.name }}</h5>
@@ -20,7 +20,7 @@
         </div>
         <div class="col-12 col-md-6 col-xl-5" *ngIf='products | productsByCategory:"Acompañamiento" as acompanamientos'>
           <ng-container *ngIf='acompanamientos.length; else noAcompanamientos'>
-            <h3 class='text-center'>Acompañamientos</h3>
+            <h4 class='text-center'>Acompañamientos</h4>
             <ul>
               <li *ngFor='let product of acompanamientos'>
                 <h5>{{ product.name }}</h5>
@@ -28,7 +28,7 @@
             </ul>
           </ng-container>
           <ng-template #noAcompanamientos>
-            <h3 class='text-center'>Este menú no tiene acompañamientos.</h3>
+            <h4 class='text-center'>Este menú no tiene acompañamientos.</h4>
           </ng-template>
         </div>
       </div>

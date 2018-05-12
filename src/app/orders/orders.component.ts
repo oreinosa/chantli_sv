@@ -14,9 +14,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class OrdersComponent implements OnInit {
   private ngUnsubscribe = new Subject();
   selectedRangeString: string = 'Para ahora';
-  dataSource = new MatTableDataSource<Order>([]);
   mode: string = 'empacar';
-  // orders: Order[];
 
   constructor(
     private ordersService: OrdersService,
@@ -25,14 +23,12 @@ export class OrdersComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.ordersService
-      .filteredOrders
-      .skip(1)
-      .takeUntil(this.ngUnsubscribe)
-      .do(orders => console.log(orders))
-      .subscribe(orders => this.dataSource.data = orders);
-    // .subscribe(orders => this.orders = orders);
 
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   onSelectMode(mode: string) {

@@ -21,7 +21,7 @@
           </div>
           <!-- DATE RANGES FILTER -->
           <div class="col-12 col-sm-6 my-3">
-            <button mat-raised-button type='button' class='m-2' (click)='selectedRange = "today";applyFilters()' [disabled]='selectedRange==="today"'>Ahora ({{ today | date:"EEEE" | dow }} {{ today | date:"shortDate" }})</button>
+            <button mat-raised-button type='button' class='m-2' (click)='selectedRange = "today";applyFilters()' [disabled]='selectedRange==="today"'>Ahora ({{ today | spanishDate }})</button>
             <button mat-raised-button type='button' class='m-2' (click)='selectedRange = "week";applyFilters()' [disabled]='selectedRange==="week"'>Esta semana</button>
             <button mat-raised-button type='button' class='m-2' (click)='selectedRange = "month";applyFilters()' [disabled]='selectedRange==="month"'>Este mes</button>
           </div>
