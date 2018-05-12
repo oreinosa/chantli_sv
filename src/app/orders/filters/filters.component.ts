@@ -34,9 +34,11 @@ export class FiltersComponent implements OnInit {
   // dateFilter: BehaviorSubject<DateRange>;
   monthFilter: BehaviorSubject<number>;
 
-  userCtrl: FormControl = new FormControl('');
-  workplaceCtrl: FormControl = new FormControl('TELUS International');
-  selectedMonthCtrl: FormControl;
+  selectedUserCtrl: FormControl = new FormControl('');
+  selectedWorkplace: string = 'TELUS International';
+  selectedMonth: number;
+  selectedYear: number;
+  includeCancelados: boolean;
 
   allOrders: Order[];
   filteredOrders: Order[];
@@ -53,8 +55,10 @@ export class FiltersComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    let currentYear = this.today.getFullYear();
     let currentMonth = this.today.getMonth();
-    this.selectedMonthCtrl = new FormControl(currentMonth);
+    this.selectedMonth = currentMonth;
+    this.selectedYear = currentYear;
 
     this.ordersService
       .getUsers()
@@ -68,11 +72,11 @@ export class FiltersComponent implements OnInit {
       // .do(workplaces => console.log(workplaces))
       .subscribe(workplaces => this.workplaces = workplaces);
 
-    this.filteredUsers = this.userCtrl
+    this.filteredUsers = this.selectedUserCtrl
       .valueChanges
       .pipe(
-      startWith(''),
-      map(user => user ? this.filterUsers(user) : this.users.slice())
+        startWith(''),
+        map(user => user ? this.filterUsers(user) : this.users.slice())
       );
 
     this.monthFilter = new BehaviorSubject(currentMonth);
@@ -80,7 +84,10 @@ export class FiltersComponent implements OnInit {
     this.monthFilter
       .takeUntil(this.ngUnsubscribe)
       .map(month => {
-        let dateRange: DateRange = { from: this.getFirstDayMonth(month), to: this.getLastDayMonth(month) };
+        let dateRange: DateRange = {
+          from: this.getFirstDayMonth(month),
+          to: this.getLastDayMonth(month)
+        };
         return dateRange;
       })
       .switchMap(({ from, to }) => this.ordersService.getOrders(from, to))
@@ -96,7 +103,7 @@ export class FiltersComponent implements OnInit {
   }
 
   selectMonth() {
-    let month = this.selectedMonthCtrl.value;
+    let month = this.selectedMonth;
     this.monthFilter.next(month);
   }
 
@@ -104,22 +111,22 @@ export class FiltersComponent implements OnInit {
     this.filterByWorkplace();
     this.filterByUser();
     this.filterByDateRange();
-    this.ordersService.filteredOrders.next(this.filteredOrders);
+    this.filterByCancelado();
+    this.ordersService.filterOrders(this.filteredOrders);
   }
 
-
   filterByWorkplace() {
-    let workplace = this.workplaceCtrl.value;
+    let workplace = this.selectedWorkplace;
     console.log(`Filter by workplace : ${workplace}`);
     let orders = this.allOrders.slice();
     this.filteredOrders = orders.filter(order => order.user.workplace === workplace);
     let users = this.allUsers.slice();
     this.users = users.filter(user => user.workplace === workplace);
-    this.userCtrl.setValue(this.userCtrl.value);
+    this.selectedUserCtrl.setValue(this.selectedUserCtrl.value);
   }
 
   filterByUser() {
-    let name = this.userCtrl.value;
+    let name = this.selectedUserCtrl.value;
     if (name) {
       console.log(`Filter by user : `, name);
       this.filteredOrders = this.filteredOrders.filter(order => order.user.name === name);
@@ -153,6 +160,12 @@ export class FiltersComponent implements OnInit {
 
     this.filteredOrders = this.filteredOrders.filter(order => order.date.for >= from && order.date.for <= to);
     this.selectRangeEmitter.emit(rangeString);
+  }
+
+  filterByCancelado() {
+    if(!this.includeCancelados){
+      this.filteredOrders = this.filteredOrders.filter(order => order.status !== 'Cancelado');
+    }
   }
 
   private filterUsers(name: string): User[] {
@@ -189,9 +202,12 @@ export class FiltersComponent implements OnInit {
 
   private getFirstDayMonth(month?: number): Date {
     let d = new Date();
-    month ? d.setMonth(month) : false;
-    d.setDate(1);
-    d.setUTCHours(13, 0, 0);
+    // month ? d.setMonth(month) : false;
+    // d.setDate(1);
+    let _month = month ? month : d.getMonth();
+    let year = this.selectedYear;
+    d.setFullYear(year, _month, 1);
+    d.setUTCHours(1, 0, 0);
     // console.log(d);
     return d;
   }
@@ -200,8 +216,9 @@ export class FiltersComponent implements OnInit {
   private getLastDayMonth(month?: number): Date {
     let d = new Date();
     let _month = month ? month : d.getMonth();
-    d.setFullYear(d.getFullYear(), _month + 1, 0)
-    d.setUTCHours(13, 0, 0);
+    let year = this.selectedYear;
+    d.setFullYear(year, _month + 1, 0);
+    d.setUTCHours(24, 0, 0);
     // console.log(d);
     return d;
   }

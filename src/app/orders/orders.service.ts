@@ -14,7 +14,7 @@ export class OrdersService {
   private usersCol: AngularFirestoreCollection<User>;
   private userDoc: AngularFirestoreDocument<User>;
 
-  filteredOrders = new BehaviorSubject<Order[]>(null);
+  filteredOrders = new BehaviorSubject<Order[]>([]);
 
   constructor(
     private fs: AngularFirestore
@@ -23,6 +23,10 @@ export class OrdersService {
     let firstDayOfYear = new Date();
     this.ordersCol = this.fs.collection<Order>('orders');
     this.usersCol = this.fs.collection<User>('users', ref => ref.orderBy('name', 'asc'));
+  }
+
+  filterOrders(orders: Order[]) {
+    this.filteredOrders.next(orders);
   }
 
   getUsers() {

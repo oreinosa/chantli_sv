@@ -1,3 +1,5 @@
+@import "./src/_colors";
+
 .mat-form-field{
   width:100%;
 }
@@ -25,6 +27,9 @@
 }
 .mat-header-cell{
   color: grey!important;
+}
+.mat-row.cancelled{
+  background-color: $danger;
 }
 .mat-cell, .mat-header-cell {
   /* overflow: hidden;

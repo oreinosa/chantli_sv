@@ -94,7 +94,8 @@ export class NewOrderComponent implements OnInit {
       }
     };
 
-    this.orderService.submitNewOrder(order)
+    this.orderService
+      .submitNewOrder(order)
       .then(() => this.router.navigate(['menu']));
   }
 

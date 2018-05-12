@@ -1,15 +1,18 @@
 import { Order } from './../../shared/classes/order';
 import { Subject } from 'rxjs/Subject';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
+import { MatSort, MatTableDataSource, MatPaginator } from '@angular/material';
 
 @Component({
   selector: 'app-package',
   templateUrl: './package.component.html',
-  styleUrls: ['./package.component.css']
+  styleUrls: ['./package.component.scss']
 })
-export class PackageComponent implements OnInit {
+export class PackageComponent implements  AfterViewInit {
   private ngUnsubscribe = new Subject();
-  @Input() dataSource: Order[];
+  @Input() dataSource: MatTableDataSource<Order>;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   public displayedColumns = ['user', 'principal', 'acompanamientos', 'bebida', "date", 'actions'];
 
@@ -17,9 +20,9 @@ export class PackageComponent implements OnInit {
 
   }
 
-  ngOnInit() {
-    // this.dataSource.sort = this.sort;
-    // this.dataSource.paginator = this.paginator;
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 
   // ngOnDestroy() {
