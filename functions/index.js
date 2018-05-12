@@ -1,11 +1,11 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-admin.initializeApp();
+admin.initializeApp(functions.config().firebase);
 
 exports.aggregateBalance = functions.firestore
   .document('orders/{orderId}')
   .onWrite(event => {
-
+    console.log(event);
     const orderId = event.params.orderId;
     const userId = event.params.user.id;
     const price = event.params.price;
