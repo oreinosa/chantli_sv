@@ -1,5 +1,5 @@
-import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
 // import { Details } from './../shared/classes/details';
 import { Order } from './../shared/classes/order';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
@@ -16,6 +16,8 @@ export class OrdersService {
   private userDoc: AngularFirestoreDocument<User>;
 
   filteredOrders = new BehaviorSubject<Order[]>([]);
+
+  payingUser = new BehaviorSubject<User>(null);
 
   constructor(
     private fs: AngularFirestore
@@ -80,11 +82,30 @@ export class OrdersService {
     return this.ordersCol.doc<Order>(order.id).update({ status: status });
   }
 
-  onPay(order: Order) {
-    const date = new Date();
-    console.log(order.id, ' paid by ', date);
-    // order.paid = date;
-    this.ordersCol.doc(order.id).update({ paid: date });
+  updateBalance(id: string, balance: number) {
+    return this.usersCol
+      .doc(id)
+      .update({
+        balance: balance
+      });
+  }
+
+  payOrders(orders: Order[]) {
+    let batch = this.fs.firestore.batch();
+    let ref;
+    for (let order of orders) {
+      ref = this.ordersCol.doc(order.id).ref;
+      batch.update(ref, { paid: new Date() });
+    }
+    return batch.commit();
+  }
+
+  payOrder(id: string) {
+    return this.ordersCol
+      .doc<Order>(id)
+      .update({
+        paid: new Date()
+      });
   }
 
 }

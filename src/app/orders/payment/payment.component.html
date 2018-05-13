@@ -1,19 +1,28 @@
-<div class="col-12 text-center">
-  <div class="col-12 col-sm-8 col-md-4 mx-auto">
-    <h5>Pagar pedidos</h5>
-    <mat-form-field>
-      <input matInput type="number" placeholder='Total a pagar' [(ngModel)]='totalDue'>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput type="number" placeholder='Paga con' [(ngModel)]='payment' (change)='change = payment - totalDue' min='0'>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput type="number" placeholder='Cambio' [(ngModel)]='change'>
-    </mat-form-field>
-    <p *ngIf='change > 0'>
-      <mat-checkbox>¿Agregar vuelto como crédito?</mat-checkbox>
-    </p>
-  </div>
+<div class="col-12 text-center" *ngIf='payingUser'>
+  <ng-container *ngIf='!paying;else loadingPayment'>
+    <div class="col-12 col-sm-8 col-md-4 mx-auto">
+      <h5>Pagar pedidos</h5>
+      <mat-form-field class='full-width'>
+        <input matInput type="number" placeholder='Total a pagar' [(ngModel)]='totalDue' readonly>
+      </mat-form-field>
+      <mat-form-field class='full-width'>
+        <input matInput type="number" placeholder='Paga con' [(ngModel)]='payment' (change)='change = payment - totalDue' min='0'>
+      </mat-form-field>
+      <mat-form-field class='full-width'>
+        <input matInput type="number" placeholder='Cambio' [(ngModel)]='change' readonly>
+      </mat-form-field>
+      <p *ngIf='change > 0'>
+        <mat-checkbox [(ngModel)]='addChange'>¿Agregar vuelto como crédito?</mat-checkbox>
+      </p>
+      <button mat-button type='button' (click)='onPay()'>Pagar</button>
+    </div>
+    <div class="col-12 text-center">
+      <h6>Balance total : {{ payingUser.balance | currency }}</h6>
+    </div>
+  </ng-container>
+  <ng-template #loadingPayment>
+    <mat-spinner class="mx-auto"></mat-spinner>
+  </ng-template>
 </div>
 <div class="table-container">
   <mat-table #table [dataSource]="dataSource" class='data-table' matSort>
@@ -70,6 +79,9 @@
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
     <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]='row.status === "Cancelado" ? "cancelled" : ""' [matTooltip]='row?.id'></mat-row>
   </mat-table>
+  <ng-container *ngIf='!payingUser'>
+    <h4 class='text-center'>¡Por favor selecciona al usuario que va a pagar!</h4>
+  </ng-container>
   <mat-paginator #paginator [pageSize]="20" [pageSizeOptions]="[10, 20, 40, 100]" [showFirstLastButtons]="true">
   </mat-paginator>
 </div>

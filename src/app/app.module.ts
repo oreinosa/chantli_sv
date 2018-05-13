@@ -26,7 +26,8 @@ import { OrdersModule } from './orders/orders.module';
   imports: [
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase), // imports firebase/app needed for everything
-    AngularFirestoreModule.enablePersistence(), // imports firebase/firestore, only needed for database features
+    // AngularFirestoreModule.enablePersistence(), // imports firebase/firestore, only needed for database features
+    AngularFirestoreModule, // imports firebase/firestore, only needed for database features    
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
     AngularFireStorageModule, // imports firebase/storage only needed for storage features
     SharedModule,

@@ -63,7 +63,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
     this.ordersService
       .getUsers()
-      .take(1)
+      .takeUntil(this.ngUnsubscribe)
       // .do(users => console.log(users))
       .subscribe(users => this.allUsers = users);
 
@@ -76,8 +76,8 @@ export class FiltersComponent implements OnInit, OnDestroy {
     this.filteredUsers = this.selectedUserCtrl
       .valueChanges
       .pipe(
-        startWith(''),
-        map(user => user ? this.filterUsers(user) : this.users.slice())
+      startWith(''),
+      map(user => user ? this.filterUsers(user) : this.users.slice())
       );
 
     this.monthFilter = new BehaviorSubject(currentMonth);
@@ -103,9 +103,20 @@ export class FiltersComponent implements OnInit, OnDestroy {
       });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  selectUser() {
+    let userName = this.selectedUserCtrl.value;
+    if (!userName) {
+      this.ordersService.payingUser.next(null);
+      return;
+    }
+    console.log(userName, ' is paying now')
+    let user = this.filterUsers(userName)[0];
+    this.ordersService.payingUser.next(user);
   }
 
   selectMonth() {
@@ -123,7 +134,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   filterByWorkplace() {
     let workplace = this.selectedWorkplace;
-    console.log(`Filter by workplace : ${workplace}`);
+    // console.log(`Filter by workplace : ${workplace}`);
     let orders = this.allOrders.slice();
     this.filteredOrders = orders.filter(order => order.user.workplace === workplace);
     let users = this.allUsers.slice();
@@ -134,7 +145,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
   filterByUser() {
     let name = this.selectedUserCtrl.value;
     if (name) {
-      console.log(`Filter by user : `, name);
+      // console.log(`Filter by user : `, name);
       this.filteredOrders = this.filteredOrders.filter(order => order.user.name === name);
     }
   }
@@ -144,7 +155,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
     let from = new Date();
     let to = new Date();
     let rangeString: string;
-    console.log(`Filter by dateRange : `, dateRange);
+    // console.log(`Filter by dateRange : `, dateRange);
 
     switch (dateRange) {
       case "today":
@@ -163,7 +174,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
         rangeString = `Para el mes`;
         break;
     }
-    console.log(from, to);
+    // console.log(from, to);
     this.filteredOrders = this.filteredOrders.filter(order => order.date.for >= from && order.date.for <= to);
     this.selectRangeEmitter.emit(rangeString);
   }
@@ -197,7 +208,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
     let d = new Date();
     var day = d.getDay(),
       diff = d.getDate() - day + 5;
-    if(day == 6) diff += 7;
+    if (day == 6) diff += 7;
     d.setDate(diff);
     d.setUTCHours(13, 0, 0);
     // console.log(d);

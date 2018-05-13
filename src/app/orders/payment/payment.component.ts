@@ -1,3 +1,4 @@
+import { User } from './../../shared/classes/user';
 import { OrdersService } from './../orders.service';
 import { Order } from './../../shared/classes/order';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
@@ -19,9 +20,13 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   refresh: boolean;
   public displayedColumns = ['select', 'user', 'price', "date", 'actions'];
 
+  payingUser: User;
+  paying: boolean;
+
   totalDue: number = 0;
   payment: number = 0;
   change: number = 0;
+  addChange: boolean;
 
   constructor(
     private ordersService: OrdersService
@@ -33,7 +38,13 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
       .takeUntil(this.ngUnsubscribe)
       .do(orders => console.log(orders))
       .map(orders => orders.filter(order => !order.paid))
-      .subscribe(orders => this.dataSource.data = orders);
+      .subscribe(orders => this.dataSource.data = this.payingUser ? orders : []);
+
+    this.ordersService
+      .payingUser
+      .takeUntil(this.ngUnsubscribe)
+      .do(user => console.log(user))
+      .subscribe(user => this.payingUser = user);
   }
 
   ngAfterViewInit() {
@@ -58,6 +69,24 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     this.isAllSelected() ?
       this.selection.clear() :
       this.dataSource.data.forEach(row => this.selection.select(row));
+  }
+
+  onPay() {
+    this.paying = true;
+    let selectedOrders = this.selection.selected;
+    let currentBalance = this.payingUser.balance;
+    let newBalance = currentBalance + this.totalDue;
+    if (this.addChange) {
+      newBalance += this.change;
+    }
+    console.log(newBalance);
+    return this.ordersService
+      .payOrders(selectedOrders)
+      .then(() => this.ordersService.updateBalance(this.payingUser.id, newBalance))
+      .then(() => {
+        this.paying = this.addChange = false;
+        this.totalDue = this.payment = this.change = 0;
+      });
   }
 
   calculateTotalDue() {

@@ -5,8 +5,6 @@ admin.initializeApp(functions.config().firebase);
 exports.aggregateBalance = functions.firestore
   .document('orders/{orderId}')
   .onCreate(orderDoc => {
-    // console.log(event);
-    // const orderId = doc.id;
     const order = orderDoc.data();
     const userId = order.user.id;
     const price = order.price;
@@ -19,12 +17,27 @@ exports.aggregateBalance = functions.firestore
       .then(userDoc => {
         const user = userDoc.data();
         let balance = user.balance;
+        let autoPay = false;
+        if (balance >= price) {
+          autoPay = true;
+        }
         balance = balance - price;
         console.log(`New balance : $${balance}`);
         // run update
-        return userRef.update({
-          balance: balance
-        });
+        if (autoPay) {
+          return orderDoc.ref
+            .update({
+              paid: new Date()
+            })
+          then(() => userRef
+            .update({
+              balance: balance
+            }));
+        }
+        return userRef
+          .update({
+            balance: balance
+          });
       })
       .catch(err => console.log(err))
   });
