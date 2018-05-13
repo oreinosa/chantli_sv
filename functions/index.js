@@ -29,10 +29,10 @@ exports.aggregateBalance = functions.firestore
             .update({
               paid: new Date()
             })
-          then(() => userRef
-            .update({
-              balance: balance
-            }));
+            .then(() => userRef
+              .update({
+                balance: balance
+              }));
         }
         return userRef
           .update({
