@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import * as firebase from 'firebase';
+require("firebase/functions");
 import { Subject } from 'rxjs/Subject';
-
+import { User } from '../shared/classes/user';
 @Injectable()
 export class MessagingService {
 
   private messaging = firebase.messaging();
-  private functions = firebase.functions();
-
+  
   private messageSource = new Subject()
   currentMessage = this.messageSource.asObservable() // message observable to show in Angular component
 
@@ -51,7 +51,7 @@ export class MessagingService {
   }
 
   subscribeToTopic(topic: string, tokens: string[]){
-    const _subscribeToTopic = this.functions.httpsCallable('subscribeToTopic');
+    const _subscribeToTopic = firebase.functions().httpsCallable('subscribeToTopic');
 
     return _subscribeToTopic({topic: topic, tokens: tokens})
     .then((a) => console.log(a))
