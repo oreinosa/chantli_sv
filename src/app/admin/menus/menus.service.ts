@@ -1,10 +1,11 @@
+import { Observable } from 'rxjs';
 import { NotificationsService } from './../../notifications/notifications.service';
 import { Injectable } from '@angular/core';
 import { Menu } from '../../shared/classes/menu';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Product } from '../../shared/classes/product';
 import { DAOSubcollection } from '../../shared/classes/dao-subcollection';
-
+import { map } from 'rxjs/operators';
 @Injectable()
 export class MenusService extends DAOSubcollection<Menu, Product> {
 
@@ -13,6 +14,13 @@ export class MenusService extends DAOSubcollection<Menu, Product> {
     public notificationsService: NotificationsService
   ) {
     super('Menu', 'menus', af, notificationsService, 'products');
+  }
+
+  getAll(): Observable<Menu[]> {
+    return super.getAll()
+      .pipe(
+      map(menus => menus.map(menu => { menu.date = menu.date.toDate(); return menu }))
+      );
   }
 
   add(menu: Menu, products: Product[]) {

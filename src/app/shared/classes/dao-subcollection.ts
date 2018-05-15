@@ -20,19 +20,23 @@ export abstract class DAOSubcollection<T, S> extends DAO<T>{
     super(className, collectionName, af, notificationsService);
   }
 
+  // getAll() {
+  //   return super.getAll();
+  // }
+
   getSubcollection(id: string): Observable<S[]> {
     let subCollection: AngularFirestoreCollection<S[]> = this.objectCollection.doc(id).collection(this.subCollectionName);
     return subCollection
       .snapshotChanges()
       .pipe(
-        map(actions => {
-          // console.log(actions);
-          return actions.map(a => {
-            let data = a.payload.doc.data() as S;
-            data['id'] = a.payload.doc.id;
-            return data;
-          })
+      map(actions => {
+        // console.log(actions);
+        return actions.map(a => {
+          let data = a.payload.doc.data() as S;
+          data['id'] = a.payload.doc.id;
+          return data;
         })
+      })
       );
   }
 
