@@ -1,6 +1,5 @@
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subject } from 'rxjs/Subject';
-// import { Details } from './../shared/classes/details';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Order } from './../shared/classes/order';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Injectable } from '@angular/core';
@@ -35,13 +34,15 @@ export class OrdersService {
   getUsers() {
     return this.usersCol
       .snapshotChanges()
-      .map(actions => {
-        return actions.map(a => {
-          const data = a.payload.doc.data();
-          const id = a.payload.doc.id;
-          return { id, ...data } as User;
-        });
-      });
+      .pipe(
+        map(actions => {
+          return actions.map(a => {
+            const data = a.payload.doc.data();
+            const id = a.payload.doc.id;
+            return { id, ...data } as User;
+          });
+        })
+      );
   }
 
   getOrders(from?: Date, to?: Date) {
@@ -61,13 +62,15 @@ export class OrdersService {
     }
     return this.ordersCol
       .snapshotChanges()
-      .map(actions => {
-        return actions.map(a => {
-          const data = a.payload.doc.data();
-          const id = a.payload.doc.id;
-          return { id, ...data } as Order;
+      .pipe(
+        map(actions => {
+          return actions.map(a => {
+            const data = a.payload.doc.data();
+            const id = a.payload.doc.id;
+            return { id, ...data } as Order;
+          })
         })
-      });
+      );
   }
 
   private compare(a, b, isAsc) {

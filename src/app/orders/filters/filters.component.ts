@@ -2,17 +2,14 @@ import { OnDestroy } from '@angular/core';
 import { Order } from './../../shared/classes/order';
 import { MatTableDataSource } from '@angular/material';
 import { DateRange } from './../../shared/classes/date-range';
-import { startWith } from 'rxjs/operators/startWith';
+import { startWith, map, takeUntil, take, switchMap, tap } from 'rxjs/operators';
 import { WorkplacesService } from './../../admin/workplaces/workplaces.service';
 import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { Workplace } from './../../shared/classes/workplace';
 import { User } from './../../shared/classes/user';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { OrdersService } from '../orders.service';
-import { map } from 'rxjs/operators/map';
-import { Subject } from 'rxjs/Subject';
 import { MONTHS } from '../../shared/classes/months';
 
 @Component({
@@ -63,40 +60,47 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
     this.ordersService
       .getUsers()
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(
+        takeUntil(this.ngUnsubscribe)
+      )
       // .do(users => console.log(users))
       .subscribe(users => this.allUsers = users);
 
     this.workplacesService
       .getAll()
-      .take(1)
+      .pipe(
+        take(1)
+      )
       // .do(workplaces => console.log(workplaces))
       .subscribe(workplaces => this.workplaces = workplaces);
 
     this.filteredUsers = this.selectedUserCtrl
       .valueChanges
       .pipe(
-      startWith(''),
-      map(user => user ? this.filterUsers(user) : this.users.slice())
+        startWith(''),
+        map(user => user ? this.filterUsers(user) : this.users.slice())
       );
 
     this.monthFilter = new BehaviorSubject(currentMonth);
 
     this.monthFilter
-      .takeUntil(this.ngUnsubscribe)
-      .map(month => {
-        let dateRange: DateRange = {
-          from: this.getFirstDayMonth(month),
-          to: this.getLastDayMonth(month)
-        };
-        return dateRange;
-      })
-      .switchMap(({ from, to }) => this.ordersService.getOrders(from, to))
-      .takeUntil(this.ngUnsubscribe)
-      // .map(orders => orders.sort((a, b) => this.compare(a.date.by, b.date.by, false)))
-      // .map(orders => orders.sort((a, b) => this.compare(a.date.for, b.date.for, false)))
-      // .map(orders => orders.sort((a, b) => this.compare(a.products.principal, b.products.principal, true)))
-      .do(orders => console.log('Orders : ', orders))
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        map(month => {
+          let dateRange: DateRange = {
+            from: this.getFirstDayMonth(month),
+            to: this.getLastDayMonth(month)
+          };
+          return dateRange;
+        }),
+        switchMap(({ from, to }) => this.ordersService.getOrders(from, to)),
+        takeUntil(this.ngUnsubscribe),
+        // .map(orders => orders.sort((a, b) => this.compare(a.date.by, b.date.by, false))),
+        // .map(orders => orders.sort((a, b) => this.compare(a.date.for, b.date.for, false))),
+        // .map(orders => orders.sort((a, b) => this.compare(a.products.principal, b.products.principal, true))),
+        tap(orders => console.log('Orders : ', orders))
+      )
+      
       .subscribe(orders => {
         this.allOrders = orders;
         this.applyFilters();

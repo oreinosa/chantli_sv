@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { UploaderComponent } from '../../../uploader/uploader.component';
 import { CategoriesService } from '../../categories/categories.service';
 import { Category } from '../../../shared/classes/category';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-edit-product',

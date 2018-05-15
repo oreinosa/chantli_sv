@@ -22,6 +22,7 @@ import { NotificationsModule } from './notifications/notifications.module';
 import { OrderModule } from './order/order.module';
 import { WorkplaceGuard } from './auth/workplace.guard';
 import { OrdersModule } from './orders/orders.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -31,6 +32,7 @@ import { OrdersModule } from './orders/orders.module';
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features    
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
     AngularFireStorageModule, // imports firebase/storage only needed for storage features
+    HttpClientModule,
     SharedModule,
     MessagingModule,
     NotificationsModule,

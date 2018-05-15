@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Menu } from '../shared/classes/menu';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
 import { Product } from '../shared/classes/product';
 import { Order } from '../shared/classes/order';
 import { NotificationsService } from '../notifications/notifications.service';
+import { map } from 'rxjs/operators';
 
 @Injectable()
 export class OrderService {
@@ -45,26 +45,30 @@ export class OrderService {
 
     return this.menusCol
       .snapshotChanges()
-      .map(actions => {
-        return actions.map(a => {
-          const data = a.payload.doc.data();
-          const id = a.payload.doc.id;
-          return { id, ...data } as Menu;
-        });
-      })
+      .pipe(
+        map(actions => {
+          return actions.map(a => {
+            const data = a.payload.doc.data();
+            const id = a.payload.doc.id;
+            return { id, ...data } as Menu;
+          });
+        })
+      );
   }
 
   getBebidas() {
     this.bebidasCol = this.af.collection('products', ref => ref.where('category', '==', 'Bebida'));
     return this.bebidasCol
       .snapshotChanges()
-      .map(actions => {
-        return actions.map(a => {
-          const data = a.payload.doc.data();
-          const id = a.payload.doc.id;
-          return { id, ...data } as Product;
-        });
-      });
+      .pipe(
+        map(actions => {
+          return actions.map(a => {
+            const data = a.payload.doc.data();
+            const id = a.payload.doc.id;
+            return { id, ...data } as Product;
+          });
+        })
+      );
   }
 
   // getWeekMenu(id: string): Observable<Menu> {
@@ -103,7 +107,7 @@ export class OrderService {
     d = new Date(d);
     var day = d.getDay(),
       diff = d.getDate() - day + 5;
-    if(day==6) diff += 7;
+    if (day == 6) diff += 7;
     // if (day == 6 || day == 0) {
     // diff += day == 6 ? 3 : 7;
     // }

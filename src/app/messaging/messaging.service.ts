@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import * as firebase from 'firebase';
-require("firebase/functions");
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { User } from '../shared/classes/user';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable()
 export class MessagingService {
 
   private messaging = firebase.messaging();
-  
+
   private messageSource = new Subject()
   currentMessage = this.messageSource.asObservable() // message observable to show in Angular component
 
-  constructor(private afs: AngularFirestore) { }
+  constructor(private afs: AngularFirestore, private http: HttpClient) { }
   // get permission to send messages
   getPermission(user: User) {
     this.messaging.requestPermission()
@@ -50,12 +50,17 @@ export class MessagingService {
 
   }
 
-  subscribeToTopic(topic: string, tokens: string[]){
-    const _subscribeToTopic = firebase.functions().httpsCallable('subscribeToTopic');
-
-    return _subscribeToTopic({topic: topic, tokens: tokens})
-    .then((a) => console.log(a))
-    .catch(e => console.log(e));
+  subscribeToTopic(topic: string, tokens: string[]) {
+    let url = 'https://us-central1-chantlisv-dev.cloudfunctions.net/subscribeToTopic';
+    let headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+    let params = {
+      topic: topic,
+      tokens: tokens
+    }
+    return this.http.post(url, params, { headers: headers })
+      .toPromise()
+      .then(a => console.log(a))
+      .catch(e => console.error(e));
   }
 
   // save the permission token in firestore

@@ -1,26 +1,26 @@
 <mat-card>
-  <div class="table-container">
-    <div class="table-header">
-      <div class="row">
-        <div class="col-12">
-          <button mat-button type='button' [routerLink]='["agregar"]'>
-            <i class="material-icons">add</i>
-            Agregar menú
-          </button>
-        </div>
-      </div>
-    </div>
+  <div class="table-header">
     <div class="row">
-      <div class="col-12 col-sm-10 mx-auto text-center my-2">
-        <router-outlet></router-outlet>
+      <div class="col-12">
+        <button mat-button type='button' [routerLink]='["agregar"]'>
+          <i class="material-icons">add</i>
+          Agregar menú
+        </button>
       </div>
     </div>
+  </div>
+  <div class="row">
+    <div class="col-12 col-sm-10 mx-auto text-center my-2">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+  <div class="table-container">
     <mat-table #table matSort [dataSource]="dataSource" class='data-table'>
       <!-- Date Column -->
       <ng-container matColumnDef="date">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
         <mat-cell *matCellDef="let element">
-          {{element.date | date:"fullDate"}}
+          <p *ngIf='(element.date | ttd | spanishDate) as date' [matTooltip]='date'> {{ date }} </p>
         </mat-cell>
       </ng-container>
 
@@ -28,31 +28,28 @@
       <ng-container matColumnDef="products">
         <mat-header-cell *matHeaderCellDef> Productos </mat-header-cell>
         <mat-cell *matCellDef="let element">
-          <ng-container *ngIf='element.id | getMenuProducts | async as products'>
-            <div class="row">
-              <div class="col-12 col-sm-6">
-                <p>
-                  <b>Platos principales</b>
-                </p>
-                <ul>
-                  <li *ngFor='let product of products | productsByCategory:"Principal"'>
-                    {{ product.name }}
-                  </li>
-                </ul>
-              </div>
-              <div class="col-12 col-sm-6">
-                <p>
-                  <b>Acompañamientos</b>
-                </p>
-                <ul>
-                  <li *ngFor='let product of products | productsByCategory:"Acompañamiento"'>
-                    {{ product.name }}
-                  </li>
-                </ul>
-              </div>
+          <div class="row" *ngIf='element.id | getMenuProducts | async as products'>
+            <div class="col-12 col-sm-6">
+              <p>
+                <b>Platos principales</b>
+              </p>
+              <ul>
+                <li *ngFor='let product of products | productsByCategory:"Principal"'>
+                  {{ product.name }}
+                </li>
+              </ul>
             </div>
-          </ng-container>
-
+            <div class="col-12 col-sm-6">
+              <p>
+                <b>Acompañamientos</b>
+              </p>
+              <ul>
+                <li *ngFor='let product of products | productsByCategory:"Acompañamiento"'>
+                  {{ product.name }}
+                </li>
+              </ul>
+            </div>
+          </div>
         </mat-cell>
       </ng-container>
 
@@ -60,7 +57,7 @@
       <ng-container matColumnDef="price">
         <mat-header-cell *matHeaderCellDef mat-sort-header> Precio </mat-header-cell>
         <mat-cell *matCellDef="let element">
-          {{element.price | currency}}
+          <p>{{element.price | currency}}</p>
         </mat-cell>
       </ng-container>
 
@@ -85,12 +82,12 @@
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </mat-table>
-    <ng-container *ngIf='loaded && !dataSource?.data?.length'>
-      <h5 class='text-center'>No hay menús.</h5>
-    </ng-container>
-    <ng-container *ngIf='!loaded'>
-      <mat-spinner class="mx-auto my-3"></mat-spinner>
-    </ng-container>
-    <mat-paginator [length]='dataSource?.data?.length' [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
   </div>
+  <ng-container *ngIf='loaded && !dataSource?.data?.length'>
+    <h5 class='text-center'>No hay menús.</h5>
+  </ng-container>
+  <ng-container *ngIf='!loaded'>
+    <mat-spinner class="mx-auto my-3"></mat-spinner>
+  </ng-container>
+  <mat-paginator [length]='dataSource?.data?.length' [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 </mat-card>

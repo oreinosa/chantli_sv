@@ -4,7 +4,7 @@ import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { WorkplacesService } from '../../admin/workplaces/workplaces.service';
 import { Workplace } from '../../shared/classes/workplace';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',

@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Menu } from '../../../shared/classes/menu';
 import { Product } from '../../../shared/classes/product';
 import { OrderService } from '../../order.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({

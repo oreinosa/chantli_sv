@@ -22,13 +22,7 @@ import {
   MatDatepickerModule,
   MatNativeDateModule
 } from '@angular/material';
-
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/takeUntil';
-import 'rxjs/add/operator/take';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/switchMap';
+import { tap, takeUntil, take, filter, map, switchMap, } from 'rxjs/operators';
 import { SortByPipe } from './pipes/sort-by.pipe';
 import { CapitalizePipe } from './pipes/capitalize.pipe';
 import { ProductsByCategoryPipe } from './pipes/products-by-category.pipe';
@@ -38,6 +32,7 @@ import { DowPipe } from './pipes/dow.pipe';
 import { SelectedPipe } from './pipes/selected.pipe';
 import { CalTotalPipe } from './pipes/cal-total.pipe';
 import { SpanishDatePipe } from './pipes/spanish-date.pipe';
+import { TtdPipe } from './pipes/ttd.pipe';
 
 @NgModule({
   imports: [
@@ -95,8 +90,20 @@ import { SpanishDatePipe } from './pipes/spanish-date.pipe';
     SelectedPipe,
     CalTotalPipe,
     SpanishDatePipe,
+    TtdPipe,
     MatProgressSpinnerModule,
   ],
-  declarations: [SortByPipe, CapitalizePipe, ProductsByCategoryPipe, GetMenuProductsPipe, EditingSubcollectionPipe, DowPipe, SelectedPipe, CalTotalPipe, SpanishDatePipe],
+  declarations: [
+    SortByPipe,
+    CapitalizePipe,
+    ProductsByCategoryPipe,
+    GetMenuProductsPipe,
+    EditingSubcollectionPipe,
+    DowPipe,
+    SelectedPipe,
+    CalTotalPipe,
+    SpanishDatePipe,
+    TtdPipe
+  ],
 })
 export class SharedModule { }

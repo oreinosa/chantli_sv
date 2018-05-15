@@ -7,6 +7,8 @@ import { AuthService } from './auth/auth.service';
 import { Router, NavigationEnd } from '@angular/router';
 // import { Subject } from 'rxjs/Subject';
 import { CategoriesService } from './admin/categories/categories.service'
+import { NotificationsService } from './notifications/notifications.service';
+import { tap } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -22,7 +24,8 @@ export class AppComponent implements OnInit {
   constructor(
     private router: Router,
     private auth: AuthService,
-    private messaging: MessagingService
+    private messaging: MessagingService,
+    private notifications: NotificationsService
   ) { }
 
   ngOnInit() {
@@ -33,20 +36,25 @@ export class AppComponent implements OnInit {
       window.scrollTo(0, 0)
     });
 
+    this.messaging.currentMessage
+      .subscribe(message => console.log(message));
+
     this.auth
       .user
-      // .takeUntil(this.ngUnsubscribe)
-      .do(data => {
-        // console.log('User : ', data)
-        let role: string = '';
-        if (data) {
-          role = data.role;
-          this.messaging.getPermission(data)
-          this.messaging.monitorRefresh(data)
-          this.messaging.receiveMessages()
-        }
-        this.auth.setRouting(role);
-      })
+      .pipe(
+        // .takeUntil(this.ngUnsubscribe)
+        tap(data => {
+          // console.log('User : ', data)
+          let role: string = '';
+          if (data) {
+            role = data.role;
+            this.messaging.getPermission(data)
+            this.messaging.monitorRefresh(data)
+            this.messaging.receiveMessages()
+          }
+          this.auth.setRouting(role);
+        })
+      )
       .subscribe(user => this.user = user);
 
     this.auth

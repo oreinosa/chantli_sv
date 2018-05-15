@@ -1,10 +1,11 @@
 import { Delete } from "./delete";
 import { DAOSubcollection } from "./dao-subcollection";
 import { Router, ActivatedRoute } from "@angular/router";
+import { takeUntil, tap, filter, switchMap } from "rxjs/operators";
 
 export class DeleteSubcollection<T, S> extends Delete<T> {
   subCollection: S[];
-  
+
   constructor(
     public service: DAOSubcollection<T, S>,
     public router: Router,
@@ -16,12 +17,14 @@ export class DeleteSubcollection<T, S> extends Delete<T> {
   ngOnInit() {
     this.service
       .object
-      .takeUntil(this.ngUnsubscribe)
-      .do(object => object ? false : this.onBack())
-      .filter(object => !!object)
-      .do(object => this.id = object['id'])
-      .switchMap(() => this.service.getSubcollection(this.id))
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        tap(object => object ? false : this.onBack()),
+        filter(object => !!object),
+        tap(object => this.id = object['id']),
+        switchMap(() => this.service.getSubcollection(this.id)),
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(subCollection => this.subCollection = subCollection);
   }
 

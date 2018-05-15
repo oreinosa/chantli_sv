@@ -3,12 +3,13 @@ import { NewOrder } from './../../shared/classes/new-order';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from '../order.service';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { Menu } from '../../shared/classes/menu';
 import { Order } from '../../shared/classes/order';
 import { AuthService } from '../../auth/auth.service';
 import { User } from '../../shared/classes/user';
 import { NotificationsService } from '../../notifications/notifications.service';
+import { take, tap, takeUntil, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-new-order',
@@ -33,19 +34,25 @@ export class NewOrderComponent implements OnInit {
 
     this.authService
       .user
-      .take(1)
+      .pipe(
+        take(1)
+      )
       .subscribe(user => this.user = user);
 
     this.orderService
       .menuSubject
-      .take(1)
-      .do(menu => menu ? false : this.router.navigate(['menu']))
+      .pipe(
+        take(1),
+        tap(menu => menu ? false : this.router.navigate(['menu']))
+      )
       .subscribe(menu => this.menu = menu);
 
     this.route
       .paramMap
-      .takeUntil(this.ngUnsubscribe)
-      .map(params => +params.get('step'))
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        map(params => +params.get('step'))
+      )
       .subscribe(step => this.step = step ? step : 1);
 
     this.newOrder = new NewOrder({ principal: null, acompanamientos: [], bebida: null });

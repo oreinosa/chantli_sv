@@ -5,10 +5,7 @@ import * as firebase from 'firebase';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/switchMap'
-import { Subject } from 'rxjs/Subject';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Observable, Subject, BehaviorSubject, of } from 'rxjs';
 
 import { User } from '../shared/classes/user';
 import { Link } from '../shared/classes/link';
@@ -17,6 +14,7 @@ import { SignUp } from '../shared/classes/sign-up';
 
 import { CategoriesService } from './../admin/categories/categories.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import { switchMap, map } from 'rxjs/operators';
 
 @Injectable()
 export class AuthService {
@@ -48,24 +46,28 @@ export class AuthService {
     //// Get auth data, then get firestore user document || null
     this.user = this.afAuth
       .authState
-      .switchMap(user => {
-        // console.log('Firebase user : ', user);
-        if (user) {
-          const doc = this.afs.collection<User>('users').doc<User>(user.uid);
-          return doc
-            .snapshotChanges()
-            .map(doc => {
-              if (doc.payload.exists) {
-                let user: User = doc.payload.data();
-                user.id = doc.payload.id;
-                return user;
-              }
-              return null;
-            });
-        } else {
-          return Observable.of(null)
-        }
-      });
+      .pipe(
+        switchMap(user => {
+          // console.log('Firebase user : ', user);
+          if (user) {
+            const doc = this.afs.collection<User>('users').doc<User>(user.uid);
+            return doc
+              .snapshotChanges()
+              .pipe(
+                map(doc => {
+                  if (doc.payload.exists) {
+                    let user: User = doc.payload.data();
+                    user.id = doc.payload.id;
+                    return user;
+                  }
+                  return null;
+                })
+              );
+          } else {
+            return of(null)
+          }
+        })
+      );
   }
 
   get currentUserObservable(): any {
@@ -79,7 +81,9 @@ export class AuthService {
   setRouting(role: string = '') {
     console.log(`Set routing for ${role}`);
     this._actions = [];
-    this._links = [];
+    this._links = [
+      { label: 'Menu', route: 'menu', icon: 'shopping_cart' }
+    ];
     switch (role) {
       case 'Admin':
         this._actions.push(
@@ -92,11 +96,9 @@ export class AuthService {
         this._actions.push(
           { label: 'Perfil', route: 'perfil', icon: 'person' },
         );
-        this._links.push(
-          { label: 'Menu', route: 'menu', icon: 'shopping_cart' }
-        );
         break;
       default:
+
         this._actions.push(
           { label: 'Ingresar', route: 'ingresar', icon: 'person' },
           { label: 'Registrarse', route: 'registrarse', icon: 'person_add' }

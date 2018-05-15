@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UploaderService } from './uploader.service';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-uploader',

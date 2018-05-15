@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { Notification } from './notification';
 import { Injectable } from '@angular/core';
 

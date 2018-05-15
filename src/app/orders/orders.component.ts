@@ -1,5 +1,5 @@
-import { takeUntil } from 'rxjs/operators/takeUntil';
-import { Subject } from 'rxjs/Subject';
+// import { takeUntil } from 'rxjs/operators/takeUntil';
+// import { Subject } from 'rxjs/Subject';
 import { OrdersService } from './../orders/orders.service';
 import { Order } from './../shared/classes/order';
 import { MatTableDataSource } from '@angular/material';
@@ -12,7 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./orders.component.css']
 })
 export class OrdersComponent implements OnInit {
-  private ngUnsubscribe = new Subject();
+  // private ngUnsubscribe = new Subject();
   selectedRangeString: string = 'Para ahora';
   mode: string = 'empacar';
 
@@ -26,10 +26,10 @@ export class OrdersComponent implements OnInit {
 
   }
 
-  ngOnDestroy() {
-    this.ngUnsubscribe.next();
-    this.ngUnsubscribe.complete();
-  }
+  // ngOnDestroy() {
+  //   this.ngUnsubscribe.next();
+  //   this.ngUnsubscribe.complete();
+  // }
 
   onSelectMode(mode: string) {
     this.mode = mode;

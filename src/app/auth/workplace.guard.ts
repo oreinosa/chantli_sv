@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/take';
-import 'rxjs/add/operator/skip';
+import { Observable } from 'rxjs';
+import { map, take, skip, tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { NotificationsService } from '../notifications/notifications.service';
 @Injectable()
@@ -19,17 +16,20 @@ export class WorkplaceGuard implements CanActivate {
     // }
     return this.auth.
       user
-      .take(1)
-      // .skip(1)
-      // .do(user => console.log(user))
-      .map(user => user && user.workplace && user.workplace != "")
-      .do(workplace => {
-        // console.log(workplace)
-        if (!workplace) {
-          // console.log("access denied");
-          this.notService.show('Por favor, actualiza tu lugar de trabajo!', 'Acceso denegado', 'info');
-          this.router.navigate(['/perfil']);
-        }
-      })
+      .pipe(
+        take(1),
+        // .skip(1)
+        // .do(user => console.log(user))
+        map(user => user && user.workplace && user.workplace != ""),
+        tap(workplace => {
+          // console.log(workplace)
+          if (!workplace) {
+            // console.log("access denied");
+            this.notService.show('Por favor, actualiza tu lugar de trabajo!', 'Acceso denegado', 'info');
+            this.router.navigate(['/perfil']);
+          }
+        })
+      )
+      
   }
 }

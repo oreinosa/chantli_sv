@@ -1,6 +1,5 @@
 import { NotificationsService } from './../../notifications/notifications.service';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
 import { Menu } from '../../shared/classes/menu';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Product } from '../../shared/classes/product';

@@ -1,8 +1,8 @@
 import { OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatSort, MatTableDataSource, Sort, MatDialog } from '@angular/material';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { DAO } from './dao';
-import "rxjs/add/operator/takeUntil";
+import { takeUntil, tap } from 'rxjs/operators';
 
 export class Table<T> implements OnInit {
   public ngUnsubscribe = new Subject();
@@ -36,8 +36,10 @@ export class Table<T> implements OnInit {
     console.log('init table');
     this.service
       .getAll()
-      .takeUntil(this.ngUnsubscribe)
-      .do(data => console.log('Table data : ', data))
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        tap(data => console.log('Table data : ', data))
+      )
       .subscribe(data => {
         this.loaded = false;
         this.data = data;

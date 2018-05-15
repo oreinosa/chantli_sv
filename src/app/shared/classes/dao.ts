@@ -1,8 +1,9 @@
-import { Observable } from "rxjs/Observable";
-import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { Observable, BehaviorSubject } from "rxjs";
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { NotificationsService } from "../../notifications/notifications.service";
 import { DocumentReference } from "@firebase/firestore-types";
+import * as firebase from 'firebase';
+import { map } from "rxjs/operators";
 
 export abstract class DAO<T> {
   object = new BehaviorSubject<T>(null);
@@ -22,17 +23,19 @@ export abstract class DAO<T> {
     return this.objectCollection
       // .valueChanges()
       .snapshotChanges()
-      .map(actions => {
-        // console.log(actions);
-        return actions.map(a => {
-          let data = a.payload.doc.data() as T;
-          data['id'] = a.payload.doc.id;
-          return data;
+      .pipe(
+        map(actions => {
+          // console.log(actions);
+          return actions.map(a => {
+            let data = a.payload.doc.data() as T;
+            data['id'] = a.payload.doc.id;
+            return data;
+          })
         })
-      });
+      );
   }
 
-  add(object: T, subcollection?: any[]): Promise<DocumentReference> {
+  add(object: T, subcollection?: any[]): Promise<firebase.firestore.DocumentReference> {
     return this.objectCollection
       .add(object)
       .then(doc => {

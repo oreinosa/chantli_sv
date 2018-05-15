@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../../shared/classes/user';
 import { AuthService } from '../../../auth/auth.service';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Workplace } from '../../../shared/classes/workplace';
 import { WorkplacesService } from '../../../admin/workplaces/workplaces.service';
 @Component({

@@ -1,5 +1,5 @@
 
-import { Component, OnDestroy, state } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -7,12 +7,8 @@ import { MenusService } from './../menus.service';
 import { ProductsService } from './../../products/products.service';
 import { Menu } from './../../../shared/classes/menu';
 import { Product } from './../../../shared/classes/product';
-
-import { startWith } from 'rxjs/operators/startWith';
-import { map } from 'rxjs/operators/map';
-import { takeUntil } from 'rxjs/operators/takeUntil';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
+import { Subject, Observable } from 'rxjs';
+import { startWith, map, takeUntil, } from 'rxjs/operators';
 import { AddSubcollection } from '../../../shared/classes/add-subcollection';
 
 @Component({
@@ -51,15 +47,17 @@ export class AddMenuComponent extends AddSubcollection<Menu, Product> implements
     super.ngOnInit();
     this.productsService
       .getAll()
-      .takeUntil(this.ngUnsubscribe)
-      .map(products => products.filter(product => product.category === "Principal" || product.category === "Acompañamiento"))
-      .map(products => products.sort((a, b) => {
-        if (a.name < b.name)
-          return -1;
-        if (a.name > b.name)
-          return 1;
-        return 0;
-      }))
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        map(products => products.filter(product => product.category === "Principal" || product.category === "Acompañamiento")),
+        map(products => products.sort((a, b) => {
+          if (a.name < b.name)
+            return -1;
+          if (a.name > b.name)
+            return 1;
+          return 0;
+        }))
+      )
       .subscribe(products => this.products = products);
   }
 

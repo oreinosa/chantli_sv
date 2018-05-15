@@ -1,6 +1,6 @@
 import { MenusService } from './../../admin/menus/menus.service';
 import { Product } from './../classes/product';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({

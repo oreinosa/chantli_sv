@@ -2,8 +2,9 @@ import { Edit } from "./edit";
 import { Router, ActivatedRoute } from "@angular/router";
 import { DAOSubcollection } from "./dao-subcollection";
 import { OnInit, OnDestroy } from "@angular/core";
+import { takeUntil, tap, filter, switchMap } from "rxjs/operators";
 
-export class EditSubcollection<T, S> extends Edit<T> implements OnInit, OnDestroy{
+export class EditSubcollection<T, S> extends Edit<T> implements OnInit, OnDestroy {
   refresh: boolean;
 
   selectedSubcollectionObjects: S[] = [];
@@ -21,19 +22,19 @@ export class EditSubcollection<T, S> extends Edit<T> implements OnInit, OnDestro
   ngOnInit() {
     this.service
       .object
-      .takeUntil(this.ngUnsubscribe)
-      .do(object => this.object = object)
-      .do((object: T) => !!this.object ? false : this.onBack('../'))
-      // .do(object => console.log(object))
-      .filter(object => !!object)
-      .switchMap(() => this.service.getSubcollection(this.object['id']))
-      .takeUntil(this.ngUnsubscribe)
-      .do(subCollection => console.log(subCollection))
-      // .do(products => this. = products.slice())
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        tap(object => this.object = object),
+        tap((object: T) => !!this.object ? false : this.onBack('../')),
+        filter(object => !!object),
+        switchMap(() => this.service.getSubcollection(this.object['id'])),
+        takeUntil(this.ngUnsubscribe),
+        tap(subCollection => console.log(subCollection))
+      )
       .subscribe(subCollection => this.object[this.service.subCollectionName] = subCollection.slice());
   }
-  
-  ngOnDestroy(){
+
+  ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

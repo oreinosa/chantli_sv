@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChildren } from '@angular/core';
 // import { MenusService } from '../../admin/menus/menus.service';
 import { Menu } from '../../shared/classes/menu';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { OrderService } from '../order.service';
 import { Product } from '../../shared/classes/product';
 import { Router } from '@angular/router';

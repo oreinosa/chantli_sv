@@ -1,9 +1,10 @@
 import { OnDestroy } from '@angular/core';
 import { OrdersService } from './../orders.service';
 import { Order } from './../../shared/classes/order';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { MatSort, MatTableDataSource, MatPaginator } from '@angular/material';
+import { tap, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-package',
@@ -26,9 +27,11 @@ export class PackageComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     this.ordersService
       .filteredOrders
-      .takeUntil(this.ngUnsubscribe)
-      .do(orders => console.log(orders))
-      .do(orders => this.orders = orders)
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        tap(orders => console.log(orders)),
+        tap(orders => this.orders = orders)
+      )
       .subscribe(orders => this.sortData());
   }
 

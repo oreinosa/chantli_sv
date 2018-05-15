@@ -1,9 +1,8 @@
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { DAO } from './dao';
 import { Router, ActivatedRoute } from '@angular/router';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/takeUntil';
 import { OnInit, OnDestroy } from '@angular/core';
+import { takeUntil, tap } from 'rxjs/operators';
 
 export abstract class Edit<T> implements OnInit, OnDestroy {
   public ngUnsubscribe = new Subject();
@@ -18,9 +17,10 @@ export abstract class Edit<T> implements OnInit, OnDestroy {
   ngOnInit() {
     this.service
       .object
-      .takeUntil(this.ngUnsubscribe)
-      .do((object: T) => !!object ? false : this.onBack('../'))
-      // .do(object => console.log(object))
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        tap((object: T) => !!object ? false : this.onBack('../'))
+      )
       .subscribe(object => this.object = object, e => this.onBack('../'));
   }
 
@@ -35,7 +35,7 @@ export abstract class Edit<T> implements OnInit, OnDestroy {
     return this.service
       .update(id, object)
       .then(flag => this.onBack('../'))
-      // .then(() => this.notificationsService.show(`${this.service['className']} editado`, undefined, 'info'));
+    // .then(() => this.notificationsService.show(`${this.service['className']} editado`, undefined, 'info'));
   }
 
   onBack(noId: string = '') {

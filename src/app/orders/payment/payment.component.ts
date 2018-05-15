@@ -2,9 +2,10 @@ import { User } from './../../shared/classes/user';
 import { OrdersService } from './../orders.service';
 import { Order } from './../../shared/classes/order';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
 import { Component, OnInit, AfterViewInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
+import { takeUntil, tap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-payment',
@@ -35,15 +36,19 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     this.ordersService
       .filteredOrders
-      .takeUntil(this.ngUnsubscribe)
-      .do(orders => console.log(orders))
-      .map(orders => orders.filter(order => !order.paid))
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        tap(orders => console.log(orders)),
+        map(orders => orders.filter(order => !order.paid))
+      )
       .subscribe(orders => this.dataSource.data = this.payingUser ? orders : []);
 
     this.ordersService
       .payingUser
-      .takeUntil(this.ngUnsubscribe)
-      .do(user => console.log(user))
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        tap(user => console.log(user))
+      )
       .subscribe(user => this.payingUser = user);
   }
 
