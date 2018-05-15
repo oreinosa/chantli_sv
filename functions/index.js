@@ -17,27 +17,76 @@ exports.aggregateBalance = functions.firestore
       .then(userDoc => {
         const user = userDoc.data();
         let balance = user.balance;
-        let autoPay = false;
-        if (balance >= price) {
-          autoPay = true;
-        }
-        balance = balance - price;
-        console.log(`New balance : $${balance}`);
-        // run update
-        if (autoPay) {
+        let credit = user.balance;
+
+        if (credit >= price) {
+          credit -= price;
+          console.log(`New credit : $${credit}`);
           return orderDoc.ref
             .update({
               paid: new Date()
             })
-            .then(() => userRef
-              .update({
-                balance: balance
-              }));
+            .then(() => userRef.update({
+              credit: credit,
+            }));
+        } else {
+          balance -= price;
+          console.log(`New balance : $${balance}`);
+
+          return userRef
+            .update({
+              balance: balance
+            });
         }
-        return userRef
-          .update({
-            balance: balance
-          });
       })
       .catch(err => console.log(err))
   });
+
+  exports.notifyArrival = functions.firestore
+  .document('/arrivals/{arrivalId}')
+  .onWrite(doc => {
+    
+      const arrival = doc.data();
+    
+      const payload = {
+            notification: {
+              title: `Alerta! (${doc.id})`,
+              body: arrival.message,
+            },
+            topic: 'arrival'
+          };
+
+      return admin
+      .messaging()
+      .send(payload);         
+      .then(payload => console.log(payload))
+      .catch(err => console.log(err))
+    });
+
+    exports.subscribeToTopic = functions.https.onCall((data, context) => {
+      const topic = data.topic;
+      const tokens = data.tokens;
+      
+      // Subscribe the devices corresponding to the registration tokens to the
+      // topic.
+      return admin
+        .messaging()
+        .subscribeToTopic(tokens, topic)
+          .then(function(response) {
+            // See the MessagingTopicManagementResponse reference documentation
+            // for the contents of response.
+            const message = 'Successfully subscribed to topic: '+response;
+            console.log(message);
+            return {
+              message: message;
+            };
+          })
+          .catch(function(error) {
+            console.log('Error subscribing to topic:', error);
+            return {
+              error: error;
+            };
+          });
+    });
+
+   

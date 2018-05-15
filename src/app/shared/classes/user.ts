@@ -8,6 +8,8 @@ export interface User {
   role?: string;
   workplace?: string,
   balance?: number;
+  credit?: number;
+  fcmTokens?: { [token: string]: true };
 }
 export class User {
   constructor(
@@ -17,6 +19,8 @@ export class User {
     public photoURL?: string,
     public role?: string,
     public workplace?: string,
-    public balance?: number
+    public balance?: number,
+    public credit?: number,
+    public fcmTokens?: { [token: string]: true }
   ) { }
 }

@@ -1,3 +1,4 @@
+import { MessagingService } from './messaging/messaging.service';
 import { Component, OnInit } from '@angular/core';
 import { Link } from './shared/classes/link';
 import { User } from './shared/classes/user';
@@ -20,7 +21,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private auth: AuthService
+    private auth: AuthService,
+    private messaging: MessagingService
   ) { }
 
   ngOnInit() {
@@ -39,6 +41,9 @@ export class AppComponent implements OnInit {
         let role: string = '';
         if (data) {
           role = data.role;
+          this.messaging.getPermission(data)
+          this.messaging.monitorRefresh(data)
+          this.messaging.receiveMessages()
         }
         this.auth.setRouting(role);
       })

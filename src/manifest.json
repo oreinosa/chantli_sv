@@ -1,0 +1,6 @@
+{
+  "short_name": "chantli-sv",
+  "name": "Chantli SV (PWA). Pedidos de comida casera.",
+  "start_url": "/?utm_source=homescreen",
+  "gcm_sender_id": "103953800507"
+}
