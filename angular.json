@@ -23,6 +23,7 @@
               "src/assets",
               "src/ngsw-config.json",
               "src/cloud-messaging-sw.js",
+              "src/manifest.json",
               "src/manifest.json"
             ],
             "styles": [
@@ -49,7 +50,8 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true
+              "buildOptimizer": true,
+              "serviceWorker": true
             }
           }
         },
@@ -78,12 +80,18 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
-              "src/styles.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/_colors",
+              "src/theme.scss",
+              "src/styles.scss"
             ],
             "scripts": [],
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              "src/manifest.json",
+              "src/cloud-messaging-sw.js",
+              "ngsw-config.json"
             ]
           }
         },

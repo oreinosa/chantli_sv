@@ -23,13 +23,16 @@ import { OrderModule } from './order/order.module';
 import { WorkplaceGuard } from './auth/workplace.guard';
 import { OrdersModule } from './orders/orders.module';
 import { HttpClientModule } from '@angular/common/http';
+import { ServiceWorkerModule } from '@angular/service-worker';
+export function myServiceFactory() {
+  return AngularFireModule.initializeApp(environment.firebase);
+}
 
 @NgModule({
   imports: [
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase), // imports firebase/app needed for everything
     // AngularFirestoreModule.enablePersistence(), // imports firebase/firestore, only needed for database features
-    AngularFirestoreModule, // imports firebase/firestore, only needed for database features    
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
     AngularFireStorageModule, // imports firebase/storage only needed for storage features
     HttpClientModule,
@@ -41,7 +44,8 @@ import { HttpClientModule } from '@angular/common/http';
     OrdersModule,
     AuthModule,
     AdminModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
