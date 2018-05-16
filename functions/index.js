@@ -42,51 +42,50 @@ exports.aggregateBalance = functions.firestore
       .catch(err => console.log(err))
   });
 
-  exports.notifyArrival = functions.firestore
+exports.notifyArrival = functions.firestore
   .document('/arrivals/{arrivalId}')
   .onWrite(doc => {
-    
-      const arrival = doc.data();
-    
-      const payload = {
-            notification: {
-              title: `Alerta! (${doc.id})`,
-              body: arrival.message,
-            },
-            topic: 'arrival'
-          };
 
-      return admin
+    const arrival = doc.data();
+
+    const payload = {
+      notification: {
+        title: `Alerta! (${doc.id})`,
+        body: arrival.message,
+      },
+      topic: 'arrival'
+    };
+
+    return admin
       .messaging()
-      .send(payload)    
+      .send(payload)
       .then(payload => console.log(payload))
       .catch(err => console.log(err))
-    });
+  });
 
-    exports.subscribeToTopic = functions.https.onCall((data, context) => {
-      const topic = data.topic;
-      const tokens = data.tokens;
-      
-      // Subscribe the devices corresponding to the registration tokens to the
-      // topic.
-      return admin
-        .messaging()
-        .subscribeToTopic(tokens, topic)
-          .then(function(response) {
-            // See the MessagingTopicManagementResponse reference documentation
-            // for the contents of response.
-            const message = 'Successfully subscribed to topic: '+response;
-            console.log(message);
-            return {
-              message: message;
-            };
-          })
-          .catch(function(error) {
-            console.log('Error subscribing to topic:', error);
-            return {
-              error: error;
-            };
-          });
-    });
+exports.subscribeToTopic = functions
+  .https
+  .onRequest((req, res) => {
+    if (req.method !== "POST") { res.code(405).end() }
+    const data = req.body;
+    const topic = data.topic;
+    const tokens = data.tokens;
 
-   
+    // Subscribe the devices corresponding to the registration tokens to the
+    // topic.
+    admin
+      .messaging()
+      .subscribeToTopic(tokens, topic)
+      .then(function (response) {
+        // See the MessagingTopicManagementResponse reference documentation
+        // for the contents of response.
+        const message = 'Successfully subscribed to topic: ' + response;
+        console.log(message);
+        res.status(200).end();
+      })
+      .catch(function (error) {
+        console.log('Error subscribing to topic:', error);
+        res.status(400).end();
+      });
+  });
+
