@@ -58,7 +58,7 @@ exports.aggregateBalance = functions.firestore
 
       return admin
       .messaging()
-      .send(payload);         
+      .send(payload)    
       .then(payload => console.log(payload))
       .catch(err => console.log(err))
     });
