@@ -18,7 +18,7 @@ exports.aggregateBalance = functions.firestore
         const user = userDoc.data();
         let balance = user.balance;
         let credit = user.balance;
-
+        console.log(credit, 'vs', price);
         if (credit >= price) {
           credit -= price;
           console.log(`New credit : $${credit}`);

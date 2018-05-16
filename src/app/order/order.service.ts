@@ -48,7 +48,8 @@ export class OrderService {
       .pipe(
         map(actions => {
           return actions.map(a => {
-            const data = a.payload.doc.data();
+            let data = a.payload.doc.data();
+            data.date = data.date.toDate();
             const id = a.payload.doc.id;
             return { id, ...data } as Menu;
           });
@@ -99,7 +100,7 @@ export class OrderService {
     }
     d.setDate(diff);
     d.setHours(0, 0, 0);
-    console.log(d);
+    // console.log(d);
     return new Date(d);
   }
 
@@ -113,7 +114,7 @@ export class OrderService {
     // }
     d.setDate(diff);
     d.setHours(23, 0, 0);
-    console.log(d);
+    // console.log(d);
     return new Date(d);
   }
 

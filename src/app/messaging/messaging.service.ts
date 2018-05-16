@@ -17,7 +17,7 @@ export class MessagingService {
   getPermission(user: User) {
     this.messaging.requestPermission()
       .then(() => {
-        console.log('Notification permission granted.');
+        // console.log('Notification permission granted.');
         return this.messaging.getToken()
       })
       .then(token => {
@@ -34,7 +34,7 @@ export class MessagingService {
     this.messaging.onTokenRefresh(() => {
       this.messaging.getToken()
         .then(refreshedToken => {
-          console.log('Token refreshed.');
+          // console.log('Token refreshed.');
           this.saveToken(user, refreshedToken)
         })
         .catch(err => console.log(err, 'Unable to retrieve new token'))

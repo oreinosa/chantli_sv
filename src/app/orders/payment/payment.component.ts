@@ -37,17 +37,17 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     this.ordersService
       .filteredOrders
       .pipe(
-        takeUntil(this.ngUnsubscribe),
-        tap(orders => console.log(orders)),
-        map(orders => orders.filter(order => !order.paid))
+      takeUntil(this.ngUnsubscribe),
+      tap(orders => orders ? console.log(orders) : false),
+      map(orders => orders.filter(order => !order.paid))
       )
       .subscribe(orders => this.dataSource.data = this.payingUser ? orders : []);
 
     this.ordersService
-      .payingUser
+      .getPayingUser()
       .pipe(
-        takeUntil(this.ngUnsubscribe),
-        tap(user => console.log(user))
+      takeUntil(this.ngUnsubscribe),
+      tap(user => user ? console.log(user) : false)
       )
       .subscribe(user => this.payingUser = user);
   }
@@ -81,13 +81,14 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     let selectedOrders = this.selection.selected;
     let currentBalance = this.payingUser.balance;
     let newBalance = currentBalance + this.totalDue;
+    let credit = this.payingUser.credit;
     if (this.addChange) {
-      newBalance += this.change;
+      credit += this.change;
     }
     console.log(newBalance);
     return this.ordersService
       .payOrders(selectedOrders)
-      .then(() => this.ordersService.updateBalance(this.payingUser.id, newBalance))
+      .then(() => this.ordersService.updateBalance(this.payingUser.id, newBalance, credit))
       .then(() => {
         this.paying = this.addChange = false;
         this.totalDue = this.payment = this.change = 0;

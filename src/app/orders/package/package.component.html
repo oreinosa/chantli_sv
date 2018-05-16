@@ -24,8 +24,11 @@
   <ng-container matColumnDef="acompanamientos">
     <mat-header-cell *matHeaderCellDef> Acompañamientos </mat-header-cell>
     <mat-cell *matCellDef="let element">
-      <p *ngFor='let acompanamiento of element.products?.acompanamientos'> {{ acompanamiento }}
-      </p>
+      <ng-container *ngFor='let acompanamiento of element.products?.acompanamientos'>
+        <p> {{ acompanamiento }}
+        </p>
+        <br><br>
+      </ng-container>
       <p>{{ element.tortillas }}
         <ng-container *ngIf='element.tortillas > 1;else one'>tortillas</ng-container>
         <ng-template #one>tortilla</ng-template>

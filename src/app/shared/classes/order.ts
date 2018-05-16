@@ -13,9 +13,9 @@ export class Order {
     public status?: string,
     public user?: User,
     public date?: {
-      for?: Date,
-      by?: Date
+      for?: any,
+      by?: any
     },
-    public paid?: Date
+    public paid?: any
   ) { }
 }

@@ -1,4 +1,4 @@
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Subject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Order } from './../shared/classes/order';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
@@ -31,17 +31,21 @@ export class OrdersService {
     this.filteredOrders.next(orders);
   }
 
+  getPayingUser(): Observable<User> {
+    return this.payingUser.asObservable();
+  }
+
   getUsers() {
     return this.usersCol
       .snapshotChanges()
       .pipe(
-        map(actions => {
-          return actions.map(a => {
-            const data = a.payload.doc.data();
-            const id = a.payload.doc.id;
-            return { id, ...data } as User;
-          });
-        })
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return { id, ...data } as User;
+        });
+      })
       );
   }
 
@@ -63,13 +67,15 @@ export class OrdersService {
     return this.ordersCol
       .snapshotChanges()
       .pipe(
-        map(actions => {
-          return actions.map(a => {
-            const data = a.payload.doc.data();
-            const id = a.payload.doc.id;
-            return { id, ...data } as Order;
-          })
+      map(actions => {
+        return actions.map(a => {
+          let data = a.payload.doc.data();
+          data.date.by = data.date.by.toDate();
+          data.date.for = data.date.for.toDate();
+          const id = a.payload.doc.id;
+          return { id, ...data } as Order;
         })
+      })
       );
   }
 
@@ -85,11 +91,12 @@ export class OrdersService {
     return this.ordersCol.doc<Order>(order.id).update({ status: status });
   }
 
-  updateBalance(id: string, balance: number) {
+  updateBalance(id: string, balance: number, credit: number) {
     return this.usersCol
       .doc(id)
       .update({
-        balance: balance
+        balance: balance,
+        credit: credit
       });
   }
 

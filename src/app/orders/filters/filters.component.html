@@ -21,9 +21,9 @@
           </div>
           <!-- DATE RANGES FILTER -->
           <div class="col-12 col-sm-6 my-3">
-            <button mat-raised-button type='button' class='m-2' (click)='selectedRange = "today";applyFilters()' [disabled]='selectedRange==="today"'>Ahora ({{ today | spanishDate }})</button>
-            <button mat-raised-button type='button' class='m-2' (click)='selectedRange = "week";applyFilters()' [disabled]='selectedRange==="week"'>Esta semana</button>
-            <button mat-raised-button type='button' class='m-2' (click)='selectedRange = "month";applyFilters()' [disabled]='selectedRange==="month"'>Este mes</button>
+            <button mat-raised-button type='button' class='m-2' (click)='selectedRange = "today";applyFilters()' [disabled]='selectedRange==="today" || today.getMonth() !== selectedMonth'>Ahora ({{ today | spanishDate }})</button>
+            <button mat-raised-button type='button' class='m-2' (click)='selectedRange = "week";applyFilters()' [disabled]='selectedRange==="week" || today.getMonth() !== selectedMonth'>Esta semana</button>
+            <button mat-raised-button type='button' class='m-2' (click)='selectedRange = "month";applyFilters()' [disabled]='selectedRange==="month" || today.getMonth() !== selectedMonth'>Este mes</button>
           </div>
         </div>
       </div>
