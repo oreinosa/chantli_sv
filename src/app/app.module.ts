@@ -27,7 +27,7 @@ import { HttpClientModule } from '@angular/common/http';
 @NgModule({
   imports: [
     BrowserModule,
-    AngularFireModule, // imports firebase/app needed for everything
+    AngularFireModule.initializeApp(environment.firebase), // imports firebase/app needed for everything
     // AngularFirestoreModule.enablePersistence(), // imports firebase/firestore, only needed for database features
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features    
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
@@ -48,7 +48,7 @@ import { HttpClientModule } from '@angular/common/http';
   providers: [AuthService, AuthGuard, WorkplaceGuard]
 })
 export class AppModule {
-  constructor() {
-    AngularFireModule.initializeApp(environment.firebase);
-  }
+  // constructor() {
+  //   AngularFireModule.initializeApp(environment.firebase);
+  // }
 }
