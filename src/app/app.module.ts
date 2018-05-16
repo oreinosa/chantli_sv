@@ -17,22 +17,24 @@ import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireStorageModule } from 'angularfire2/storage';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireFunctionsModule } from 'angularfire2/functions';
 import { environment } from '../environments/environment';
+
 import { NotificationsModule } from './notifications/notifications.module';
 import { OrderModule } from './order/order.module';
 import { WorkplaceGuard } from './auth/workplace.guard';
 import { OrdersModule } from './orders/orders.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
-export function myServiceFactory() {
-  return AngularFireModule.initializeApp(environment.firebase);
-}
 
 @NgModule({
   imports: [
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase), // imports firebase/app needed for everything
-    // AngularFirestoreModule.enablePersistence(), // imports firebase/firestore, only needed for database features
+    AngularFirestoreModule
+    // .enablePersistence()
+    ,
+    AngularFireFunctionsModule,
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
     AngularFireStorageModule, // imports firebase/storage only needed for storage features
     HttpClientModule,

@@ -15,7 +15,7 @@ const routes: Routes = [
   {
     path: 'perfil', component: ProfileComponent, children: [
       { path: 'info', component: InformationComponent },
-      { path: 'subscriptions', component: SubscriptionsComponent },
+      { path: 'notificaciones', component: SubscriptionsComponent },
       { path: '', pathMatch: 'full', redirectTo: 'info' }
     ]
   }

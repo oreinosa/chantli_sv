@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import * as firebase from 'firebase';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { User } from '../shared/classes/user';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { AngularFireFunctions } from 'angularfire2/functions';
 @Injectable()
 export class MessagingService {
 
@@ -12,7 +13,7 @@ export class MessagingService {
   private messageSource = new Subject()
   currentMessage = this.messageSource.asObservable() // message observable to show in Angular component
 
-  constructor(private afs: AngularFirestore, private http: HttpClient) { }
+  constructor(private afs: AngularFirestore, private http: HttpClient, private functions: AngularFireFunctions) { }
   // get permission to send messages
   getPermission(user: User) {
     this.messaging.requestPermission()
@@ -50,17 +51,22 @@ export class MessagingService {
 
   }
 
-  subscribeToTopic(topic: string, tokens: string[]) {
-    let url = 'https://us-central1-chantlisv-dev.cloudfunctions.net/subscribeToTopic';
-    let headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
-    let params = {
+  subscribeToTopic(topic: string, tokens: any): Observable<any> {
+    // let url = 'https://us-central1-chantlisv-dev.cloudfunctions.net/subscribeToTopic';
+    // let headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+    let subscribeToTopicFunc = this.functions.httpsCallable("subscribeToTopic");
+    return subscribeToTopicFunc({
       topic: topic,
       tokens: tokens
-    }
-    return this.http.post(url, params, { headers: headers })
-      .toPromise()
-      .then(a => console.log(a))
-      .catch(e => console.error(e));
+    });
+    // let params = {
+    //   topic: topic,
+    //   tokens: tokens
+    // }
+    // return this.http.post(url, params, { headers: headers })
+    //   .toPromise()
+    //   .then(a => console.log(a))
+    //   .catch(e => console.error(e));
   }
 
   // save the permission token in firestore

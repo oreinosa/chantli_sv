@@ -1,3 +1,30 @@
-<p>
-  subscriptions works!
-</p>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <h4>Subscripción de notificaciones</h4>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <h6>
+      <mat-checkbox>
+        Nuevo menú
+      </mat-checkbox>
+    </h6>
+    <h6>
+      <mat-checkbox>
+        ¡Su comida está lista!
+      </mat-checkbox>
+    </h6>
+    <!-- <h6>
+      <mat-checkbox>
+        Nuevo menú
+      </mat-checkbox>
+    </h6> -->
+  </mat-card-content>
+  <ng-template #loading>
+    <mat-spinner class="col-12 mx-auto"></mat-spinner>
+  </ng-template>
+  <mat-card-actions>
+    <button type='button' (click)='onSubmit()'>Guardar</button>
+  </mat-card-actions>
+</mat-card>

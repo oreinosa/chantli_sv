@@ -36,7 +36,7 @@ exports.aggregateBalance = functions.firestore
           return userRef
             .update({
               balance: balance
-            });
+            }).then(() => console.log('updated balance'));
         }
       })
       .catch(err => console.log(err))
@@ -63,11 +63,36 @@ exports.notifyArrival = functions.firestore
       .catch(err => console.log(err))
   });
 
+// exports.subscribeToTopic = functions
+//   .https
+//   .onRequest((req, res) => {
+//     if (req.method !== "POST") { res.code(405).end() }
+//     const data = req.body;
+//     const topic = data.topic;
+//     const tokens = data.tokens;
+
+//     // Subscribe the devices corresponding to the registration tokens to the
+//     // topic.
+//     admin
+//       .messaging()
+//       .subscribeToTopic(tokens, topic)
+//       .then(function (response) {
+//         // See the MessagingTopicManagementResponse reference documentation
+//         // for the contents of response.
+//         const message = 'Successfully subscribed to topic: ' + response;
+//         console.log(message);
+//         res.status(200).end();
+//       })
+//       .catch(function (error) {
+//         console.log('Error subscribing to topic:', error);
+//         res.status(400).end();
+//       });
+//   });
+
+
 exports.subscribeToTopic = functions
   .https
-  .onRequest((req, res) => {
-    if (req.method !== "POST") { res.code(405).end() }
-    const data = req.body;
+  .onCall((data, context) => {
     const topic = data.topic;
     const tokens = data.tokens;
 
@@ -81,11 +106,16 @@ exports.subscribeToTopic = functions
         // for the contents of response.
         const message = 'Successfully subscribed to topic: ' + response;
         console.log(message);
-        res.status(200).end();
+        return {
+          response: message
+        }
+        // res.status(200).end();
       })
       .catch(function (error) {
         console.log('Error subscribing to topic:', error);
-        res.status(400).end();
+        // res.status(400).end();
+        return {
+          response: error
+        }
       });
   });
-

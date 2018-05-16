@@ -23,7 +23,6 @@
               "src/assets",
               "src/ngsw-config.json",
               "src/cloud-messaging-sw.js",
-              "src/manifest.json",
               "src/manifest.json"
             ],
             "styles": [
@@ -79,20 +78,20 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
-            "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "src/_colors",
-              "src/theme.scss",
-              "src/styles.scss"
-            ],
-            "scripts": [],
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/manifest.json",
+              "ngsw-config.json",
               "src/cloud-messaging-sw.js",
-              "ngsw-config.json"
-            ]
+              "src/manifest.json"
+            ],
+            "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/_colors.scss",
+              "src/theme.scss",
+              "src/styles.scss"
+            ],
+            "scripts": []
           }
         },
         "lint": {
