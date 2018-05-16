@@ -11,7 +11,7 @@
       </mat-checkbox>
     </h6>
     <h6>
-      <mat-checkbox>
+      <mat-checkbox [(ngModel)]='arrivalsFlag'>
         ¡Su comida está lista!
       </mat-checkbox>
     </h6>
@@ -25,6 +25,6 @@
     <mat-spinner class="col-12 mx-auto"></mat-spinner>
   </ng-template>
   <mat-card-actions>
-    <button type='button' (click)='onSubmit()'>Guardar</button>
+    <button mat-button type='button' (click)='onSubmit()'>Guardar</button>
   </mat-card-actions>
 </mat-card>
