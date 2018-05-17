@@ -43,14 +43,14 @@ exports.aggregateBalance = functions.firestore
 
 exports.notifyArrival = functions.firestore
   .document('/arrivals/{arrivalId}')
-  .onWrite(doc => {
+  .onWrite((change, context) => {
 
-    const arrival = doc.data();
+    const arrival = change.after.data();
 
     const payload = {
       notification: {
-        title: `Alerta! (${doc.id})`,
-        body: arrival.message,
+        title: `Alerta! (${change.after.id})`,
+        body: arrival.message + `(${arrival.timestamp})`,
       },
       topic: 'arrival'
     };
@@ -77,7 +77,7 @@ exports.subscribeToTopic = functions
         // See the MessagingTopicManagementResponse reference documentation
         // for the contents of response.
         const message = 'Successfully subscribed to topic: ' + response;
-        console.log(message);
+        console.log(response);
         return {
           response: message
         }
