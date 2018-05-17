@@ -32,7 +32,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase), // imports firebase/app needed for everything
     AngularFirestoreModule
-    // .enablePersistence()
+    .enablePersistence()
     ,
     AngularFireFunctionsModule,
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,

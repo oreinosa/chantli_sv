@@ -30,13 +30,12 @@ exports.aggregateBalance = functions.firestore
               credit: credit,
             }));
         } else {
-          balance -= price;
+          balance += price;
           console.log(`New balance : $${balance}`);
-
           return userRef
             .update({
               balance: balance
-            }).then(() => console.log('updated balance'));
+            });
         }
       })
       .catch(err => console.log(err))

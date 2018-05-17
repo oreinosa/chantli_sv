@@ -21,8 +21,6 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "src/ngsw-config.json",
-              "src/cloud-messaging-sw.js",
               "src/manifest.json"
             ],
             "styles": [
@@ -81,7 +79,6 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              "ngsw-config.json",
               "src/cloud-messaging-sw.js",
               "src/manifest.json"
             ],
