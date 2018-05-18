@@ -26,13 +26,16 @@ import { WorkplaceGuard } from './auth/workplace.guard';
 import { OrdersModule } from './orders/orders.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { SwUpdate } from '@angular/service-worker/src/update';
+import { SwPush } from '@angular/service-worker/src/push';
+import { MatSnackBar } from '@angular/material';
 
 @NgModule({
   imports: [
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase), // imports firebase/app needed for everything
     AngularFirestoreModule
-    .enablePersistence()
+      .enablePersistence()
     ,
     AngularFireFunctionsModule,
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
@@ -57,4 +60,20 @@ export class AppModule {
   // constructor() {
   //   AngularFireModule.initializeApp(environment.firebase);
   // }
+  constructor(update: SwUpdate, push: SwPush, snackbar: MatSnackBar) {
+    update.available.subscribe(update => {
+      console.log('update available');
+      const snack = snackbar.open('Actualización disponible', 'Actualizar');
+
+      snack.onAction()
+        .subscribe(() => {
+          window.location.reload();
+        });
+    });
+
+    push.messages.subscribe(msg => {
+      console.log(msg);
+      snackbar.open(JSON.stringify(msg));
+    });
+  }
 }

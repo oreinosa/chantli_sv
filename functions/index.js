@@ -58,8 +58,12 @@ exports.notifyArrival = functions.firestore
     return admin
       .messaging()
       .send(message)
-      .then(payload => console.log(payload))
-      .catch(err => console.log(err))
+      .then(payload => {
+        console.log('Successfully sent message:', response);
+      })
+      .catch(err => {
+        console.log('Error sending message:', error);
+      })
   });
 
 exports.subscribeToTopic = functions
