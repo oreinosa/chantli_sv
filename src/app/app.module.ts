@@ -33,7 +33,7 @@ import { MatSnackBar } from '@angular/material';
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase), // imports firebase/app needed for everything
     AngularFirestoreModule
-      // .enablePersistence()
+    // .enablePersistence()
     ,
     AngularFireFunctionsModule,
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
@@ -68,7 +68,7 @@ export class AppModule {
           window.location.reload();
         });
     });
-
+    console.log(push.isEnabled);
     push.messages.subscribe(msg => {
       console.log(msg);
       snackbar.open(JSON.stringify(msg));

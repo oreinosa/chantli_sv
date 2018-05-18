@@ -6,6 +6,7 @@
 			<app-sidenav [user]='user' [links]='links'[actions]='actions' (signedOut)='onSignOut()' (navigated)='drawer.toggle()'></app-sidenav>
 		</mat-drawer>
 		<div class="app-sidenav-content container-fluid mb-3">
+			<h1 *ngIf='currentMessage | async as message'>{{ message }}</h1>
 			<router-outlet></router-outlet>
 			<app-notifications></app-notifications>
 		</div>

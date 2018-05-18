@@ -52,6 +52,9 @@ exports.notifyArrival = functions.firestore
         title: `Alerta! (${change.after.id})`,
         body: arrival.message + `(${arrival.timestamp})`,
       },
+      data: {
+        test: 'test'
+      },
       topic: 'arrival'
     };
 

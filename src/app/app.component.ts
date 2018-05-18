@@ -9,6 +9,7 @@ import { Router, NavigationEnd } from '@angular/router';
 import { CategoriesService } from './admin/categories/categories.service'
 import { NotificationsService } from './notifications/notifications.service';
 import { tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -20,7 +21,7 @@ export class AppComponent implements OnInit {
   links: Link[];
   actions: Link[];
   user: User;
-
+  currentMessage: Observable<any>;
   constructor(
     private router: Router,
     private auth: AuthService,
@@ -36,9 +37,6 @@ export class AppComponent implements OnInit {
       window.scrollTo(0, 0)
     });
 
-    this.messaging.currentMessage
-      .subscribe(message => console.log(message));
-
     this.auth
       .user
       .pipe(
@@ -50,7 +48,8 @@ export class AppComponent implements OnInit {
             role = data.role;
             this.messaging.getPermission(data)
             this.messaging.monitorRefresh(data)
-            this.messaging.receiveMessages()
+            this.messaging.receiveMessages();
+            this.currentMessage = this.messaging.currentMessage.pipe(tap((a) => console.log(a)));
           }
           this.auth.setRouting(role);
         })

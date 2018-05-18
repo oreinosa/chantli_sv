@@ -11,6 +11,7 @@
   "prefer_related_applications": false,
   "short_name": "Chantli SV",
   "name": "Chantli SV",
+  "gcm_sender_id": "103953800507",
   "start_url": "/?utm_source=homescreen",
   "icons": [
     {

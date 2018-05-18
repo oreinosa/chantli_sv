@@ -50,7 +50,8 @@ export class MessagingService {
       console.log('Message received. ', payload);
       this.messageSource.next(payload)
     });
-
+    console.log('receive');
+    // this.messaging.setBackgroundMessageHandler((a) => console.log(a));
   }
 
   subscribeToTopic(topic: string, tokens: any): Promise<any> {
