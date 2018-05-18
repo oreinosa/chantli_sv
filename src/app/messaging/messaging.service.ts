@@ -16,7 +16,8 @@ export class MessagingService {
   constructor(private afs: AngularFirestore, private http: HttpClient, private functions: AngularFireFunctions) { }
   // get permission to send messages
   getPermission(user: User) {
-    this.messaging.requestPermission()
+    this.messaging
+      .requestPermission()
       .then(() => {
         // console.log('Notification permission granted.');
         return this.messaging.getToken()

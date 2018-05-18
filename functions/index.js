@@ -47,7 +47,7 @@ exports.notifyArrival = functions.firestore
 
     const arrival = change.after.data();
 
-    const payload = {
+    const message = {
       notification: {
         title: `Alerta! (${change.after.id})`,
         body: arrival.message + `(${arrival.timestamp})`,
@@ -57,7 +57,7 @@ exports.notifyArrival = functions.firestore
 
     return admin
       .messaging()
-      .send(payload)
+      .send(message)
       .then(payload => console.log(payload))
       .catch(err => console.log(err))
   });
@@ -67,16 +67,16 @@ exports.subscribeToTopic = functions
   .onCall((data, context) => {
     const topic = data.topic;
     const tokens = data.tokens;
-
+    console.log(tokens);
     // Subscribe the devices corresponding to the registration tokens to the
-    // topic.
-    admin
+    // topic
+    return admin
       .messaging()
       .subscribeToTopic(tokens, topic)
       .then(function (response) {
         // See the MessagingTopicManagementResponse reference documentation
         // for the contents of response.
-        const message = 'Successfully subscribed to topic: ' + response;
+        const message = 'Successfully subscribed to topic: ' + response.successCount;
         console.log(response);
         return {
           response: message
