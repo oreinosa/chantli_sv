@@ -59,9 +59,9 @@ exports.notifyArrival = functions.firestore
       .messaging()
       .send(message)
       .then(payload => {
-        console.log('Successfully sent message:', response);
+        console.log('Successfully sent message:', payload);
       })
-      .catch(err => {
+      .catch(error => {
         console.log('Error sending message:', error);
       })
   });

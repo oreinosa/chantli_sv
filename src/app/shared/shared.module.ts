@@ -20,7 +20,8 @@ import {
   MatTooltipModule,
   MatAutocompleteModule,
   MatDatepickerModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  MatSnackBarModule
 } from '@angular/material';
 import { tap, takeUntil, take, filter, map, switchMap, } from 'rxjs/operators';
 import { SortByPipe } from './pipes/sort-by.pipe';
@@ -54,6 +55,7 @@ import { TtdPipe } from './pipes/ttd.pipe';
     MatTabsModule,
     MatTooltipModule,
     MatDialogModule,
+    MatSnackBarModule,
     MatAutocompleteModule,
     MatDatepickerModule,
     MatNativeDateModule,
@@ -80,6 +82,7 @@ import { TtdPipe } from './pipes/ttd.pipe';
     MatTooltipModule,
     MatTabsModule,
     MatDialogModule,
+    MatSnackBarModule,
     ProductsByCategoryPipe,
     GetMenuProductsPipe,
     MatAutocompleteModule,

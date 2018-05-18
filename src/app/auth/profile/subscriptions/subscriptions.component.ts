@@ -33,7 +33,11 @@ export class SubscriptionsComponent implements OnInit {
 
   onSubmit() {
     if (this.arrivalsFlag) {
-      this.messagingService.subscribeToTopic('arrival', this.tokens)
+      console.log('subscribe to arrivals alert');
+      this.messagingService
+        .subscribeToTopic('arrival', this.tokens)
+        .then(res => console.log(res))
+        .catch(error => console.log(error));
     }
   }
 

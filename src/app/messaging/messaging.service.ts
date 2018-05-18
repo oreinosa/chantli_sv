@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import * as firebase from 'firebase';
+import 'firebase/messaging'; // naked import to bring in feature
 import { Subject, Observable } from 'rxjs';
 import { User } from '../shared/classes/user';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -19,7 +20,7 @@ export class MessagingService {
     this.messaging
       .requestPermission()
       .then(() => {
-        // console.log('Notification permission granted.');
+        console.log('Notification permission granted.');
         return this.messaging.getToken()
       })
       .then(token => {
@@ -36,7 +37,7 @@ export class MessagingService {
     this.messaging.onTokenRefresh(() => {
       this.messaging.getToken()
         .then(refreshedToken => {
-          // console.log('Token refreshed.');
+          console.log('Token refreshed.');
           this.saveToken(user, refreshedToken)
         })
         .catch(err => console.log(err, 'Unable to retrieve new token'))
@@ -52,14 +53,14 @@ export class MessagingService {
 
   }
 
-  subscribeToTopic(topic: string, tokens: any): Observable<any> {
+  subscribeToTopic(topic: string, tokens: any): Promise<any> {
     // let url = 'https://us-central1-chantlisv-dev.cloudfunctions.net/subscribeToTopic';
     // let headers = new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
     let subscribeToTopicFunc = this.functions.httpsCallable("subscribeToTopic");
     return subscribeToTopicFunc({
       topic: topic,
       tokens: tokens
-    });
+    }).toPromise();
     // let params = {
     //   topic: topic,
     //   tokens: tokens

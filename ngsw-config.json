@@ -9,8 +9,6 @@
         "files": [
           "/favicon.ico",
           "/index.html",
-          "/cloud-messaging-sw.js",
-          "/*.json",
           "/*.css",
           "/*.js"
         ]

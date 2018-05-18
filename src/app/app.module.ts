@@ -33,7 +33,7 @@ import { MatSnackBar } from '@angular/material';
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase), // imports firebase/app needed for everything
     AngularFirestoreModule
-      .enablePersistence()
+      // .enablePersistence()
     ,
     AngularFireFunctionsModule,
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
@@ -48,7 +48,7 @@ import { MatSnackBar } from '@angular/material';
     AuthModule,
     AdminModule,
     AppRoutingModule,
-    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('/combined-worker.js', { enabled: environment.production })
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
