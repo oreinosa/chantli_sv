@@ -25,9 +25,7 @@ import { OrderModule } from './order/order.module';
 import { WorkplaceGuard } from './auth/workplace.guard';
 import { OrdersModule } from './orders/orders.module';
 import { HttpClientModule } from '@angular/common/http';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { SwUpdate } from '@angular/service-worker/src/update';
-import { SwPush } from '@angular/service-worker/src/push';
+import { ServiceWorkerModule, SwPush, SwUpdate } from '@angular/service-worker';
 import { MatSnackBar } from '@angular/material';
 
 @NgModule({
@@ -57,7 +55,7 @@ import { MatSnackBar } from '@angular/material';
   providers: [AuthService, AuthGuard, WorkplaceGuard]
 })
 export class AppModule {
-  // constructor() {
+  // constructor() {  
   //   AngularFireModule.initializeApp(environment.firebase);
   // }
   constructor(update: SwUpdate, push: SwPush, snackbar: MatSnackBar) {
