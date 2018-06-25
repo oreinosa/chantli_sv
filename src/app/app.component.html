@@ -1,17 +1,3 @@
-<ng-container *ngIf='links && actions; else loading'>
-	<app-toolbar [user]='user' [appTitle]='appTitle' [links]='links' [actions]='actions' (opened)='drawer.toggle()'
-	 (signedOut)='onSignOut()'></app-toolbar>
-	<mat-drawer-container class="app-container" autosize>
-		<mat-drawer #drawer class="app-sidenav mx-auto" mode="over">
-			<app-sidenav [user]='user' [links]='links'[actions]='actions' (signedOut)='onSignOut()' (navigated)='drawer.toggle()'></app-sidenav>
-		</mat-drawer>
-		<div class="app-sidenav-content container-fluid mb-3">
-			<h1 *ngIf='currentMessage | async as message'>{{ message }}</h1>
-			<router-outlet></router-outlet>
-			<app-notifications></app-notifications>
-		</div>
-	</mat-drawer-container>
-</ng-container>
-<ng-template #loading>
-<mat-spinner class="col-12 mx-auto"></mat-spinner>
-</ng-template>
+<app-nav>
+  <router-outlet></router-outlet>
+</app-nav>

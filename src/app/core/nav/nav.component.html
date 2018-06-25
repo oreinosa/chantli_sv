@@ -1,0 +1,49 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport="true" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    mode="over">
+    <mat-toolbar color="primary">
+      <span style='text-align: center;'>Menu</span>
+    </mat-toolbar>
+    <div class="sidenav-content">
+      <ng-container *ngIf='user'>
+        <app-avatar [user]='user'></app-avatar>
+        <hr>
+      </ng-container>
+      <mat-nav-list>
+        <a mat-button style="height: 0; position: absolute;"></a>
+        <a *ngFor='let link of links' mat-list-item (click)='drawer.close()' [routerLink]='link.route' routerLinkActive='active'>
+          <mat-icon *ngIf='link.icon'>{{ link.icon }}</mat-icon>
+          {{ link.label }}
+        </a>
+        <hr>
+        <a *ngFor='let link of actions' mat-list-item (click)="drawer.close()" [routerLink]='link.route' routerLinkActive='active'>
+          <mat-icon *ngIf='link.icon'>{{ link.icon }}</mat-icon>
+          {{ link.label }}
+        </a>
+      </mat-nav-list>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" id='toolbar'>
+      <button id='menu-button' type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()" *ngIf='(isHandset$ | async)'>
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+      <span class='app-title hover' routerLink=''>Chantli SV</span>
+      <ng-container *ngIf='!(isHandset$ | async)'>
+        <a *ngFor='let link of links' mat-button [routerLink]='link.route' routerLinkActive='active'>
+          <mat-icon *ngIf='link.icon'>{{ link.icon }}</mat-icon>
+          {{ link.label }}
+        </a>
+        <span class="spacer"></span>
+        <a *ngFor='let link of actions' mat-button [routerLink]='link.route' routerLinkActive='active'>
+          <mat-icon *ngIf='link.icon'>{{ link.icon }}</mat-icon>
+          {{ link.label }}
+        </a>
+      </ng-container>
+    </mat-toolbar>
+    <div class="container-fluid">
+      <ng-content></ng-content>
+    </div>
+    <app-footer></app-footer>
+  </mat-sidenav-content>
+</mat-sidenav-container>

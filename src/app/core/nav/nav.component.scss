@@ -1,0 +1,45 @@
+.sidenav {
+  min-width: 200px;
+  max-width: 250px;
+  box-shadow: 3px 0 6px rgba(0,0,0,.1);
+
+  .sidenav-content{
+    padding: 10px 0;
+    background-color: #fafafa;
+
+    a{
+      .mat-icon{
+        margin-right: 15px;
+      }
+      &.active{
+        background-color: rgba(0,0,0,.14);
+      }
+    }
+  }
+}
+
+#toolbar{
+  position: fixed;
+  z-index: 99;
+
+  #menu-button {
+    margin-right: 10px;
+  }
+  .app-title{
+    margin: 0 10px;
+  }
+  
+  a{
+    text-decoration: none;
+    &.active{
+      color: black;
+    }
+  }
+}
+
+.container-fluid{
+  background-color: #d3d3d3;
+  padding-top: 78px;
+  padding-bottom: 25px;
+  min-height: 900px;
+}

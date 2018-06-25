@@ -1,4 +1,3 @@
-import { MessagingModule } from './messaging/messaging.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -32,15 +31,12 @@ import { MatSnackBar } from '@angular/material';
   imports: [
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebase), // imports firebase/app needed for everything
-    AngularFirestoreModule
-    // .enablePersistence()
-    ,
+    AngularFirestoreModule.enablePersistence(),
     AngularFireFunctionsModule,
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
     AngularFireStorageModule, // imports firebase/storage only needed for storage features
     HttpClientModule,
     SharedModule,
-    MessagingModule,
     NotificationsModule,
     CoreModule,
     OrderModule,
@@ -54,10 +50,9 @@ import { MatSnackBar } from '@angular/material';
   bootstrap: [AppComponent],
   providers: [AuthService, AuthGuard, WorkplaceGuard]
 })
+
 export class AppModule {
-  // constructor() {  
-  //   AngularFireModule.initializeApp(environment.firebase);
-  // }
+
   constructor(update: SwUpdate, push: SwPush, snackbar: MatSnackBar) {
     update.available.subscribe(update => {
       console.log('update available');
@@ -68,7 +63,6 @@ export class AppModule {
           window.location.reload();
         });
     });
-    console.log(push.isEnabled);
     push.messages.subscribe(msg => {
       console.log(msg);
       snackbar.open(JSON.stringify(msg));
