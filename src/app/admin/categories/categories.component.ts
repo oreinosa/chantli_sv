@@ -6,7 +6,7 @@ import { Category } from '../../shared/classes/category';
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.component.html',
-  styleUrls: ['./categories.component.css']
+  styleUrls: ['./categories.component.css', '../admin-table.css']
 })
 export class CategoriesComponent extends Table<Category>  {
   public displayedColumns = ['name', 'description', 'actions'];

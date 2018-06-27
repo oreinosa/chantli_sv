@@ -20,6 +20,12 @@
           <mat-icon *ngIf='link.icon'>{{ link.icon }}</mat-icon>
           {{ link.label }}
         </a>
+        <ng-container *ngIf='user'>
+          <a mat-list-item (click)="signOut()">
+            <mat-icon>exit_to_app</mat-icon>
+            Cerrar sesión
+          </a>
+        </ng-container>
       </mat-nav-list>
     </div>
   </mat-sidenav>
@@ -39,11 +45,15 @@
           <mat-icon *ngIf='link.icon'>{{ link.icon }}</mat-icon>
           {{ link.label }}
         </a>
+        <a mat-button (click)="signOut()" *ngIf='user'>
+          <mat-icon>exit_to_app</mat-icon>
+          Cerrar sesión
+        </a>
       </ng-container>
     </mat-toolbar>
     <div class="container-fluid">
       <ng-content></ng-content>
     </div>
-    <app-footer></app-footer>
+    <!-- <app-footer></app-footer> -->
   </mat-sidenav-content>
 </mat-sidenav-container>

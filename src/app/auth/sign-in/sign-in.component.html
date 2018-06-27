@@ -1,40 +1,38 @@
-<div class="row">
-	<div class="col-12 col-sm-9 col-md-7 col-lg-5 col-xl-4 mx-auto text-center container">
-		<mat-card class="bg-light pb-5 pt-4" *ngIf='!submitted; else loading'>
-			<mat-card-content class='p-5'>
-				<form #f='ngForm' (ngSubmit)='onSubmit(f.value)'>
+<form #f='ngForm' (ngSubmit)='onSubmit(f)'>
+	<div class="row">
+		<div class="col-12 col-sm-9 col-md-7 col-lg-5 col-xl-4 mx-auto text-center">
+			<mat-card class="bg-light p-5">
+				<mat-card-content>
 					<div class="form">
 						<div class="form-title mb-5">
 							<h4>Ingresar</h4>
 							<br>
 							<img src="/assets/logo.png" alt="logo" class="img-fluid">
 						</div>
-						<div class="form-content my-3" *ngIf='signIn'>
-							<mat-form-field class="full-width">
-								<input matInput type="email" placeholder='Correo electrónico' id='email' [(ngModel)]='signIn.email' name='email' required
-								 email>
-							</mat-form-field>
-							<mat-form-field class="full-width">
-								<input matInput type="password" placeholder='Constraseña' id='password' [(ngModel)]='signIn.password' name='password' required>
-							</mat-form-field>
+						<div class="form-content my-3">
+							<ng-container *ngIf='!f?.submitted; else loading'>
+								<mat-form-field class="full-width">
+									<input matInput type="email" placeholder='Correo electrónico' id='email' [(ngModel)]='signIn.email' name='email' required
+									 email>
+								</mat-form-field>
+								<mat-form-field class="full-width">
+									<input matInput type="password" placeholder='Constraseña' id='password' [(ngModel)]='signIn.password' name='password' required>
+								</mat-form-field>
+							</ng-container>
+							<ng-template #loading>
+								<mat-spinner class='mx-auto'></mat-spinner>
+							</ng-template>
 						</div>
-						<button type='submit' mat-button>Ingresar</button>
-						<br>
-						<br>
-						<button mat-button type='button' routerLink='/reset-password'>¿Olvidaste tu contraseña?</button>
+						<button mat-button type='submit' [disabled]='f?.submitted'>Ingresar</button>
+						<button mat-button type='button' (click)='onSignInSocial("google")' [disabled]='f?.submitted'>Ingresa con tu cuenta Google</button>
 					</div>
-				</form>
-				<hr>
-				<div class="social-buttons">
-					<button mat-button type='button' routerLink='/registrarse'>Crear cuenta nueva</button>
-					<br>
-					<br>
-					<button mat-button type='button' (click)='onSignInSocial("google")'>Ingresa con tu cuenta Google</button>
-				</div>
-			</mat-card-content>
-		</mat-card>
-		<ng-template #loading>
-			<mat-spinner class='mx-auto'></mat-spinner>
-		</ng-template>
+					<hr>
+					<div class="other-options">
+						<button mat-button type='button' routerLink='/reset-password' [disabled]='f?.submitted'>¿Olvidaste tu contraseña?</button>
+						<button mat-button type='button' routerLink='/registrarse' [disabled]='f?.submitted'>Crear cuenta nueva</button>
+					</div>
+				</mat-card-content>
+			</mat-card>
+		</div>
 	</div>
-</div>
+</form>

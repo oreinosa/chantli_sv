@@ -31,7 +31,7 @@ export class NavComponent {
         let links: Link[] = [], actions: Link[] = [];
 
         links.push(
-          { route: 'menu', label: 'Menu', icon: 'restaurant_menu' },
+          { route: 'menu', label: 'Menu', icon: 'restaurant' },
         );
 
         if (user) {
@@ -58,7 +58,12 @@ export class NavComponent {
 
         this.links = links;
         this.actions = actions;
+        this.user = user;
       });
+  }
+
+  signOut() {
+    this.auth.signOut();
   }
 
 }

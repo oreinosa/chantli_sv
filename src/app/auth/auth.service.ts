@@ -52,10 +52,8 @@ export class AuthService {
   signInEmail(signIn: SignIn) {
     return this.afAuth.auth
       .signInWithEmailAndPassword(signIn.email, signIn.password)
-      .then(
-        credential => this.notificationsService.show(`Hola, ${credential.displayName}`, 'Autenticación', 'info'),
-        e => this.notificationsService.show('Correo electrónico o contraseaña incorrecta', 'Error', 'danger')
-      );
+      .catch(e => this.notificationsService.show('Correo electrónico o contraseaña incorrecta', 'Error', 'danger'))
+      .then(credential => this.notificationsService.show(`Hola, ${credential.user.displayName}`, 'Autenticación', 'info'));
   }
 
   signInSocial(provider: string) {
@@ -78,16 +76,18 @@ export class AuthService {
     return this.afAuth
       .auth
       .createUserWithEmailAndPassword(signUp.email, signUp.password)
-      .then(
-        credential => credential
-          .updateProfile({ // UPDATE FIREBASE USER CREDENTIALS
+      .catch(e => this.notificationsService.show('Correo electrónico ya esta en uso', 'Error', 'danger'))
+      .then(credential => {
+        console.log(credential);
+        if (credential) {
+          credential.user.updateProfile({ // UPDATE FIREBASE USER CREDENTIALS
             displayName: signUp.name,
             photoURL: 'https://devchantlisv.page.link/empty-picture'
           })
-          .then(() => this.updateUserData(credential, signUp)),
-        e => this.notificationsService.show('Correo electrónico ya esta en uso', 'Error', 'danger')
-      ) // UPDATE FIRESTORE USER DATA
-      .then(() => this.notificationsService.show(`Bienvenido, ${signUp.name}`, 'Autenticación', 'success'));
+            .then(() => this.updateUserData(credential.user, signUp))
+            .then(() => this.notificationsService.show(`Bienvenido, ${signUp.name}`, 'Autenticación', 'success'))
+        }
+      }) // UPDATE FIRESTORE USER DATA
   }
 
   signOut() {
