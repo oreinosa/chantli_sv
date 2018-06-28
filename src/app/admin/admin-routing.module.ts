@@ -13,7 +13,7 @@ const routes: Routes = [
   {
     path: 'admin', component: AdminComponent, canActivate: [AuthGuard, AdminGuard],
     children: [
-      { path: 'usuarios', loadChildren: () => UsersModule },
+      { path: 'usuarios', loadChildren: 'src/app/admin/users/users.module#UsersModule' },
       { path: 'categorias', loadChildren: () => CategoriesModule },
       { path: 'lugares-de-trabajo', loadChildren: () => WorkplacesModule },
       { path: 'productos', loadChildren: () => ProductsModule },
