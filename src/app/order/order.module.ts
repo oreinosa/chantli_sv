@@ -11,6 +11,7 @@ import { Step2Component } from './new-order/step-2/step-2.component';
 import { Step3Component } from './new-order/step-3/step-3.component';
 import { Step4Component } from './new-order/step-4/step-4.component';
 import { NewOrderComponent } from './new-order/new-order.component';
+import { OrderComponent } from './order.component';
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import { NewOrderComponent } from './new-order/new-order.component';
     Step2Component,
     Step3Component,
     Step4Component,
-    NewOrderComponent
+    NewOrderComponent,
+    OrderComponent
   ],
   providers: [OrderService, MenusService]
 })

@@ -14,3 +14,12 @@ body{
 .hover:hover{
   cursor: pointer;
 }
+a.active.mat-list-item{
+  background-color: rgba(0,0,0,.14);
+}
+a.active.mat-list-item:hover{
+  background-color: rgba(0,0,0,.1);
+}
+a.active.mat-tab-link{
+  border-bottom: 1px solid #d3d3d3;
+}

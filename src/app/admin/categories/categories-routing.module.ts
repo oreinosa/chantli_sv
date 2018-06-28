@@ -10,7 +10,7 @@ const routes: Routes = [
     path: '', component: CategoriesComponent, children: [
       { path: 'agregar', component: AddCategoryComponent },
       { path: 'editar/:id', component: EditCategoryComponent },
-      { path: 'eliminar/:id', component: DelCategoryComponent },
+      { path: 'borrar/:id', component: DelCategoryComponent },
     ]
   }
 ];

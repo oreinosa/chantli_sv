@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
-import { map, share } from 'rxjs/operators';
+import { map, share, startWith } from 'rxjs/operators';
 import { AuthService } from '../../auth/auth.service';
 import { Link } from '../../shared/classes/link';
 
@@ -17,15 +17,17 @@ export class NavComponent {
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
-      map(result => result.matches),
-      share()
+    map(result => result.matches),
+    share()
     );
 
   constructor(
     private breakpointObserver: BreakpointObserver,
     private auth: AuthService
   ) {
-    this.auth.user
+    this.auth.user.pipe(
+      startWith(null)
+    )
       .subscribe(user => {
         console.log(!!user);
         let links: Link[] = [], actions: Link[] = [];
@@ -37,9 +39,11 @@ export class NavComponent {
         if (user) {
           switch (user.role) {
             case 'Admin':
-              links.push(
+              actions.push(
                 { route: 'admin', label: 'Admin', icon: 'build' },
-                { route: 'ordenes', label: 'Ordenes', icon: 'assignment'}
+              );
+              links.push(
+                { route: 'ordenes', label: 'Ordenes', icon: 'assignment' }
               );
             case 'Cliente':
               actions.push(

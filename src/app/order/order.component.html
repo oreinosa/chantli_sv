@@ -1,0 +1,48 @@
+<div class="row">
+  <div class='col-12 title'>
+    <mat-card>
+      <h1>Menu de la semana</h1>
+    </mat-card>
+  </div>
+  <ng-container *ngIf='menus; else loading'>
+    <div class="col-12 col-sm-10 col-lg-8 mx-auto mb-3 text-center" *ngIf='menus.length == 0;else dowSelection'>
+      <h4>Aún no está el menú de la semana.</h4>
+    </div>
+    <ng-template #dowSelection>
+      <div class="col-12 dow">
+        <mat-card>
+          <mat-card-content class='text-center'>
+            <nav mat-tab-nav-bar>
+              <a mat-tab-link *ngFor="let $dow of DOW;let i=index" [routerLink]="['../',$dow | lowercase]" [ngClass]='i+1 === dow ? "active" : ""'>
+                {{ $dow | capitalize }}
+              </a>
+            </nav>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <ng-container *ngIf='dow'>
+        <div class='col-12 col-lg-6 mx-auto mb-3'>
+          <ng-container *ngIf='selectedMenus.length;else menuNotAvailable'>
+            <!-- {{ selectedMenu | json }} -->
+            <ng-container *ngFor='let selectedMenu of selectedMenus;last as isLast'>
+              <app-day-menu [menu]='selectedMenu' (selected)='onOrderMenu($event)'></app-day-menu>
+              <br *ngIf='!isLast'>
+            </ng-container>
+          </ng-container>
+          <ng-template #menuNotAvailable>
+            <mat-card>
+              <mat-card-content>
+                <h4 class='text-center'>No hay menú para {{ DOW[dow-1] | capitalize }} <:-(</h4>
+              </mat-card-content>
+            </mat-card>
+          </ng-template>
+        </div>
+      </ng-container>
+    </ng-template>
+  </ng-container>
+  <ng-template #loading>
+    <div class="col-12">
+      <mat-spinner class='mx-auto'></mat-spinner>
+    </div>
+  </ng-template>
+</div>

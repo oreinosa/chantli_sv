@@ -1,0 +1,22 @@
+.title, .dow{
+  padding-left : 0;
+  padding-right: 0;
+  margin-top: -15px;
+  margin-bottom: 25px;
+  /* outline: 10px solid #009688; */
+}
+.dow{
+  margin-top: -27px;
+}
+.title .mat-card, .dow .mat-card{
+  background-color: #009688;
+  color: white!important;
+  text-align : center;
+}
+.dow .mat-card a{
+  opacity: 1;
+  color: white!important;  
+}
+.dow .mat-card a:hover{
+  text-decoration: none;  
+}

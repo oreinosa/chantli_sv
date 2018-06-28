@@ -22,10 +22,15 @@ export class Table<T> implements OnInit {
   ) {
   }
 
-  onAction(object: T, actionName?: string) {
+  onAction(object?: T, actionName?: string) {
     console.log('action ', object);
-    this.service.object.next(object);
-    window.scrollTo(0, 145);
+    object ? this.service.object.next(object) : false;
+    setTimeout(() => {
+      window.scroll({
+        top: 150,
+        behavior: 'smooth'
+      });
+    }, 2);
   }
 
   ngOnInit() {
@@ -37,8 +42,8 @@ export class Table<T> implements OnInit {
     this.service
       .getAll()
       .pipe(
-        takeUntil(this.ngUnsubscribe),
-        tap(data => console.log('Table data : ', data))
+      takeUntil(this.ngUnsubscribe),
+      tap(data => console.log('Table data : ', data))
       )
       .subscribe(data => {
         this.loaded = false;
