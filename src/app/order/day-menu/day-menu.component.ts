@@ -9,6 +9,7 @@ import { Product } from '../../shared/classes/product';
 })
 export class DayMenuComponent implements OnInit {
   @Input() menu: Menu;
+  @Input() menuNumber: number;
   @Output() selected = new EventEmitter<Menu>();
   constructor() { }
 

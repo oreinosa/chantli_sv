@@ -94,7 +94,7 @@ export class AuthService {
     return this.afAuth.auth
       .signOut()
       .then(() => {
-        this.router.navigate(['']);
+        this.router.navigate(['menu']);
         this.notificationsService.show('Adiós!', 'Autenticación', 'info');
       });
   }

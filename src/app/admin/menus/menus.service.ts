@@ -17,10 +17,23 @@ export class MenusService extends DAOSubcollection<Menu, Product> {
   }
 
   getAll(): Observable<Menu[]> {
-    return super.getAll()
+    this.objectCollection = this.af.collection<Menu>('menus', ref => ref.orderBy('date', 'desc').limit(10));
+    return this.objectCollection
+      .snapshotChanges()
       .pipe(
+      map(actions => {
+        // console.log(actions);
+        return actions.map(a => {
+          let data = a.payload.doc.data() as Menu;
+          data['id'] = a.payload.doc.id;
+          return data;
+        })
+      }),
       map(menus => menus.map(menu => { menu.date = menu.date.toDate(); return menu }))
       );
+    //   .pipe(
+    //   map(menus => menus.map(menu => { menu.date = menu.date.toDate(); return menu }))
+    //   );
   }
 
   add(menu: Menu, products: Product[]) {

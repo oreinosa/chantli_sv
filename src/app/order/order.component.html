@@ -21,11 +21,11 @@
         </mat-card>
       </div>
       <ng-container *ngIf='dow'>
-        <div class='col-12 col-lg-6 mx-auto mb-3'>
+        <div class='col-12 col-md-10 col-lg-8 mx-auto mb-3'>
           <ng-container *ngIf='selectedMenus.length;else menuNotAvailable'>
             <!-- {{ selectedMenu | json }} -->
-            <ng-container *ngFor='let selectedMenu of selectedMenus;last as isLast'>
-              <app-day-menu [menu]='selectedMenu' (selected)='onOrderMenu($event)'></app-day-menu>
+            <ng-container *ngFor='let selectedMenu of selectedMenus;last as isLast;let i=index'>
+              <app-day-menu [menu]='selectedMenu' [menuNumber]='i+1' (selected)='onOrderMenu($event)'></app-day-menu>
               <br *ngIf='!isLast'>
             </ng-container>
           </ng-container>
