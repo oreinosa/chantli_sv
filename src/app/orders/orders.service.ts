@@ -23,8 +23,8 @@ export class OrdersService {
   ) {
     let date = new Date();
     let firstDayOfYear = new Date();
-    this.ordersCol = this.fs.collection<Order>('orders');
-    this.usersCol = this.fs.collection<User>('users', ref => ref.orderBy('name', 'asc'));
+    this.ordersCol = this.fs.collection<Order>('ordenes');
+    this.usersCol = this.fs.collection<User>('usuarios', ref => ref.orderBy('name', 'asc'));
   }
 
   filterOrders(orders: Order[]) {
@@ -51,14 +51,14 @@ export class OrdersService {
 
   getOrders(from?: Date, to?: Date) {
     if (from && to) {
-      this.ordersCol = this.fs.collection<Order>('orders', ref =>
+      this.ordersCol = this.fs.collection<Order>('ordenes', ref =>
         ref
           // .orderBy('date.by', 'desc')
           .where('date.for', ">=", from)
           .where('date.for', "<=", to)
       );
     } else {
-      this.ordersCol = this.fs.collection<Order>('orders', ref =>
+      this.ordersCol = this.fs.collection<Order>('ordenes', ref =>
         ref
         // .orderBy('date.for', 'desc')
         // .orderBy('products.principal', 'desc')

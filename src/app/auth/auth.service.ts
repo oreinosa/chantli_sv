@@ -33,7 +33,7 @@ export class AuthService {
         switchMap(user => {
           // console.log('Firebase user : ', user);
           if (user) {
-            const doc = this.afs.collection<User>('users').doc<User>(user.uid);
+            const doc = this.afs.collection<User>('usuarios').doc<User>(user.uid);
             return doc.valueChanges();
           }
           return of(null);
@@ -105,7 +105,7 @@ export class AuthService {
 
   updateWorkplace(workplace: string, user: User) {
     return this.afs
-      .doc<User>(`users/${user.id}`)
+      .doc<User>(`usuarios/${user.id}`)
       .update({ workplace: workplace })
       .then(() => this.notificationsService.show('Lugar de trabajo actualizado!', undefined, 'success'));
   }
@@ -113,7 +113,7 @@ export class AuthService {
   private updateUserData(user, signUp?: SignUp) {
     // Sets user data to firestore on login
     // console.log(user, signUp);
-    const userRef: AngularFirestoreDocument<User> = this.afs.doc(`users/${user.uid}`);
+    const userRef: AngularFirestoreDocument<User> = this.afs.doc(`usuarios/${user.uid}`);
     return userRef
       .ref
       .get()

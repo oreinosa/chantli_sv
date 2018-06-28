@@ -12,7 +12,7 @@ export class UsersService extends DAO<User> {
     public af: AngularFirestore,
     public notificationsService: NotificationsService
   ) {
-    super('Usuario','users', af, notificationsService);
+    super('Usuario','usuarios', af, notificationsService);
   }
 
 }

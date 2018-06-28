@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/chantlisv",
+    "public": "dist",
     "ignore": [
       "firebase.json",
       "**/.*",

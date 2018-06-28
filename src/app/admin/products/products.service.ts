@@ -11,7 +11,7 @@ export class ProductsService extends DAO<Product> {
     public af: AngularFirestore,
     public notificationsService: NotificationsService
   ) {
-    super('Producto','products', af, notificationsService);
+    super('Producto','productos', af, notificationsService);
   }
 
   // getAllByCategory(category: string) {

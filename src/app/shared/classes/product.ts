@@ -5,8 +5,8 @@ export interface Product {
   imageURL?: string;
   price?: number;
   cost?: number;
-  extra?: number;
-  noSides?: boolean,
+  extra: number;
+  noSides: boolean,
   category?: string;
 }
 export class Product {
@@ -17,8 +17,8 @@ export class Product {
     public imageURL?: string,
     public price?: number,
     public cost?: number,
-    public extra?: number,
-    public noSides?: boolean,
+    public extra: number = 0,
+    public noSides: boolean = false,
     public category?: string
   ) { }
 }

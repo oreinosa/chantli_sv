@@ -65,7 +65,7 @@
         </div>
       </div>
     </div>
-    <button mat-button type='submit' [disabled]='f.invalid || !(selectedSubcollectionObjects | editingSubcollection:object?.products:refresh)?.length'>Editar</button>
+    <button mat-button type='submit' [disabled]='f.invalid'>Editar</button>
     <button mat-button type='button' routerLink='../../'>Atrás</button>
   </ng-container>
   <ng-template #loading>

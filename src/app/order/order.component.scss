@@ -1,3 +1,5 @@
+@import 'src/_colors';
+
 .title, .dow{
   padding-left : 0;
   padding-right: 0;
@@ -9,9 +11,12 @@
   margin-top: -27px;
 }
 .title .mat-card, .dow .mat-card{
-  background-color: #009688;
+  background-color: $primary;
   color: white!important;
   text-align : center;
+}
+.dow .mat-card{
+  border-bottom: 1px solid rgba(0,0,0,.12);
 }
 .dow .mat-card a{
   opacity: 1;
@@ -19,4 +24,13 @@
 }
 .dow .mat-card a:hover{
   text-decoration: none;  
+}
+.toolbar-flex {
+  flex: 1 0.5 auto;
+}
+.mat-tab-link.active{
+  border-bottom: 2px solid $success;
+}
+.mat-tab-link{
+  /* transition: 3s; */
 }

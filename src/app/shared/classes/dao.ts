@@ -39,7 +39,7 @@ export abstract class DAO<T> {
     return this.objectCollection
       .add(object)
       .then(doc => {
-        this.notificationsService.show(`${this.className} agregado`, undefined, 'success');
+        this.notificationsService.show(`${this.className} agregado`, this.collectionName.charAt(0).toUpperCase() + this.collectionName.substr(1), 'success');
         return doc;
       })
   }
@@ -50,7 +50,7 @@ export abstract class DAO<T> {
       .doc(id)
       .set(object, { merge: true })
       .then(doc => {
-        this.notificationsService.show(`${this.className} editado`, undefined, 'info');
+        this.notificationsService.show(`${this.className} editado`, this.collectionName.charAt(0).toUpperCase() + this.collectionName.substr(1), 'info');
         return object;
       });
   }
@@ -60,7 +60,7 @@ export abstract class DAO<T> {
       .doc(id)
       .delete()
       .then(() => {
-        this.notificationsService.show(`${this.className} borrado`, undefined, 'danger');
+        this.notificationsService.show(`${this.className} borrado`, this.collectionName.charAt(0).toUpperCase() + this.collectionName.substr(1), 'danger');
         return id;
       });
   }

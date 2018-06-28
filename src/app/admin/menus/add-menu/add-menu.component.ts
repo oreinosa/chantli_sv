@@ -68,11 +68,13 @@ export class AddMenuComponent extends AddSubcollection<Menu, Product> implements
 
   selectProduct(name: string) {
     this.selectedSubcollectionObject = this.filterProducts(name)[0];
+    console.log(this.filterProducts(name));
   }
 
   filterProducts(name: string) {
-    return this.products.filter(product =>
-      product.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
+    // return this.products.filter(product =>
+    //   product.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
+    return this.products.filter(product => product.name.toLowerCase().includes(name.toLowerCase()))
   }
 
 }

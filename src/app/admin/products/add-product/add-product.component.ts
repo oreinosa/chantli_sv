@@ -32,7 +32,7 @@ export class AddProductComponent extends Add<Product>  {
 
   onSubmit(product: Product): Promise<void> {
     return this.uploader
-      .onSubmit('products', this.object.name)
+      .onSubmit('productos', this.object.name)
       .then(imageURL => product.imageURL = imageURL)
       .then(() => super.onSubmit(product));
   }

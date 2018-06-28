@@ -28,6 +28,7 @@ import { ServiceWorkerModule, SwPush, SwUpdate } from '@angular/service-worker';
 import { MatSnackBar } from '@angular/material';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AdminGuard } from './auth/admin.guard';
 
 
 @NgModule({
@@ -52,7 +53,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
-  providers: [AuthService, AuthGuard, WorkplaceGuard]
+  providers: [AuthService, AuthGuard, WorkplaceGuard, AdminGuard]
 })
 
 export class AppModule {

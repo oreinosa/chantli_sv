@@ -23,7 +23,7 @@ export class Table<T> implements OnInit {
   }
 
   onAction(object?: T, actionName?: string) {
-    console.log('action ', object);
+    // console.log('action ', object);
     object ? this.service.object.next(object) : false;
     setTimeout(() => {
       window.scroll({

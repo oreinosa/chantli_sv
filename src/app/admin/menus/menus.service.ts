@@ -13,7 +13,7 @@ export class MenusService extends DAOSubcollection<Menu, Product> {
     public af: AngularFirestore,
     public notificationsService: NotificationsService
   ) {
-    super('Menu', 'menus', af, notificationsService, 'products');
+    super('Menu', 'menus', af, notificationsService, 'productos');
   }
 
   getAll(): Observable<Menu[]> {
@@ -21,19 +21,16 @@ export class MenusService extends DAOSubcollection<Menu, Product> {
     return this.objectCollection
       .snapshotChanges()
       .pipe(
-      map(actions => {
-        // console.log(actions);
-        return actions.map(a => {
-          let data = a.payload.doc.data() as Menu;
-          data['id'] = a.payload.doc.id;
-          return data;
-        })
-      }),
-      map(menus => menus.map(menu => { menu.date = menu.date.toDate(); return menu }))
+        map(actions => {
+          // console.log(actions);
+          return actions.map(a => {
+            let data = a.payload.doc.data() as Menu;
+            data['id'] = a.payload.doc.id;
+            return data;
+          })
+        }),
+        map(menus => menus.map(menu => { menu.date = menu.date.toDate(); return menu }))
       );
-    //   .pipe(
-    //   map(menus => menus.map(menu => { menu.date = menu.date.toDate(); return menu }))
-    //   );
   }
 
   add(menu: Menu, products: Product[]) {
@@ -52,22 +49,14 @@ export class MenusService extends DAOSubcollection<Menu, Product> {
     return super.update(id, menu, products, deletedProducts);
   }
 
-  toggleMenuAvailability(id: string, flag: boolean): Promise<void> {
-    return this.objectCollection.doc(id)
-      .update({ available: flag })
-      .then(() => this.notificationsService
-        .show(`Menu ${id} ${flag ? "disponible" : "cerrado"}`, undefined, `${flag ? "success" : "warning"}`));
+  delete(id: string, subCollection: Product[]) {
+    return super.delete(id, subCollection);
   }
 
-
-  // deleteProduct(idProduct: string, idMenu: string) {
-  //   let productsCollection = this.objectCollection.doc(idMenu).collection<Product>('products');
-  //   let productDocument = productsCollection.doc(idProduct);
-  //   return productDocument.delete();
-  // }
-
-  // private addProducts(products: Product[]): Promise<void> {
-  //   return
-  // }
-
+  toggleMenuAvailability(id: string, flag: boolean): Promise<void> {
+    return this.objectCollection.doc(id)
+      .set({ available: flag }, { merge: true })
+      .then(() => this.notificationsService
+        .show(`Menu ${id} ${flag ? "disponible" : "cerrado"}`, 'Menús', `${flag ? "success" : "warning"}`));
+  }
 }

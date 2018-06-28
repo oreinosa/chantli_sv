@@ -32,6 +32,7 @@ export class EditProductComponent extends Edit<Product> {
   }
 
   onSubmit(product: Product): Promise<void> {
+    console.log(product);
     if (this.uploader.image) {
       return this.uploader
         .onSubmit('products', this.object.name)

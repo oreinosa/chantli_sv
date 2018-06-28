@@ -59,7 +59,7 @@ export class EditMenuComponent extends EditSubcollection<Menu, Product> {
 
   filterProducts(name: string) {
     return this.products.filter(product =>
-      product.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
+      product.name.toLowerCase().includes(name.toLowerCase()));
   }
 
 }

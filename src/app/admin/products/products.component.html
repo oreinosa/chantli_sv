@@ -21,8 +21,8 @@
 						<!-- Name Column -->
 						<ng-container matColumnDef="name">
 							<mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-							<mat-cell *matCellDef="let element">
-								{{element.name}}
+							<mat-cell *matCellDef="let element" class='d-block'>
+								<p>{{element.name}}</p>
 								<ng-container *ngIf='element.noSides'>
 									<p>(Sin acompañamiento)</p>
 								</ng-container>

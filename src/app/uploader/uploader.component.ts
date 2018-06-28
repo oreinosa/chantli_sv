@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UploaderService } from './uploader.service';
 import { Subject } from 'rxjs';
+import { UploadTaskSnapshot } from '@firebase/storage-types';
 
 @Component({
   selector: 'app-uploader',
@@ -34,11 +35,10 @@ export class UploaderComponent implements OnInit {
     // this.logger.log(this.image);
     return this.uploadService
       .uploadFile(route, id, this.image)
-      .then(a => {
+      .then((a: UploadTaskSnapshot) => {
         console.log(a);
-        return a;
+        return a.ref.getDownloadURL();
       })
-      .then(a => a.downloadURL)
       .catch(() => this.image = null);
   }
 
