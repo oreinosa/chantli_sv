@@ -1,5 +1,10 @@
 <mat-card>
-  <div class="table-header">
+  <mat-card-header>
+    <mat-card-title>
+      <h3>Menús</h3>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
     <div class="row">
       <div class="col-12">
         <button mat-button type='button' [routerLink]='["agregar"]'>
@@ -7,88 +12,87 @@
           Agregar menú
         </button>
       </div>
+      <div class="col-12 col-md-8 mx-auto text-center my-2">
+        <router-outlet></router-outlet>
+      </div>
+      <div class="col-12">
+        <div class='table-container'>
+          <mat-table #table matSort [dataSource]="dataSource" class='data-table'>
+            <!-- Date Column -->
+            <ng-container matColumnDef="date">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <p *ngIf='(element.date | spanishDate) as date' [matTooltip]='date'> {{ date }} </p>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Products Column -->
+            <ng-container matColumnDef="products">
+              <mat-header-cell *matHeaderCellDef> Productos </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <div class="row" *ngIf='element.id | getMenuProducts | async as products'>
+                  <div class="col-12 col-sm-6">
+                    <p>
+                      <b>Platos principales</b>
+                    </p>
+                    <ul>
+                      <li *ngFor='let product of products | productsByCategory:"Principal"'>
+                        {{ product.name }}
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="col-12 col-sm-6">
+                    <p>
+                      <b>Acompañamientos</b>
+                    </p>
+                    <ul>
+                      <li *ngFor='let product of products | productsByCategory:"Acompañamiento"'>
+                        {{ product.name }}
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Price Column -->
+            <ng-container matColumnDef="price">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Precio </mat-header-cell>
+              <mat-cell *matCellDef="let element">
+                <p>{{element.price | currency}}</p>
+              </mat-cell>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+              <mat-cell *matCellDef="let element" style='display: block'>
+                <p>
+                  <mat-slide-toggle [checked]='element.available' (change)='toggleMenuAvailability(element.id, $event.checked)'>
+                    Disponible
+                  </mat-slide-toggle>
+                </p>
+                <button mat-icon-button type='button' [routerLink]='["editar",element.id]' matTooltip="Editar" (click)='onAction(element)'>
+                  <mat-icon>update</mat-icon>
+                </button>
+                <button mat-icon-button type='button' [routerLink]='["borrar",element.id]' matTooltip="Borrar" (click)='onAction(element)'>
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          </mat-table>
+          <ng-container *ngIf='loaded && !dataSource?.data?.length'>
+            <h5 class='text-center'>No hay menús.</h5>
+          </ng-container>
+          <ng-container *ngIf='!loaded'>
+            <mat-spinner class="mx-auto my-3"></mat-spinner>
+          </ng-container>
+        </div>
+        <mat-paginator [length]='dataSource?.data?.length' [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+      </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-12 col-sm-10 mx-auto text-center my-2">
-      <router-outlet></router-outlet>
-    </div>
-  </div>
-  <div class="table-container">
-    <mat-table #table matSort [dataSource]="dataSource" class='data-table'>
-      <!-- Date Column -->
-      <ng-container matColumnDef="date">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
-        <mat-cell *matCellDef="let element">
-          <p *ngIf='(element.date | spanishDate) as date' [matTooltip]='date'> {{ date }} </p>
-        </mat-cell>
-      </ng-container>
-
-      <!-- Products Column -->
-      <ng-container matColumnDef="products">
-        <mat-header-cell *matHeaderCellDef> Productos </mat-header-cell>
-        <mat-cell *matCellDef="let element">
-          <div class="row" *ngIf='element.id | getMenuProducts | async as products'>
-            <div class="col-12 col-sm-6">
-              <p>
-                <b>Platos principales</b>
-              </p>
-              <ul>
-                <li *ngFor='let product of products | productsByCategory:"Principal"'>
-                  {{ product.name }}
-                </li>
-              </ul>
-            </div>
-            <div class="col-12 col-sm-6">
-              <p>
-                <b>Acompañamientos</b>
-              </p>
-              <ul>
-                <li *ngFor='let product of products | productsByCategory:"Acompañamiento"'>
-                  {{ product.name }}
-                </li>
-              </ul>
-            </div>
-          </div>
-        </mat-cell>
-      </ng-container>
-
-      <!-- Price Column -->
-      <ng-container matColumnDef="price">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> Precio </mat-header-cell>
-        <mat-cell *matCellDef="let element">
-          <p>{{element.price | currency}}</p>
-        </mat-cell>
-      </ng-container>
-
-      <!-- Actions Column -->
-      <ng-container matColumnDef="actions">
-        <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
-        <mat-cell *matCellDef="let element">
-          <p>
-            <mat-slide-toggle [checked]='element.available' (change)='toggleMenuAvailability(element.id, $event.checked)'>
-              ¿Disponible?
-            </mat-slide-toggle>
-          </p>
-          <br>
-          <button mat-icon-button type='button' [routerLink]='["editar",element.id]' matTooltip="Editar" (click)='onAction(element)'>
-            <mat-icon>update</mat-icon>
-          </button>
-          <button mat-icon-button type='button' [routerLink]='["borrar",element.id]' matTooltip="Borrar" (click)='onAction(element)'>
-            <mat-icon>delete</mat-icon>
-          </button>
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-    </mat-table>
-  </div>
-  <ng-container *ngIf='loaded && !dataSource?.data?.length'>
-    <h5 class='text-center'>No hay menús.</h5>
-  </ng-container>
-  <ng-container *ngIf='!loaded'>
-    <mat-spinner class="mx-auto my-3"></mat-spinner>
-  </ng-container>
-  <mat-paginator [length]='dataSource?.data?.length' [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  </mat-card-content>
 </mat-card>

@@ -27,7 +27,7 @@ export class NavComponent {
   ) {
     this.auth.user
       .subscribe(user => {
-        console.log(user);
+        console.log(!!user);
         let links: Link[] = [], actions: Link[] = [];
 
         links.push(
@@ -37,12 +37,13 @@ export class NavComponent {
         if (user) {
           switch (user.role) {
             case 'Admin':
-              actions.push(
+              links.push(
                 { route: 'admin', label: 'Admin', icon: 'build' },
+                { route: 'ordenes', label: 'Ordenes', icon: 'assignment'}
               );
             case 'Cliente':
               actions.push(
-                { route: 'mis-pedidos', label: 'Mis pedidos', icon: 'shopping_cart' },
+                { route: 'mis-ordenes', label: 'Mis ordenes', icon: 'shopping_cart' },
               );
             default:
               actions.push(

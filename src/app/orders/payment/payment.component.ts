@@ -5,7 +5,7 @@ import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { Subject } from 'rxjs';
 import { Component, OnInit, AfterViewInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
-import { takeUntil, tap, map } from 'rxjs/operators';
+import { takeUntil, tap, map, filter, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-payment',
@@ -34,22 +34,17 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.ordersService
-      .filteredOrders
-      .pipe(
-        takeUntil(this.ngUnsubscribe),
-        tap(orders => orders ? console.log(orders) : false),
-        map(orders => orders.filter(order => !order.paid))
-      )
-      .subscribe(orders => this.dataSource.data = this.payingUser ? orders : []);
 
     this.ordersService
-      .getPayingUser()
-      .pipe(
-        takeUntil(this.ngUnsubscribe),
-        tap(user => user ? console.log(user) : false)
+      .getPayingUser().pipe(
+      takeUntil(this.ngUnsubscribe),
+      tap(user => {
+        console.log(user);
+        this.payingUser = user;
+      }),
+      switchMap(user => this.ordersService.filteredOrders)
       )
-      .subscribe(user => this.payingUser = user);
+      .subscribe(orders => this.dataSource.data = this.payingUser ? orders : []);
   }
 
   ngAfterViewInit() {

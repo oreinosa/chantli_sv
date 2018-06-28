@@ -6,7 +6,7 @@ import { WorkplacesService } from './workplaces.service';
 @Component({
   selector: 'app-workplaces',
   templateUrl: './workplaces.component.html',
-  styleUrls: ['./workplaces.component.css']
+  styleUrls: ['./workplaces.component.css', '../admin-table.css']
 })
 export class WorkplacesComponent  extends Table<Workplace>  {
   public displayedColumns = ['name', 'actions'];

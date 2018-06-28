@@ -27,6 +27,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule, SwPush, SwUpdate } from '@angular/service-worker';
 import { MatSnackBar } from '@angular/material';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -44,7 +47,8 @@ import { MatSnackBar } from '@angular/material';
     AuthModule,
     AdminModule,
     AppRoutingModule,
-    ServiceWorkerModule.register('/combined-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('/combined-worker.js', { enabled: environment.production }),
+    BrowserAnimationsModule
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

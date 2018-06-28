@@ -1,6 +1,6 @@
+import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatCardModule,
@@ -21,8 +21,12 @@ import {
   MatAutocompleteModule,
   MatDatepickerModule,
   MatNativeDateModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatTableModule,
+  MatSortModule,
+  MatPaginatorModule,
 } from '@angular/material';
+
 import { tap, takeUntil, take, filter, map, switchMap, } from 'rxjs/operators';
 import { SortByPipe } from './pipes/sort-by.pipe';
 import { CapitalizePipe } from './pipes/capitalize.pipe';
@@ -38,8 +42,8 @@ import { TtdPipe } from './pipes/ttd.pipe';
 @NgModule({
   imports: [
     CommonModule,
-    BrowserAnimationsModule,
     FormsModule,
+    RouterModule,
     ReactiveFormsModule,
     MatCardModule,
     MatSelectModule,
@@ -60,13 +64,16 @@ import { TtdPipe } from './pipes/ttd.pipe';
     MatDatepickerModule,
     MatNativeDateModule,
     MatProgressSpinnerModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
   ],
   exports: [
     CommonModule,
     SortByPipe,
     CapitalizePipe,
-    BrowserAnimationsModule,
     FormsModule,
+    RouterModule,
     ReactiveFormsModule,
     MatCardModule,
     MatSelectModule,
@@ -95,6 +102,9 @@ import { TtdPipe } from './pipes/ttd.pipe';
     SpanishDatePipe,
     TtdPipe,
     MatProgressSpinnerModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule,
   ],
   declarations: [
     SortByPipe,

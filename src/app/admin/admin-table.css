@@ -10,4 +10,14 @@
 .mat-cell{
   word-wrap: break-word;
   word-break: break-all;
+  /* white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis; */
+}
+.table-container{
+  overflow-x: auto;
+}
+.mat-table {
+  max-height: 600px;
+  overflow: auto;   
 }

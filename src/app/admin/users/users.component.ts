@@ -7,7 +7,7 @@ import { MatPaginator, MatSort, Sort } from '@angular/material';
 @Component({
   selector: 'app-users',
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css']
+  styleUrls: ['./users.component.css', '../admin-table.css']
 })
 export class UsersComponent extends Table<User> {
   public displayedColumns = ['id', 'name', 'email', 'role', 'workplace', 'actions'];

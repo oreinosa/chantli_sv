@@ -21,35 +21,12 @@
 .mat-column-actions {
   flex: 0 0 15%;
 }
-.mat-table, .mat-paginator{
-  overflow: auto;
-  background-color: inherit;
-}
-.mat-header-cell{
-  color: grey!important;
-}
 .mat-row.cancelled{
   background-color: $danger;
 }
-.mat-cell, .mat-header-cell {
-  /* overflow: hidden;
-  word-wrap: break-word; */
-  overflow: hidden;  
-  text-overflow: clip;
-  padding: 5px 15px;   
-} 
-p {
-  width: 100%;
+.mat-cell{
+  display: block;
 }
-/* .mat-icon{
-  margin-right: 10px;
+.mat-table{
+  min-width: 700px;
 }
-.active, .mat-list-item:hover{
-  background-color: rgba(0,0,0,0.1);
-}
-a{
-  text-decoration: none;
-}
-a:active{
-  text-decoration: none;
-} */

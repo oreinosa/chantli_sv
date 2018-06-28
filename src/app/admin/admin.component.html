@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="col-12" [ngClass]='menuExtended ? "col-md-4 col-lg-3" : "col-md-2"'>
+	<div class="col-12">
 		<mat-card class='admin-routes'>
 			<mat-card-content>
 				<h4 class="text-center">
@@ -17,10 +17,10 @@
 					</button>
 				</ng-template>
 			</mat-card-content>
-			<div class="side" (click)='menuExtended = !menuExtended' *ngIf='(isHandset$ | async)'></div>
+			<div class="bottom-line" (click)='menuExtended = !menuExtended' *ngIf='(isHandset$ | async)'></div>
 		</mat-card>
 	</div>
-	<div class="col-12" [ngClass]='menuExtended ? "col-md-8 col-lg-9" : "col-md-10"'>
+	<div class="col-12">
 		<router-outlet></router-outlet>
 	</div>
 </div>

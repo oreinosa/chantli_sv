@@ -1,6 +1,11 @@
 .mat-icon{
   margin-right: 10px;
 }
+.mat-list-item{
+  display: inline-flex;
+  margin-right: 5px;
+  margin-left: 5px;  
+}
 .active, .mat-list-item:hover{
   background-color: rgba(0,0,0,0.1);
 }
@@ -13,15 +18,14 @@ a:active{
 .admin-routes{
   margin-bottom: 15px;
 }
-.side{
+.bottom-line{
   height: 100%;
   background-color: inherit;
   width: 15px;
   position: absolute;
-  right: 0;
-  top:0;
+  bottom:0;
   cursor: pointer;
 }
-.side:hover{
+.bottom-line:hover{
   background-color: rgba(0,0,0,0.12);
 }

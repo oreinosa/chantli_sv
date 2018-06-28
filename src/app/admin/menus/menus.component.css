@@ -1,41 +1,5 @@
-
-/* .mat-table, .mat-paginator{
-  overflow: auto;
-  background-color: inherit;
-}  */
-/* .mat-header-cell{
-  color: grey!important;
-} */
-
-/* .mat-icon{
-  margin-right: 10px;
-}
-.active, .mat-list-item:hover{
-  background-color: rgba(0,0,0,0.1);
-}
-a{
-  text-decoration: none;
-}
-a:active{
-  text-decoration: none;
-} */
-.table-container{
-  display: flex;
-  flex-direction: column;
-  max-height: 500px;
-  /* min-width: 300px; */
-  overflow: auto;
-}
-.mat-cell, .mat-header-cell{
-  padding: 0 15px;   
-}
-.mat-cell p {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
 .mat-column-date {
-  flex: 0 0 15%;
+  flex: 0 0 20%;
 }
 .mat-column-products {
   flex: 0 0 50%;
@@ -44,8 +8,11 @@ a:active{
   flex: 0 0 10%;
 }
 .mat-column-actions {
-  flex: 0 0 25%;
+  flex: 0 0 20%;
 }
-.row{
-  width: 100%;
+.mat-cell .row{
+  width: 150%;
+}
+.mat-table{
+  min-width: 700px;
 }

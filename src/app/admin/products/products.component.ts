@@ -6,7 +6,7 @@ import { Product } from '../../shared/classes/product';
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
-  styleUrls: ['./products.component.css']
+  styleUrls: ['./products.component.css', '../admin-table.css']
 })
 export class ProductsComponent extends Table<Product>  {
   public displayedColumns = ['name', 'description', 'imageURL', 'category', 'actions'];

@@ -16,7 +16,7 @@ export class OrdersService {
 
   filteredOrders = new BehaviorSubject<Order[]>([]);
 
-  payingUser = new BehaviorSubject<User>(null);
+  payingUser = new Subject<User>();
 
   constructor(
     private fs: AngularFirestore

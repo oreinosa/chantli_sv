@@ -9,6 +9,7 @@ import { PaymentComponent } from './payment/payment.component';
 import { MatTableModule, MatSortModule, MatPaginatorModule } from '@angular/material';
 import { FiltersComponent } from './filters/filters.component';
 import { OrdersModeComponent } from './orders-mode/orders-mode.component';
+import { WorkplacesService } from 'src/app/admin/workplaces/workplaces.service';
 
 @NgModule({
   imports: [
@@ -18,7 +19,13 @@ import { OrdersModeComponent } from './orders-mode/orders-mode.component';
     MatPaginatorModule,
     OrdersRoutingModule
   ],
-  declarations: [OrdersComponent, PackageComponent, PaymentComponent, FiltersComponent, OrdersModeComponent],
-  providers: [OrdersService]
+  declarations: [
+    OrdersComponent,
+    PackageComponent,
+    PaymentComponent,
+    FiltersComponent,
+    OrdersModeComponent
+  ],
+  providers: [OrdersService, WorkplacesService]
 })
 export class OrdersModule { }

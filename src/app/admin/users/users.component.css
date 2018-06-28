@@ -16,18 +16,6 @@
 .mat-column-actions {
   flex: 0 0 10%;
 }
-.mat-table, .mat-paginator{
-  overflow: auto;
-  background-color: inherit;
-}
-.mat-cell,  .mat-paginator {
-  /* color: white!important; */
-}
-.mat-header-cell{
-  color: grey!important;
-}
-.mat-cell, .mat-header-cell {
-  overflow: hidden;
-  word-wrap: break-word;
-  padding: 0 15px;   
+.mat-table{
+  min-width: 875px;
 }

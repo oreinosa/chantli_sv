@@ -1,3 +1,4 @@
+import { MenusService } from './../admin/menus/menus.service';
 import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 
@@ -25,6 +26,6 @@ import { NewOrderComponent } from './new-order/new-order.component';
     Step4Component,
     NewOrderComponent
   ],
-  providers: [OrderService]
+  providers: [OrderService, MenusService]
 })
 export class OrderModule { }

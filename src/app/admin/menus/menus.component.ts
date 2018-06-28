@@ -6,7 +6,7 @@ import { MenusService } from './menus.service';
 @Component({
   selector: 'app-menus',
   templateUrl: './menus.component.html',
-  styleUrls: ['./menus.component.css']
+  styleUrls: ['./menus.component.css', '../admin-table.css']
 })
 export class MenusComponent extends Table<Menu>  {
   public displayedColumns = ['date', 'products', 'price', 'actions'];

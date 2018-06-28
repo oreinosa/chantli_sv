@@ -9,7 +9,7 @@ import { tap, takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'app-package',
   templateUrl: './package.component.html',
-  styleUrls: ['./package.component.scss']
+  styleUrls: ['./package.component.scss', '../../admin/admin-table.css']
 })
 export class PackageComponent implements OnInit, AfterViewInit, OnDestroy {
   private ngUnsubscribe = new Subject();

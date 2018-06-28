@@ -1,59 +1,65 @@
 <mat-card>
-	<div class="table-container">
-		<div class="table-header">
-			<div class="row">
-				<div class="col-12">
-					<button mat-button type='button' [routerLink]='["agregar"]'>
-            <i class="material-icons">add</i>
-            Agregar categoría
-          </button>
-				</div>
-			</div>
-		</div>
+	<mat-card-header>
+		<mat-card-title>
+			<h3>Categorías</h3>
+		</mat-card-title>
+	</mat-card-header>
+	<mat-card-content>
 		<div class="row">
+			<div class="col-12">
+				<button mat-button type='button' [routerLink]='["agregar"]'>
+					<i class="material-icons">add</i>
+					Agregar categoría
+				</button>
+			</div>
 			<div class="col-12 col-sm-8 col-md-6 col-lg-4 mx-auto text-center my-2">
 				<router-outlet></router-outlet>
 			</div>
+			<div class="col-12">
+				<div class='table-container'>
+
+					<mat-table #table matSort [dataSource]="dataSource" class='data-table'>
+						<!-- Name Column -->
+						<ng-container matColumnDef="name">
+							<mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+							<mat-cell *matCellDef="let element">
+								{{element.name}}
+							</mat-cell>
+						</ng-container>
+
+						<!-- Description Column -->
+						<ng-container matColumnDef="description">
+							<mat-header-cell *matHeaderCellDef> Descripción </mat-header-cell>
+							<mat-cell *matCellDef="let element">
+								{{ element.description }}
+							</mat-cell>
+						</ng-container>
+
+						<!-- Actions Column -->
+						<ng-container matColumnDef="actions">
+							<mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+							<mat-cell *matCellDef="let element">
+								<button mat-icon-button type='button' [routerLink]='["editar",element.id]' matTooltip="Editar" (click)='onAction(element)'>
+									<mat-icon>update</mat-icon>
+								</button>
+								<button mat-icon-button type='button' [routerLink]='["borrar",element.id]' matTooltip="Borrar" (click)='onAction(element)'>
+									<mat-icon>delete</mat-icon>
+								</button>
+							</mat-cell>
+						</ng-container>
+
+						<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+						<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+					</mat-table>
+					<ng-container *ngIf='loaded && !dataSource?.data?.length'>
+						<h5 class='text-center'>No hay categorías.</h5>
+					</ng-container>
+					<ng-container *ngIf='!loaded'>
+						<mat-spinner class="mx-auto my-3"></mat-spinner>
+					</ng-container>
+				</div>
+				<mat-paginator [length]='dataSource?.data?.length' [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+			</div>
 		</div>
-		<mat-table #table matSort [dataSource]="dataSource" class='data-table'>
-			<!-- Name Column -->
-			<ng-container matColumnDef="name">
-				<mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-				<mat-cell *matCellDef="let element">
-					{{element.name}}
-				</mat-cell>
-			</ng-container>
-
-			<!-- Description Column -->
-			<ng-container matColumnDef="description">
-				<mat-header-cell *matHeaderCellDef> Descripción </mat-header-cell>
-				<mat-cell *matCellDef="let element">
-					{{ element.description }}
-				</mat-cell>
-			</ng-container>
-
-			<!-- Actions Column -->
-			<ng-container matColumnDef="actions">
-				<mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
-				<mat-cell *matCellDef="let element">
-				  <button mat-icon-button type='button' [routerLink]='["editar",element.id]' matTooltip="Editar" (click)='onAction(element)'>
-            <mat-icon>update</mat-icon>
-            </button>
-					<button mat-icon-button type='button' [routerLink]='["borrar",element.id]' matTooltip="Borrar" (click)='onAction(element)'>
-            <mat-icon>delete</mat-icon>
-          </button>
-				</mat-cell>
-			</ng-container>
-
-			<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-			<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-		</mat-table>
-		<ng-container *ngIf='loaded && !dataSource?.data?.length'>
-			<h5 class='text-center'>No hay categorías.</h5>
-		</ng-container>
-		<ng-container *ngIf='!loaded'>
-			<mat-spinner class="mx-auto my-3"></mat-spinner>
-		</ng-container>
-		<mat-paginator [length]='dataSource?.data?.length' [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
-	</div>
+	</mat-card-content>
 </mat-card>
