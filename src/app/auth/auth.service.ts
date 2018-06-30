@@ -30,14 +30,14 @@ export class AuthService {
     this.user = this.afAuth
       .authState
       .pipe(
-        switchMap(user => {
-          // console.log('Firebase user : ', user);
-          if (user) {
-            const doc = this.afs.collection<User>('usuarios').doc<User>(user.uid);
-            return doc.valueChanges();
-          }
-          return of(null);
-        })
+      switchMap(user => {
+        // console.log('Firebase user : ', user);
+        if (user) {
+          const doc = this.afs.collection<User>('usuarios').doc<User>(user.uid);
+          return doc.valueChanges();
+        }
+        return of(null);
+      })
       );
   }
 
@@ -53,7 +53,7 @@ export class AuthService {
     return this.afAuth.auth
       .signInWithEmailAndPassword(signIn.email, signIn.password)
       .catch(e => this.notificationsService.show('Correo electrónico o contraseaña incorrecta', 'Error', 'danger'))
-      .then(credential => this.notificationsService.show(`Hola, ${credential.user.displayName}`, 'Autenticación', 'info'));
+      .then((credential: firebase.auth.UserCredential) => this.notificationsService.show(`Hola, ${credential.user.displayName}`, 'Autenticación', 'info'));
   }
 
   signInSocial(provider: string) {
@@ -67,9 +67,9 @@ export class AuthService {
     return this.afAuth.auth
       .signInWithPopup(_provider)
       .then(
-        credential => this.updateUserData(credential.user)
-          .then(() => this.notificationsService.show(`Hola, ${credential.user.displayName}`, 'Autenticación', 'info')),
-        e => console.log(e))
+      credential => this.updateUserData(credential.user)
+        .then(() => this.notificationsService.show(`Hola, ${credential.user.displayName}`, 'Autenticación', 'info')),
+      e => console.log(e))
   }
 
   signUp(signUp: SignUp) {

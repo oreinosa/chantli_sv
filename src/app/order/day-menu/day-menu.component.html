@@ -1,8 +1,8 @@
 <ng-container *ngIf='(menu.id | getMenuProducts | async) as products; else loadingProducts'>
-  <mat-card [ngClass]='DOW' *ngIf='(menu.date | date:"EEEE" | dow) as DOW'>
+  <mat-card [ngClass]='DOW' *ngIf='(menu.date.toDate() | date:"EEEE" | dow) as DOW'>
     <mat-card-header>
       <mat-card-title>
-        <h2>Menú {{ menuNumber }}</h2>
+        <h2>Menú {{ menuNumber }} de {{ DOW }} </h2>
       </mat-card-title>
       <mat-card-subtitle>
         <h3>Precio : {{ menu.price | currency }}</h3>

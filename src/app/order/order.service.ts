@@ -49,7 +49,6 @@ export class OrderService {
         map(actions => {
           return actions.map(a => {
             let data = a.payload.doc.data();
-            data.date = data.date.toDate();
             const id = a.payload.doc.id;
             return { id, ...data } as Menu;
           });

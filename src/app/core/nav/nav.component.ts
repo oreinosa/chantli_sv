@@ -39,11 +39,12 @@ export class NavComponent {
         if (user) {
           switch (user.role) {
             case 'Admin':
-              actions.push(
-                { route: 'admin', label: 'Admin', icon: 'build' },
-              );
+              // actions.push(
+              //   { route: 'admin', label: 'Admin', icon: 'build' },
+              // );
               links.push(
-                { route: 'ordenes', label: 'Ordenes', icon: 'assignment' }
+                { route: 'ordenes', label: 'Ordenes', icon: 'assignment' },
+                { route: 'admin', label: 'Admin', icon: 'build' },                
               );
             case 'Cliente':
               actions.push(

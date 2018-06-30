@@ -52,12 +52,16 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
       <mat-cell *matCellDef="let element">
-        acciones
+        <mat-form-field class="full-width">
+          <mat-select placeholder='Estado' [value]='element.status' (selectionChange)='onUpdateStatus(element.id, $event.value)'>
+            <mat-option *ngFor='let status of statuses' [value]='status'>{{ status }}</mat-option>
+          </mat-select>
+        </mat-form-field>
       </mat-cell>
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]='row.status === "Cancelado" ? "cancelled" : ""'></mat-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]='(row.status === "Cancelado" || row.status === "Cancelado (reembolso)") ? "cancelled" : ""'></mat-row>
   </mat-table>
 </div>
 <mat-paginator #paginator [pageSize]="20" [pageSizeOptions]="[10, 20, 40, 100]" [showFirstLastButtons]="true">

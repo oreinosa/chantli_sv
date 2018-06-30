@@ -3,13 +3,13 @@ const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 
 exports.aggregateBalance = functions.firestore
-  .document('orders/{orderId}')
+  .document('ordenes/{orderId}')
   .onCreate(orderDoc => {
     const order = orderDoc.data();
     const userId = order.user.id;
     const price = order.price;
     // ref to the parent document
-    const userRef = admin.firestore().collection('users').doc(userId)
+    const userRef = admin.firestore().collection('usuarios').doc(userId)
 
     // get all comments and aggregate
     return userRef
@@ -42,7 +42,7 @@ exports.aggregateBalance = functions.firestore
   });
 
 exports.notifyArrival = functions.firestore
-  .document('/arrivals/{arrivalId}')
+  .document('/llegadas/{arrivalId}')
   .onWrite((change, context) => {
 
     const arrival = change.after.data();

@@ -29,20 +29,20 @@ export class OrderComponent implements OnInit {
   ngOnInit() {
     this.orderService
       .getWeekMenus().pipe(
-        takeUntil(this.ngUnsubscribe),
-        tap(menus => console.log(menus)),
-        tap(menus => this.menus = menus),
+      takeUntil(this.ngUnsubscribe),
+      tap(menus => console.log(menus)),
+      tap(menus => this.menus = menus),
     )
       .subscribe(data => {
         const date = new Date();
         this.dow = date.getDay();
-        this.selectedMenus = this.menus.filter(menu => menu.date.getDay() === this.dow);
+        this.selectedMenus = this.menus.filter(menu => menu.date.toDate().getDay() === this.dow);
       });
   }
 
   onSelectDay(dow: number) {
     this.dow = dow;
-    this.selectedMenus = this.menus.filter(menu => menu.date.getDay() === this.dow);
+    this.selectedMenus = this.menus.filter(menu => menu.date.toDate().getDay() === this.dow);
   }
 
   onOrderMenu(menu: Menu) {

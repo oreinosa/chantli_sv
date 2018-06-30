@@ -17,7 +17,8 @@
       <button mat-button type='button' (click)='onPay()'>Pagar</button>
     </div>
     <div class="col-12 text-center">
-      <h6>Balance total : {{ payingUser.balance | currency }}</h6>
+      <h6 *ngIf='payingUser?.credit'>Crédito : {{ payingUser.credit | currency }}</h6>
+      <h6>Total pendiente : {{ payingUser.balance | currency }}</h6>
     </div>
   </ng-container>
   <ng-template #loadingPayment>
@@ -77,7 +78,7 @@
     </ng-container>
 
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]='row.status === "Cancelado" ? "cancelled" : ""' [matTooltip]='row?.id'></mat-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]='row.status === "Cancelado" ? "cancelled" : ""'></mat-row>
   </mat-table>
   <ng-container *ngIf='!payingUser'>
     <h4 class='text-center'>¡Por favor selecciona al usuario que va a pagar!</h4>

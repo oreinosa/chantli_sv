@@ -1,19 +1,27 @@
+@import 'src/_colors';
 .menu-products{
   word-wrap: break-word;
 }
+.mat-card{
+  background-color: $accent;
+  color: white!important;
+  .mat-card-subtitle{
+    color: white!important;  
+  }
+}
 
-.Lunes{
-  background-color: #B2DFDB;
-}
-.Martes{
-  background-color: #B2EBF2;
-}
-.Miércoles{
-  background-color: #B3E5FC;
-}
-.Jueves{
-  background-color: #BBDEFB;
-}
-.Viernes{
-  background-color: #C8E6C9;
-}
+// .Lunes{
+//   background-color: #B2DFDB;
+// }
+// .Martes{
+//   background-color: #B2EBF2;
+// }
+// .Miércoles{
+//   background-color: #B3E5FC;
+// }
+// .Jueves{
+//   background-color: #BBDEFB;
+// }
+// .Viernes{
+//   background-color: #C8E6C9;
+// }

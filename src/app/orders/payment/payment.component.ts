@@ -42,7 +42,17 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log(user);
         this.payingUser = user;
       }),
-      switchMap(user => this.ordersService.filteredOrders)
+      filter(user => !!user),
+      switchMap(user => this.ordersService.filteredOrders),
+      map(orders => orders.filter(order => {
+        switch (order.status) {
+          case 'Cancelado':
+          case 'Cancelado (reembolso)':
+            return false;
+        }
+        return true;
+      })),
+      takeUntil(this.ngUnsubscribe)
       )
       .subscribe(orders => this.dataSource.data = this.payingUser ? orders : []);
   }

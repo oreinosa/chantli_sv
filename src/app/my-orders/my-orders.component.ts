@@ -7,22 +7,25 @@ import { AuthService } from '../auth/auth.service';
 import { User } from '../shared/classes/user';
 import { Order } from '../shared/classes/order';
 
-import { takeUntil, tap, switchMap, startWith } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { take, takeUntil, tap, switchMap, startWith } from 'rxjs/operators';
+import { Subject, Observable, BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-my-orders',
   templateUrl: './my-orders.component.html',
-  styleUrls: ['./my-orders.component.css', '../admin/admin-table.css']
+  styleUrls: ['./my-orders.component.scss', '../admin/admin-table.css']
 })
 export class MyOrdersComponent implements OnInit, OnDestroy {
   ngUnsubscribe = new Subject();
   dataSource = new MatTableDataSource<Order>();
-  displayedColumns = ["products", "date", "price", "status", "actions"]
+  displayedColumns = ["products", "date", "price", "status", "paid", "actions"]
   loaded = false;
 
+  today = new Date();
+  thisHour: number;
+
   user: User;
-  limitCtrl = new FormControl();
+  limitSubject: BehaviorSubject<number>;
   limits: number[] = [];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -33,58 +36,57 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    // this.$myOrders = 
+    this.thisHour = this.today.getHours();
+    
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
 
-    // this.auth
-    //   .user.pipe(
-    //     takeUntil(this.ngUnsubscribe),
-    //     tap(user => {
-    //       console.log(user);
-    //       this.user = user
-    //     }),
-    //     switchMap(() => this.limit.asObservable()),
-    //     takeUntil(this.ngUnsubscribe),
-    //     tap(limit => console.log('limit to ', limit)),
-    //     switchMap(limit => this.myOrdersService.getMyOrders(limit, this.user)),
-    //     takeUntil(this.ngUnsubscribe),
-    //     tap(orders => {
-    //       console.log(orders);
-    //       this.loaded = false;
-    //       this.dataSource.data = orders;
-    //     })
-    //   )
-    //   .subscribe(() => this.loaded = true);
-
-
     this.auth
       .user.pipe(
-        takeUntil(this.ngUnsubscribe),
-        tap(user => {
-          console.log(user);
-          this.user = user;
-          this.limits = [1, 3, 5];
-        }))
-      .subscribe(() => this.limitCtrl.setValue(10));
-
-    this.limitCtrl.valueChanges.pipe(
+      take(1),
+      tap(user => {
+        console.log(user);
+        this.user = user;
+        this.limits = [5, 10, 30];
+        this.limitSubject = new BehaviorSubject<number>(5)
+      }),
+      switchMap(() => this.limitSubject),
       takeUntil(this.ngUnsubscribe),
-      tap(limit => console.log('limit to ', limit)),
+      tap(limit => {
+        console.log('limit to ', limit);
+        this.loaded = false;
+      }),
       switchMap(limit => this.myOrdersService.getMyOrders(limit, this.user)),
       takeUntil(this.ngUnsubscribe),
       tap(orders => {
         console.log(orders);
-        this.loaded = false;
         this.dataSource.data = orders;
       })
-    )
+      )
       .subscribe(() => this.loaded = true);
+
+    // this.limitSubject.pipe(
+    //   takeUntil(this.ngUnsubscribe),
+    //   tap(limit => console.log('limit to ', limit)),
+    //   switchMap(limit => this.myOrdersService.getMyOrders(limit, this.user)),
+    //   takeUntil(this.ngUnsubscribe),
+    //   tap(orders => {
+    //     console.log(orders);
+    //     this.loaded = false;
+    //     this.dataSource.data = orders;
+    //   })
+    // )
+    //   .subscribe(() => this.loaded = true);
+
   }
 
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  onSelectLimit(limit: number) {
+    this.limitSubject.next(limit);
   }
 
 }

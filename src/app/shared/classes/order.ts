@@ -1,5 +1,5 @@
 import { User } from './user';
-import { Timestamp } from '@firebase/firestore-types';
+import * as firebase from 'firebase';
 
 export class Order {
   constructor(
@@ -14,8 +14,8 @@ export class Order {
     public status?: string,
     public user?: User,
     public date?: {
-      for?: Timestamp,
-      by?: Timestamp
+      for?: firebase.firestore.Timestamp,
+      by?: firebase.firestore.Timestamp
     },
     public paid?: any
   ) { }

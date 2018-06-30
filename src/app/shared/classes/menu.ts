@@ -1,12 +1,12 @@
 import { Product } from './product';
-import { Timestamp } from '@firebase/firestore-types';
+import * as firestore from 'firebase/firestore';
 
 export class Menu {
   constructor(
     public id?: string,
-    public date?: Timestamp,
+    public date?: firestore.Timestamp,
     public products?: Product[],
-    public price?: number, 
+    public price?: number,
     public available: boolean = false
-  ){}
+  ) { }
 }

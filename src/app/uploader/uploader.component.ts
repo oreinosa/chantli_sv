@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UploaderService } from './uploader.service';
 import { Subject } from 'rxjs';
-import { UploadTaskSnapshot } from '@firebase/storage-types';
+import { UploadTaskSnapshot } from 'angularfire2/storage/interfaces';
 
 @Component({
   selector: 'app-uploader',

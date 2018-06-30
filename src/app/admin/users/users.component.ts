@@ -12,9 +12,6 @@ import { MatPaginator, MatSort, Sort } from '@angular/material';
 export class UsersComponent extends Table<User> {
   public displayedColumns = ['id', 'name', 'email', 'role', 'workplace', 'actions'];
 
-  // @ViewChild(MatPaginator) paginator: MatPaginator;
-  // @ViewChild(MatSort) sort: MatSort;
-
   constructor(
     public usersService: UsersService,
   ) {
@@ -23,17 +20,17 @@ export class UsersComponent extends Table<User> {
 
   ngAfterViewInit() { }
 
-  sortData(sort: Sort) {
+  sortData() {
     // console.log(sort);
     const data = this.data.slice();
-    if (!sort || !sort.active || sort.direction == '') {
+    if (!this.sort || !this.sort.active || this.sort.direction == '') {
       this.dataSource.data = data;
       return;
     }
 
     this.dataSource.data = data.sort((a, b) => {
-      let isAsc = sort.direction == 'asc';
-      switch (sort.active) {
+      let isAsc = this.sort.direction == 'asc';
+      switch (this.sort.active) {
         case 'name': return this.compare(a.name.toLowerCase(), b.name.toLowerCase(), isAsc);
         case 'email': return this.compare(a.email.toLowerCase(), b.email.toLowerCase(), isAsc);
         case 'role': return this.compare(a.role.toLowerCase(), b.role.toLowerCase(), isAsc);

@@ -18,6 +18,14 @@ export class PackageComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
+  statuses = [
+    "Nueva orden",
+    "Empacado",
+    "Entregado",
+    "Cancelado",
+    "Cancelado (reembolso)"
+  ];
+
   public displayedColumns = ['user', 'principal', 'acompanamientos', 'bebida', "date", 'actions'];
 
   constructor(
@@ -28,9 +36,9 @@ export class PackageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.ordersService
       .filteredOrders
       .pipe(
-        takeUntil(this.ngUnsubscribe),
-        tap(orders => console.log(orders)),
-        tap(orders => this.orders = orders)
+      takeUntil(this.ngUnsubscribe),
+      tap(orders => console.log(orders)),
+      tap(orders => this.orders = orders)
       )
       .subscribe(orders => this.sortData());
   }
@@ -65,6 +73,10 @@ export class PackageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   compare(a, b, isAsc) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+  onUpdateStatus(orderId: string, status: string) {
+    this.ordersService.onUpdateStatus(orderId, status);
   }
 
 }

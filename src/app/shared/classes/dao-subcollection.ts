@@ -2,7 +2,6 @@ import { Observable, BehaviorSubject } from "rxjs";
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { DAO } from "./dao";
 import { NotificationsService } from "../../notifications/notifications.service";
-import { DocumentReference } from "@firebase/firestore-types";
 import * as firebase from 'firebase';
 import { map } from "rxjs/operators";
 

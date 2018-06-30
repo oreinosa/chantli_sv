@@ -61,8 +61,8 @@ export class FiltersComponent implements OnInit, OnDestroy {
     this.ordersService
       .getUsers()
       .pipe(
-        takeUntil(this.ngUnsubscribe),
-        tap(users => this.selectUser())
+      takeUntil(this.ngUnsubscribe),
+      tap(users => this.selectUser())
       )
       // .do(users => console.log(users))
       .subscribe(users => this.allUsers = users);
@@ -70,7 +70,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
     this.workplacesService
       .getAll()
       .pipe(
-        take(1)
+      take(1)
       )
       // .do(workplaces => console.log(workplaces))
       .subscribe(workplaces => this.workplaces = workplaces);
@@ -78,28 +78,28 @@ export class FiltersComponent implements OnInit, OnDestroy {
     this.filteredUsers = this.selectedUserCtrl
       .valueChanges
       .pipe(
-        startWith(''),
-        map(user => user ? this.filterUsers(user) : this.users.slice())
+      startWith(''),
+      map(user => user ? this.filterUsers(user) : this.users.slice())
       );
 
     this.monthFilter = new BehaviorSubject(currentMonth);
 
     this.monthFilter
       .pipe(
-        takeUntil(this.ngUnsubscribe),
-        map(month => {
-          let dateRange: DateRange = {
-            from: this.getFirstDayMonth(month),
-            to: this.getLastDayMonth(month)
-          };
-          return dateRange;
-        }),
-        switchMap(({ from, to }) => this.ordersService.getOrders(from, to)),
-        takeUntil(this.ngUnsubscribe),
-        // .map(orders => orders.sort((a, b) => this.compare(a.date.by, b.date.by, false))),
-        // .map(orders => orders.sort((a, b) => this.compare(a.date.for, b.date.for, false))),
-        // .map(orders => orders.sort((a, b) => this.compare(a.products.principal, b.products.principal, true))),
-        tap(orders => console.log('Orders : ', orders))
+      takeUntil(this.ngUnsubscribe),
+      map(month => {
+        let dateRange: DateRange = {
+          from: this.getFirstDayMonth(month),
+          to: this.getLastDayMonth(month)
+        };
+        return dateRange;
+      }),
+      switchMap(({ from, to }) => this.ordersService.getOrders(from, to)),
+      takeUntil(this.ngUnsubscribe),
+      // .map(orders => orders.sort((a, b) => this.compare(a.date.by, b.date.by, false))),
+      // .map(orders => orders.sort((a, b) => this.compare(a.date.for, b.date.for, false))),
+      // .map(orders => orders.sort((a, b) => this.compare(a.products.principal, b.products.principal, true))),
+      tap(orders => console.log('Orders : ', orders))
       )
       .subscribe(orders => {
         this.allOrders = orders;
@@ -191,7 +191,14 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   filterByCancelado() {
     if (!this.includeCancelados) {
-      this.filteredOrders = this.filteredOrders.filter(order => order.status !== 'Cancelado');
+      this.filteredOrders = this.filteredOrders.filter(order => {
+        switch (order.status) {
+          case 'Cancelado':
+          case 'Cancelado (reembolso)':
+            return false;
+        }
+        return true;
+      });
     }
   }
 

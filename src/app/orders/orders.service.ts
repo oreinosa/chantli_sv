@@ -84,9 +84,9 @@ export class OrdersService {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
-  onUpdateStatus(order: Order, status: string) {
-    console.log(order.id, ' set to ', status);
-    return this.ordersCol.doc<Order>(order.id).update({ status: status });
+  onUpdateStatus(id: string, status: string) {
+    console.log(id, ' set to ', status);
+    return this.ordersCol.doc<Order>(id).update({ status: status });
   }
 
   updateBalance(id: string, balance: number, credit: number) {

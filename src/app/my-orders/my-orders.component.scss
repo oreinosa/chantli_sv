@@ -1,20 +1,25 @@
+@import 'src/_colors';
+
 .mat-cell{
   display: block;
 }
 .mat-column-products{
-  flex: 0 0 45%;
+  flex: 0 0 25%;
 }
 .mat-column-date{
-  flex: 0 0 15%;
+  flex: 0 0 25%;
 }
 .mat-column-price{
   flex: 0 0 10%;
 }
 .mat-column-status{
+  flex: 0 0 15%;
+}
+.mat-column-paid{
   flex: 0 0 10%;
 }
 .mat-column-actions{
-  flex: 0 0 20%;
+  flex: 0 0 15%;
 }
 .mat-table{
   min-width: 800px;
@@ -22,4 +27,10 @@
 }
 .table-container{
   min-height: 215px;
+}
+.paid{
+  color: $success;
+}
+.pending{
+  color: $danger;  
 }

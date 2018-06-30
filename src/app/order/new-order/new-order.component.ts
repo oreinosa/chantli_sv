@@ -1,3 +1,4 @@
+import * as firebase from 'firebase';
 import { Product } from './../../shared/classes/product';
 import { NewOrder } from './../../shared/classes/new-order';
 import { Component, OnInit } from '@angular/core';
@@ -35,23 +36,23 @@ export class NewOrderComponent implements OnInit {
     this.authService
       .user
       .pipe(
-        take(1)
+      take(1)
       )
       .subscribe(user => this.user = user);
 
     this.orderService
       .menuSubject
       .pipe(
-        take(1),
-        tap(menu => menu ? false : this.router.navigate(['menu']))
+      take(1),
+      tap(menu => menu ? false : this.router.navigate(['menu']))
       )
       .subscribe(menu => this.menu = menu);
 
     this.route
       .paramMap
       .pipe(
-        takeUntil(this.ngUnsubscribe),
-        map(params => +params.get('step'))
+      takeUntil(this.ngUnsubscribe),
+      map(params => +params.get('step'))
       )
       .subscribe(step => this.step = step ? step : 1);
 
@@ -78,7 +79,7 @@ export class NewOrderComponent implements OnInit {
   onConfirm(tortillas: number, price: number) {
     let products = this.newOrder.products;
     let acompanamientos: string[] = products.acompanamientos.map(product => product.name);
-    let orderedBy = new Date();
+    let orderedBy = firebase.firestore.Timestamp.fromDate(new Date());
     // orderedBy.setUTCHours(12, 0, 0);
 
     let order: Order = {

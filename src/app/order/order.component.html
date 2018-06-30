@@ -12,13 +12,20 @@
       <div class="col-12 dow">
         <mat-card class='mat-elevation-z0'>
           <mat-card-content class='text-center d-flex'>
-            <span class="toolbar-flex"></span>
-            <nav mat-tab-nav-bar>
-              <a mat-tab-link *ngFor="let $dow of DOW;let i=index" (click)='onSelectDay(i+1)' [ngClass]='i+1 === dow ? "active" : ""'>
-                {{ $dow | capitalize }}
-              </a>
-            </nav>
-            <span class="toolbar-flex"></span>
+            <span class="toolbar-flex">
+              
+              </span>              
+            <ng-container>
+                <nav mat-tab-nav-bar>
+                  <a mat-tab-link *ngFor="let $dow of DOW;let i=index" (click)='onSelectDay(i+1)' [ngClass]='i+1 === dow ? "active" : ""'>
+                    {{ $dow | capitalize }}
+                  </a>
+                </nav>
+            </ng-container>
+            <span class="toolbar-flex">
+
+            </span>
+            
           </mat-card-content>
         </mat-card>
       </div>
@@ -29,7 +36,7 @@
               <!-- {{ selectedMenu | json }} -->
               <ng-container *ngFor='let selectedMenu of selectedMenus;last as isLast;let i=index'>
                 <div class="col-12 menu-container" [ngClass]='selectedMenus.length > 1 ? "col-md-6" : "col-md-10 offset-md-1 col-lg-8 offset-lg-2"'>
-                  <app-day-menu [menu]='selectedMenu' [menuNumber]='i+1' (selected)='onOrderMenu($event)'></app-day-menu>
+                  <app-day-menu [menu]='selectedMenu' [menuNumber]='selectedMenus.length > 1 ? (i+1) : undefined' (selected)='onOrderMenu($event)'></app-day-menu>
                   <br *ngIf='!isLast'>
                 </div>
               </ng-container>
