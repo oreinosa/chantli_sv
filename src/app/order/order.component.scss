@@ -29,8 +29,23 @@
   flex: 1 0.5 auto;
 }
 .mat-tab-link.active{
-  border-bottom: 2px solid $success;
+  border-bottom: 2px solid $accent;
+  background-color: rgba(0,0,0,.08);
 }
 .mat-tab-link{
   /* transition: 3s; */
+}
+.mobile  {
+  .active{
+    background-color: inherit;    
+  }
+  nav a{ 
+    font-size: 150%;    
+  }
+  .select-button button .mat-icon{
+    font-size: 50px;        
+    height: 50px;
+    width: 50px;
+    line-height: 50px;
+  }
 }

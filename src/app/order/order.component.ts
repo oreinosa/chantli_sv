@@ -1,5 +1,6 @@
-import { takeUntil, tap, switchMap } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { takeUntil, tap, switchMap, map, share } from 'rxjs/operators';
+import { Subject, Observable } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OrderService } from './order.service';
 import { Menu } from './../shared/classes/menu';
@@ -18,7 +19,14 @@ export class OrderComponent implements OnInit {
   DOW: string[];
   dow: number;
 
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
+    .pipe(
+    map(result => result.matches),
+    share()
+    );
+
   constructor(
+    private breakpointObserver: BreakpointObserver,
     private orderService: OrderService,
     private router: Router,
     private route: ActivatedRoute

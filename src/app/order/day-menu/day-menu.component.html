@@ -2,10 +2,9 @@
   <mat-card [ngClass]='DOW' *ngIf='(menu.date.toDate() | date:"EEEE" | dow) as DOW'>
     <mat-card-header>
       <mat-card-title>
-        <h2>Menú {{ menuNumber }} de {{ DOW }} </h2>
+        <h2>Precio : {{ menu.price | currency }}</h2>
       </mat-card-title>
       <mat-card-subtitle>
-        <h3>Precio : {{ menu.price | currency }}</h3>
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>

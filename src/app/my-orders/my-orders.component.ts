@@ -24,6 +24,11 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
   today = new Date();
   thisHour: number;
 
+  action: {
+    name: string,
+    object: Order
+  };
+
   user: User;
   limitSubject: BehaviorSubject<number>;
   limits: number[] = [];
@@ -37,7 +42,7 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.thisHour = this.today.getHours();
-    
+
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
 
@@ -65,19 +70,10 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => this.loaded = true);
 
-    // this.limitSubject.pipe(
-    //   takeUntil(this.ngUnsubscribe),
-    //   tap(limit => console.log('limit to ', limit)),
-    //   switchMap(limit => this.myOrdersService.getMyOrders(limit, this.user)),
-    //   takeUntil(this.ngUnsubscribe),
-    //   tap(orders => {
-    //     console.log(orders);
-    //     this.loaded = false;
-    //     this.dataSource.data = orders;
-    //   })
-    // )
-    //   .subscribe(() => this.loaded = true);
-
+    this.myOrdersService.action.pipe(
+      takeUntil(this.ngUnsubscribe),
+    )
+      .subscribe(action => this.action = action)
   }
 
   ngOnDestroy() {
@@ -87,6 +83,10 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
 
   onSelectLimit(limit: number) {
     this.limitSubject.next(limit);
+  }
+
+  onAction(name: string, object: Order) {
+    this.myOrdersService.onAction(name, object);
   }
 
 }

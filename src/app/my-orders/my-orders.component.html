@@ -1,94 +1,127 @@
-<mat-card>
-  <mat-card-content>
-    <h1>Mis ordenes</h1>
-    <h6>
-      Mostrando las últimas
-      <mat-form-field style='max-width: 50px;' class='mx-2'>
-        <mat-select (selectionChange)='onSelectLimit($event.value)' [value]='5'>
-          <mat-option *ngFor='let limit of limits' [value]='limit'>{{ limit }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      órdenes
-    </h6>
-    <div class='table-container'>
-      <mat-table #table matSort [dataSource]="dataSource" class='data-table'>
-        <!-- Products Column -->
-        <ng-container matColumnDef="products">
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Productos </mat-header-cell>
-          <mat-cell *matCellDef="let element">
-            <p>{{element.products.principal}}</p>
-            <p *ngFor='let ac of element.products.acompanamientos'>
-              {{ ac }}
-            </p>
-            <p> {{ element.tortillas + 'tortilla' + element.tortillas > 1 ? 's' : '' }} </p>
-          </mat-cell>
-        </ng-container>
+<div class="row">
+  <div class="col-12">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <h1>Mis ordenes</h1>
+        </mat-card-title>
+        <mat-card-subtitle>
+          <h6>
+            <ng-container [ngSwitch]='action.name'>
+              <ng-container *ngSwitchCase='"lista"'>
+                Mostrando las últimas
+                <mat-form-field style='max-width: 50px;' class='mx-2'>
+                  <mat-select (selectionChange)='onSelectLimit($event.value)' [value]='5'>
+                    <mat-option *ngFor='let limit of limits' [value]='limit'>{{ limit }}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                órdenes
+              </ng-container>
+              <ng-container *ngSwitchCase='"editar"'>
+                Editando orden {{ action.object.id }}
+              </ng-container>
+              <ng-container *ngSwitchCase='"cancelar"'>
+                Cancelar orden {{ action.object.id }}
+              </ng-container>
+              <ng-container *ngSwitchCase='"comentario"'>
+                Comentando sobre orden {{ action.object.id }}
+              </ng-container>
+            </ng-container>
+          </h6>
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="action-container row">
+          <div class="col-12 col-md-10 col-lg-6 mr-auto">
+            <router-outlet></router-outlet>
+          </div>
+        </div>
+        <ng-container *ngIf='action.name === "lista"'>
+          <div class='table-container'>
+            <mat-table #table matSort [dataSource]="dataSource" class='data-table'>
+              <!-- Products Column -->
+              <ng-container matColumnDef="products">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Productos </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <p>{{element.products.principal}}</p>
+                  <p *ngFor='let ac of element.products.acompanamientos'>
+                    {{ ac }}
+                  </p>
+                  <p> {{ element.tortillas + 'tortilla' + element.tortillas > 1 ? 's' : '' }} </p>
+                </mat-cell>
+              </ng-container>
 
-        <!-- Date Column -->
-        <ng-container matColumnDef="date">
-          <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
-          <mat-cell *matCellDef="let element">
-            <p> {{ element.date.for.toDate() | spanishDate }}</p>
-            <p>Ordenado el {{ element.date.by.toDate() | spanishDate }}</p>
-          </mat-cell>
-        </ng-container>
+              <!-- Date Column -->
+              <ng-container matColumnDef="date">
+                <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <p> {{ element.date.for.toDate() | spanishDate }}</p>
+                  <p>Ordenado el {{ element.date.by.toDate() | spanishDate }}</p>
+                </mat-cell>
+              </ng-container>
 
-        <!-- Price Column -->
-        <ng-container matColumnDef="price">
-          <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
-          <mat-cell *matCellDef="let element">
-            <p> {{ element.price | currency }} </p>
-          </mat-cell>
-        </ng-container>
+              <!-- Price Column -->
+              <ng-container matColumnDef="price">
+                <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <p> {{ element.price | currency }} </p>
+                </mat-cell>
+              </ng-container>
 
-        <!-- Status Column -->
-        <ng-container matColumnDef="status">
-          <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
-          <mat-cell *matCellDef="let element">
-            <p> {{ element.status }} </p>
-          </mat-cell>
-        </ng-container>
+              <!-- Status Column -->
+              <ng-container matColumnDef="status">
+                <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <p> {{ element.status }} </p>
+                </mat-cell>
+              </ng-container>
 
-        <!-- Paid Column -->
-        <ng-container matColumnDef="paid">
-          <mat-header-cell *matHeaderCellDef> Pago </mat-header-cell>
-          <mat-cell *matCellDef="let element" class='text-center'>
-            <p>
-              <mat-icon [ngClass]='!!element?.paid ? "paid" : "pending"'>{{ !!element?.paid ? "check_circle" : "highlight_off"}}</mat-icon>
-            </p>
-            <p *ngIf='element?.paid?.toDate() as date'>
-              {{ date | spanishDate }}
-            </p>
-          </mat-cell>
-        </ng-container>
+              <!-- Paid Column -->
+              <ng-container matColumnDef="paid">
+                <mat-header-cell *matHeaderCellDef> Pago </mat-header-cell>
+                <mat-cell *matCellDef="let element" class='text-center'>
+                  <p>
+                    <mat-icon [ngClass]='!!element?.paid ? "paid" : "pending"'>{{ !!element?.paid ? "check_circle" : "highlight_off"}}</mat-icon>
+                  </p>
+                  <p *ngIf='element?.paid?.toDate() as date'>
+                    {{ date | spanishDate }}
+                  </p>
+                </mat-cell>
+              </ng-container>
 
-        <!-- Actions Column -->
-        <ng-container matColumnDef="actions">
-          <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
-          <mat-cell *matCellDef="let element">
-            <button type='button' mat-icon-button matTooltip='Editar' *ngIf='element.status === "Nueva orden"'>
-              <mat-icon>edit</mat-icon>
-            </button>
-            <button type='button' mat-icon-button matTooltip='Cancelar' *ngIf='element.status !== "Entregado"'>
-              <mat-icon>cancel</mat-icon>
-            </button>
-            <button type='button' mat-icon-button matTooltip='Comentario' *ngIf='element.status === "Entregado"'>
-              <mat-icon>feedback</mat-icon>
-            </button>
-          </mat-cell>
-        </ng-container>
+              <!-- Actions Column -->
+              <ng-container matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                  <button type='button' mat-icon-button matTooltip='Editar' *ngIf='element.status === "Nueva orden"' [routerLink]='["editar",element.id]'
+                    (click)='onAction("editar",element)'>
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button type='button' mat-icon-button matTooltip='Cancelar' *ngIf='element.status !== "Entregado"' [routerLink]='["cancelar",element.id]'
+                    (click)='onAction("cancelar",element)'>
+                    <mat-icon>cancel</mat-icon>
+                  </button>
+                  <button type='button' mat-icon-button matTooltip='Comentario' *ngIf='element.status === "Entregado"' [routerLink]='["comentario",element.id]'
+                    (click)='onAction("comentar",element)'>
+                    <mat-icon>feedback</mat-icon>
+                  </button>
+                </mat-cell>
+              </ng-container>
 
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-      </mat-table>
-      <ng-container *ngIf='loaded && !dataSource?.data?.length'>
-        <h5 class='text-center'>No tienes ninguna orden
-          <=-(</h5>
-      </ng-container>
-      <ng-container *ngIf='!loaded'>
-        <mat-spinner class="mx-auto my-3"></mat-spinner>
-      </ng-container>
-    </div>
-    <mat-paginator [length]='dataSource?.data?.length' [pageSizeOptions]="[5, 10, 30]" [pageSize]='limitSubject | async'></mat-paginator>
-  </mat-card-content>
-</mat-card>
+              <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+            <ng-container *ngIf='loaded && !dataSource?.data?.length'>
+              <h5 class='text-center'>No tienes ninguna orden
+                <=-(</h5>
+            </ng-container>
+            <ng-container *ngIf='!loaded'>
+              <mat-spinner class="mx-auto my-3"></mat-spinner>
+            </ng-container>
+          </div>
+          <mat-paginator [length]='dataSource?.data?.length' [pageSizeOptions]="[5, 10, 30]" [pageSize]='limitSubject | async'></mat-paginator>
+        </ng-container>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,3 +1,6 @@
+import { takeUntil } from 'rxjs/operators';
+import { Unsubscribe } from './../../shared/classes/unsubscribe';
+import { OrdersService } from './../orders.service';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 interface Mode {
@@ -10,12 +13,14 @@ interface Mode {
   templateUrl: './orders-mode.component.html',
   styleUrls: ['./orders-mode.component.css']
 })
-export class OrdersModeComponent implements OnInit {
+export class OrdersModeComponent extends Unsubscribe implements OnInit {
   @Output() selectMode = new EventEmitter<string>();
   actionIndex: number = 0;
   actions: Mode[];
 
-  constructor() { }
+  constructor(
+    private ordersService: OrdersService
+  ) { super() }
 
   ngOnInit() {
     this.actions = [
@@ -23,6 +28,11 @@ export class OrdersModeComponent implements OnInit {
       { icon: 'attach_money', action: 'pagar' },
       { icon: '', action: 'credito' },
     ];
+
+    this.ordersService.mode.pipe(
+      takeUntil(this.ngUnsubscribe)
+    )
+      .subscribe(mode => console.log(mode));
   }
 
 }

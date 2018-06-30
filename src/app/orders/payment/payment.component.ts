@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { User } from './../../shared/classes/user';
 import { OrdersService } from './../orders.service';
 import { Order } from './../../shared/classes/order';
@@ -5,7 +6,10 @@ import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { Subject } from 'rxjs';
 import { Component, OnInit, AfterViewInit, OnDestroy, Input, ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
-import { takeUntil, tap, map, filter, switchMap } from 'rxjs/operators';
+import { takeUntil, tap, map, filter, switchMap, take, startWith } from 'rxjs/operators';
+import { WorkplacesService } from 'src/app/admin/workplaces/workplaces.service';
+import { Workplace } from 'src/app/shared/classes/workplace';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-payment',
@@ -29,11 +33,33 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   change: number = 0;
   addChange: boolean;
 
+  workplaces: Workplace[];
+  users: User[];
+  selectedWorkplaceCtrl = new FormControl();
+  selectedUserCtrl = new FormControl();
+  filteredUsers: Observable<User[]>;
+
   constructor(
-    private ordersService: OrdersService
+    private ordersService: OrdersService,
+    private workplacesService: WorkplacesService
   ) { }
 
   ngOnInit() {
+
+    this.workplacesService
+      .getAll()
+      .pipe(
+      take(1)
+      )
+      // .do(workplaces => console.log(workplaces))
+      .subscribe(workplaces => this.workplaces = workplaces);
+
+    this.filteredUsers = this.selectedUserCtrl
+      .valueChanges
+      .pipe(
+      startWith(''),
+      map(user => user ? this.filterUsers(user) : this.users.slice())
+      );
 
     this.ordersService
       .getPayingUser().pipe(
@@ -42,8 +68,9 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
         console.log(user);
         this.payingUser = user;
       }),
-      filter(user => !!user),
+      // filter(user => !!user),
       switchMap(user => this.ordersService.filteredOrders),
+      tap(orders => console.log(orders)),
       map(orders => orders.filter(order => {
         switch (order.status) {
           case 'Cancelado':
@@ -65,6 +92,15 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  filterByWorkplace(workplace: string) {
+    this.users = users.filter(user => user.workplace === workplace);
+  }
+
+  private filterUsers(name: string): User[] {
+    return this.users.filter(user =>
+      user.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
   }
 
   /** Whether the number of selected elements matches the total number of rows. */

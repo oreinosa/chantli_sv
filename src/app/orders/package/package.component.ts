@@ -26,6 +26,8 @@ export class PackageComponent implements OnInit, AfterViewInit, OnDestroy {
     "Cancelado (reembolso)"
   ];
 
+  range: string;
+
   public displayedColumns = ['user', 'principal', 'acompanamientos', 'bebida', "date", 'actions'];
 
   constructor(
@@ -51,6 +53,10 @@ export class PackageComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  onSelectRange(range: string) {
+    this.range = range;
   }
 
   sortData() {

@@ -43,6 +43,10 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   selectedRange = 'today';
 
+  mode: string;
+
+  payingUser: User;
+
   @Output('selectedRange') selectRangeEmitter = new EventEmitter<string>();
 
 
@@ -58,11 +62,21 @@ export class FiltersComponent implements OnInit, OnDestroy {
     this.selectedMonth = currentMonth;
     this.selectedYear = currentYear;
 
+    this.ordersService.payingUser.pipe(
+      takeUntil(this.ngUnsubscribe),
+    )
+      .subscribe(user => this.payingUser = user);
+
+    this.ordersService
+      .mode.pipe(
+      takeUntil(this.ngUnsubscribe)
+      )
+      .subscribe(mode => this.mode = mode);
+
     this.ordersService
       .getUsers()
       .pipe(
       takeUntil(this.ngUnsubscribe),
-      tap(users => this.selectUser())
       )
       // .do(users => console.log(users))
       .subscribe(users => this.allUsers = users);
@@ -112,16 +126,16 @@ export class FiltersComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  selectUser() {
-    let userName = this.selectedUserCtrl.value;
-    if (!userName) {
-      this.ordersService.payingUser.next(null);
-      return;
-    }
-    console.log(userName, ' is paying now')
-    let user = this.filterUsers(userName)[0];
-    this.ordersService.payingUser.next(user);
-  }
+  // selectUser() {
+  //   let userName = this.selectedUserCtrl.value;
+  //   if (!userName) {
+  //     this.ordersService.payingUser.next(null);
+  //     return;
+  //   }
+  //   console.log(userName, ' is paying now')
+  //   let user = this.filterUsers(userName)[0];
+  //   this.ordersService.payingUser.next(user);
+  // }
 
   selectMonth() {
     let month = this.selectedMonth;

@@ -40,13 +40,13 @@
         <ng-container *ngIf='users; else loadingUsers'>
           <mat-form-field class='full-width'>
             <input matInput placeholder="Clientes" [matAutocomplete]="auto" [formControl]="selectedUserCtrl">
-            <mat-autocomplete #auto="matAutocomplete" (optionSelected)='selectUser();applyFilters()'>
+            <mat-autocomplete #auto="matAutocomplete" (optionSelected)='applyFilters()'>
               <mat-option *ngFor="let user of filteredUsers | async" [value]="user.name">
                 {{ user.name }}
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-          <button mat-button type='button' (click)='selectedUserCtrl.reset();selectUser();applyFilters();'>
+          <button mat-button type='button' (click)='selectedUserCtrl.reset();applyFilters();'>
             Todos los clientes
           </button>
         </ng-container>

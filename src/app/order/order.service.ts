@@ -31,6 +31,7 @@ export class OrderService {
 
   getWeekMenus(): Observable<Menu[]> {
     const d = new Date();
+    d.setDate(29);
     // console.log('Today date : ', d);
     // console.log('Monday : ', this.getMonday(d));
     // console.log('Friday : ', this.getFriday(d));

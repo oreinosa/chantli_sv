@@ -3,15 +3,13 @@
     <mat-card>
       <mat-card-header>
         <mat-card-title>
-          <h3>Pedidos</h3>
+          <h3>{{ mode === "pagar" ? "Pagando pedidos" : "Pedidos"}}</h3>
         </mat-card-title>
         <mat-card-subtitle>
           <h5>{{ selectedRangeString }}</h5>
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <app-filters (selectedRange)='onSelectRange($event)'></app-filters>
-        <hr>
         <router-outlet></router-outlet>
       </mat-card-content>
     </mat-card>

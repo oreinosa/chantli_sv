@@ -1,5 +1,5 @@
-// import { takeUntil } from 'rxjs/operators/takeUntil';
-// import { Subject } from 'rxjs/Subject';
+import { takeUntil, tap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 import { OrdersService } from './../orders/orders.service';
 import { Order } from './../shared/classes/order';
 import { MatTableDataSource } from '@angular/material';
@@ -12,8 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./orders.component.css']
 })
 export class OrdersComponent implements OnInit {
-  // private ngUnsubscribe = new Subject();
-  selectedRangeString: string = 'Para ahora';
+  private ngUnsubscribe = new Subject();
   mode: string = 'empacar';
 
   constructor(
@@ -23,21 +22,22 @@ export class OrdersComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
+    this.ordersService
+      .mode.pipe(
+      takeUntil(this.ngUnsubscribe),
+      tap(mode => console.log('mode ', mode)),
+      tap(mode => this.mode = mode)
+      )
+      .subscribe(mode => this.router.navigate(['ordenes', mode]));
   }
 
-  // ngOnDestroy() {
-  //   this.ngUnsubscribe.next();
-  //   this.ngUnsubscribe.complete();
-  // }
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
 
   onSelectMode(mode: string) {
-    this.mode = mode;
-    this.router.navigate(['../', mode], { relativeTo: this.route });
-  }
-
-  onSelectRange(selectedRangeString: string) {
-    this.selectedRangeString = selectedRangeString;
+    this.ordersService.onSelectMode(mode);
   }
 
 }

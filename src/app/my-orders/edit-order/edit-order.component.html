@@ -1,0 +1,15 @@
+<mat-card class='mat-elevation-z0'>
+  <mat-card-content>
+    {{ order | json}}
+  </mat-card-content>
+  <mat-card-actions>
+    <button type='button' mat-button>
+      <!-- <mat-icon>edit</mat-icon> -->
+      Editar
+    </button>
+    <button type='button' mat-button (click)='onCancel()'>
+      <!-- <mat-icon>edit</mat-icon> -->
+      Atrás
+    </button>
+  </mat-card-actions>
+</mat-card>

@@ -2,6 +2,7 @@
   <div class='col-12 title'>
     <mat-card class='mat-elevation-z0'>
       <h1>Menu de la semana</h1>
+      <h4>Selecciona el día que quieres ordenar</h4>                  
     </mat-card>
   </div>
   <ng-container *ngIf='menus; else loading'>
@@ -11,21 +12,33 @@
     <ng-template #dowSelection>
       <div class="col-12 dow">
         <mat-card class='mat-elevation-z0'>
-          <mat-card-content class='text-center d-flex'>
-            <span class="toolbar-flex">
-              
-              </span>              
-            <ng-container>
-                <nav mat-tab-nav-bar>
-                  <a mat-tab-link *ngFor="let $dow of DOW;let i=index" (click)='onSelectDay(i+1)' [ngClass]='i+1 === dow ? "active" : ""'>
-                    {{ $dow | capitalize }}
-                  </a>
-                </nav>
-            </ng-container>
-            <span class="toolbar-flex">
-
+          <mat-card-content class='text-center d-flex' [ngClass]='(isHandset$ | async) ? "mobile" : ""'>
+            <span class="toolbar-flex select-button">
+              <button type='button' mat-icon-button (click)='onSelectDay(dow-1)' class='float-right' [disabled]='dow <= 1'>
+                <mat-icon>
+                  arrow_left
+                </mat-icon>
+              </button>
             </span>
-            
+            <nav mat-tab-nav-bar>
+              <ng-container *ngIf='!(isHandset$ | async);else selectedDay'>
+                <a mat-tab-link *ngFor="let $dow of DOW;let i=index" (click)='onSelectDay(i+1)' [ngClass]='i+1 === dow ? "active" : ""'>
+                  {{ $dow | capitalize }}
+                </a>
+              </ng-container>
+              <ng-template #selectedDay>
+                <a mat-tab-link class='active'>
+                  {{ DOW[dow-1] | capitalize }}
+                </a>
+              </ng-template>
+            </nav>
+            <span class="toolbar-flex select-button">
+              <button type='button' mat-icon-button (click)='onSelectDay(dow+1)' class='float-left' [disabled]='dow >= 5'>
+                <mat-icon>
+                  arrow_right
+                </mat-icon>
+              </button>
+            </span>
           </mat-card-content>
         </mat-card>
       </div>
@@ -35,8 +48,8 @@
             <ng-container *ngIf='selectedMenus.length;else menuNotAvailable'>
               <!-- {{ selectedMenu | json }} -->
               <ng-container *ngFor='let selectedMenu of selectedMenus;last as isLast;let i=index'>
-                <div class="col-12 menu-container" [ngClass]='selectedMenus.length > 1 ? "col-md-6" : "col-md-10 offset-md-1 col-lg-8 offset-lg-2"'>
-                  <app-day-menu [menu]='selectedMenu' [menuNumber]='selectedMenus.length > 1 ? (i+1) : undefined' (selected)='onOrderMenu($event)'></app-day-menu>
+                <div class="col-12 mx-auto menu-container" [ngClass]='selectedMenus.length > 1 ? "col-md-10 col-lg-6" : "col-md-10 col-lg-8"'>
+                  <app-day-menu [menu]='selectedMenu' (selected)='onOrderMenu($event)'></app-day-menu>
                   <br *ngIf='!isLast'>
                 </div>
               </ng-container>

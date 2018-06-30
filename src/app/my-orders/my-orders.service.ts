@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Order } from '../shared/classes/order';
 import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { User } from '../shared/classes/user';
 
 @Injectable({
@@ -10,6 +10,8 @@ import { User } from '../shared/classes/user';
 })
 export class MyOrdersService {
   myOrdersCollection: AngularFirestoreCollection<Order>;
+
+  private $action = new BehaviorSubject<{ name: string, object: Order }>({ name: "lista", object: null });
 
   constructor(
     private af: AngularFirestore,
@@ -21,14 +23,28 @@ export class MyOrdersService {
 
     return this.myOrdersCollection
       .snapshotChanges().pipe(
-        map(actions => {
-          // console.log(actions);
-          return actions.map(a => {
-            let data = a.payload.doc.data() as Order;
-            data['id'] = a.payload.doc.id;
-            return data;
-          })
+      map(actions => {
+        // console.log(actions);
+        return actions.map(a => {
+          let data = a.payload.doc.data() as Order;
+          data['id'] = a.payload.doc.id;
+          return data;
         })
+      })
       );
+  }
+
+  get action(): Observable<{ name: string, object: Order }> {
+    return this.$action.asObservable();
+  }
+
+  onAction(name: string, object: Order): void {
+    this.$action.next({ name, object });
+  }
+
+  cancelOrder(id: string) {
+    this.myOrdersCollection.doc(id).update({
+      status: 'Cancelado'
+    });
   }
 }

@@ -17,6 +17,9 @@ export class Order {
       for?: firebase.firestore.Timestamp,
       by?: firebase.firestore.Timestamp
     },
-    public paid?: any
+    public paid?: {
+      by: firebase.firestore.Timestamp,
+      flag: false
+    }
   ) { }
 }

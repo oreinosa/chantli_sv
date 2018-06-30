@@ -1,3 +1,6 @@
+<h5>{{ range }}</h5>
+<app-filters (selectedRange)='onSelectRange($event)'></app-filters>
+<hr>
 <div class="table-container">
   <mat-table #table [dataSource]="dataSource" class='data-table' matSort (matSortChange)="sortData()">
     <!-- Name Column -->

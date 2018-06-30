@@ -1,0 +1,37 @@
+<mat-card class='mat-elevation-z0'>
+  <mat-card-content>
+    <h6>
+      <b> Quieres cancelar esta orden?</b>
+    </h6>
+    <p>
+      Para : {{ order.date.for.toDate() | spanishDate }}
+    </p>
+    <p>
+      <span>
+        {{ order.products.principal }}
+      </span>
+      <span *ngFor='let ac of order.products.acompanamientos; last as isLast; first as isFirst'>
+        , {{ ac }}
+      </span>
+      <span>
+        , {{ order.products.bebida }}
+      </span>
+    </p>
+    <p>
+      <b> Precio : {{ order.price | currency }} </b>
+    </p>
+    <p *ngIf='order.paid'>
+      <i>Debido a que esta orden ya estaba pagada, se te agregará un crédito de {{ order.price | currency }} a tu cuenta</i>
+    </p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button type='button' mat-button>
+      <!-- <mat-icon>edit</mat-icon> -->
+      Cancelar
+    </button>
+    <button type='button' mat-button (click)='onCancel()'>
+      <!-- <mat-icon>edit</mat-icon> -->
+      Atrás
+    </button>
+  </mat-card-actions>
+</mat-card>

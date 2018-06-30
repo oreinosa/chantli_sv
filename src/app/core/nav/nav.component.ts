@@ -15,7 +15,7 @@ export class NavComponent {
   links: Link[];
   actions: Link[];
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
     .pipe(
     map(result => result.matches),
     share()
@@ -44,7 +44,7 @@ export class NavComponent {
               // );
               links.push(
                 { route: 'ordenes', label: 'Ordenes', icon: 'assignment' },
-                { route: 'admin', label: 'Admin', icon: 'build' },                
+                { route: 'admin', label: 'Admin', icon: 'build' },
               );
             case 'Cliente':
               actions.push(
