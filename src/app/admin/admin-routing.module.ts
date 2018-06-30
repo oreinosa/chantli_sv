@@ -14,10 +14,10 @@ const routes: Routes = [
     path: 'admin', component: AdminComponent, canActivate: [AuthGuard, AdminGuard],
     children: [
       { path: 'usuarios', loadChildren: 'src/app/admin/users/users.module#UsersModule' },
-      { path: 'categorias', loadChildren: () => CategoriesModule },
-      { path: 'lugares-de-trabajo', loadChildren: () => WorkplacesModule },
-      { path: 'productos', loadChildren: () => ProductsModule },
-      { path: 'menus', loadChildren: () => MenusModule },
+      { path: 'categorias', loadChildren: 'src/app/admin/categories/categories.module#CategoriesModule' },
+      { path: 'lugares-de-trabajo', loadChildren: 'src/app/admin/workplaces/workplaces.module#WorkplacesModule' },
+      { path: 'productos', loadChildren: 'src/app/admin/products/products.module#ProductsModule' },
+      { path: 'menus', loadChildren: 'src/app/admin/menus/menus.module#MenusModule' },
       { path: '', pathMatch: 'full', redirectTo: 'menus' }
     ]
   },

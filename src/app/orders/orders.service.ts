@@ -39,13 +39,13 @@ export class OrdersService {
     return this.usersCol
       .snapshotChanges()
       .pipe(
-      map(actions => {
-        return actions.map(a => {
-          const data = a.payload.doc.data();
-          const id = a.payload.doc.id;
-          return { id, ...data } as User;
-        });
-      })
+        map(actions => {
+          return actions.map(a => {
+            const data = a.payload.doc.data();
+            const id = a.payload.doc.id;
+            return { id, ...data } as User;
+          });
+        })
       );
   }
 
@@ -67,15 +67,13 @@ export class OrdersService {
     return this.ordersCol
       .snapshotChanges()
       .pipe(
-      map(actions => {
-        return actions.map(a => {
-          let data = a.payload.doc.data();
-          data.date.by = data.date.by.toDate();
-          data.date.for = data.date.for.toDate();
-          const id = a.payload.doc.id;
-          return { id, ...data } as Order;
+        map(actions => {
+          return actions.map(a => {
+            let data = a.payload.doc.data();
+            const id = a.payload.doc.id;
+            return { id, ...data } as Order;
+          })
         })
-      })
       );
   }
 

@@ -7,8 +7,6 @@ import { takeUntil, tap } from 'rxjs/operators';
 export class Table<T> implements OnInit {
   public ngUnsubscribe = new Subject();
   public displayedColumns?: string[];
-  // public sort?: MatSort;
-  // public paginator?: MatPaginator;
   public data: T[];
   public dataSource: MatTableDataSource<T> = new MatTableDataSource();
   public loaded: boolean = false;
@@ -22,9 +20,9 @@ export class Table<T> implements OnInit {
   ) {
   }
 
-  onAction(object?: T, actionName?: string) {
+  onAction(object: T = null, actionName?: string) {
     // console.log('action ', object);
-    object ? this.service.object.next(object) : false;
+    this.service.object.next(object);
     setTimeout(() => {
       window.scroll({
         top: 150,
@@ -34,7 +32,6 @@ export class Table<T> implements OnInit {
   }
 
   ngOnInit() {
-    // this.service.objectSubject.next(null);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
 
@@ -42,20 +39,16 @@ export class Table<T> implements OnInit {
     this.service
       .getAll()
       .pipe(
-      takeUntil(this.ngUnsubscribe),
-      tap(data => console.log('Table data : ', data))
+        takeUntil(this.ngUnsubscribe),
+        tap(data => this.loaded = false)
       )
       .subscribe(data => {
-        this.loaded = false;
+        console.log('Table data : ', data)
         this.data = data;
-        this.dataSource.data.length ? this.sortData(this.sort) : this.sortData(null);
         this.loaded = true;
+        this.sortData();
       });
   }
-
-  // ngAfterViewInit() {
-
-  // }
 
   ngOnDestroy() {
     // console.log('destroy table');
@@ -63,8 +56,8 @@ export class Table<T> implements OnInit {
     this.ngUnsubscribe.complete();
   }
 
-  sortData(sort: Sort) {
-    this.dataSource.data = this.data.slice();
+  sortData() {
+    this.dataSource.data = this.data;
   }
 
   // sortData() {

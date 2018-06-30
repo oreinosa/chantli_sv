@@ -56,7 +56,7 @@ export class PackageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataSource.data = data.sort((a, b) => {
       let isAsc = this.sort.direction == 'asc';
       switch (this.sort.active) {
-        case 'name': case 'principal': case 'bebida': return this.compare(a[this.sort.active], b[this.sort.active], isAsc);
+        case 'user': case 'principal': case 'bebida': return this.compare(a[this.sort.active], b[this.sort.active], isAsc);
         case 'date': return this.compare(a.date.for, b.date.for, isAsc);
         default: return 0;
       }

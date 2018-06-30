@@ -7,9 +7,12 @@ import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
 import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { OrderModule } from './order/order.module';
+import { OrdersModule } from './orders/orders.module';
+import { MyOrdersModule } from './my-orders/my-orders.module';
 
 import { AuthService } from './auth/auth.service';
-import { AuthGuard } from './auth/auth.guard';
 import { AppRoutingModule } from './app-routing.module';
 
 import { AngularFireModule } from 'angularfire2';
@@ -19,16 +22,15 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireFunctionsModule } from 'angularfire2/functions';
 import { environment } from '../environments/environment';
 
-import { NotificationsModule } from './notifications/notifications.module';
-import { OrderModule } from './order/order.module';
-import { WorkplaceGuard } from './auth/workplace.guard';
-import { OrdersModule } from './orders/orders.module';
 import { HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule, SwPush, SwUpdate } from '@angular/service-worker';
 import { MatSnackBar } from '@angular/material';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { AdminGuard } from './auth/admin.guard';
+import { AuthGuard } from './auth/auth.guard';
+import { WorkplaceGuard } from './auth/workplace.guard';
 
 
 @NgModule({
@@ -43,6 +45,7 @@ import { AdminGuard } from './auth/admin.guard';
     SharedModule,
     NotificationsModule,
     CoreModule,
+    MyOrdersModule,
     OrderModule,
     OrdersModule,
     AuthModule,

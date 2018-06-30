@@ -44,7 +44,7 @@
     <ng-container matColumnDef="date">
       <mat-header-cell *matHeaderCellDef mat-sort-header>Para</mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <p> {{ element.date.for | spanishDate }}</p>
+        <p> {{ element.date.for.toDate() | spanishDate }}</p>
       </mat-cell>
     </ng-container>
 

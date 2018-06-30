@@ -28,24 +28,17 @@ export class MenusService extends DAOSubcollection<Menu, Product> {
             data['id'] = a.payload.doc.id;
             return data;
           })
-        }),
-        map(menus => menus.map(menu => { menu.date = menu.date.toDate(); return menu }))
-      );
+        }));
   }
 
   add(menu: Menu, products: Product[]) {
-    // let date = new Date(menu.date);
-    menu.date.setUTCHours(12, 0, 0);
-    // menu.date = date.getTime();
-    console.log(menu.date);
+    menu.date.toDate().setUTCHours(12, 0, 0);
+    console.log(menu.date.toDate());
     return super.add(menu, products);
   }
 
   update(id: string, menu: Menu, products: Product[], deletedProducts: Product[]) {
-    // let date = new Date(menu.date);
-    menu.date.setUTCHours(12, 0, 0);
-    // menu.date = date.getTime();
-    // console.log(date.toISOString());
+    menu.date.toDate().setUTCHours(12, 0, 0);
     return super.update(id, menu, products, deletedProducts);
   }
 

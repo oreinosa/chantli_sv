@@ -1,0 +1,68 @@
+<mat-card>
+  <h1>Mis ordenes</h1>
+  <h6>
+    Mostrando las últimas
+    <mat-form-field style='max-width: 50px;'>
+      <mat-select [formControl]='limitCtrl'>
+        <mat-option *ngFor='let limit of limits' [value]='limit'>{{ limit }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    órdenes
+  </h6>
+  <div class='table-container'>
+    <mat-table #table matSort [dataSource]="dataSource" class='data-table'>
+      <!-- Products Column -->
+      <ng-container matColumnDef="products">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Productos </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <p> {{ element.products | json }}</p>
+          <p> {{ element.tortillas }} </p>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Date Column -->
+      <ng-container matColumnDef="date">
+        <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <p> {{ element.date.for.toDate() | spanishDate }}</p>
+          <p>Ordenado el {{ element.date.by.toDate() | spanishDate }}</p>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Price Column -->
+      <ng-container matColumnDef="price">
+        <mat-header-cell *matHeaderCellDef> Precio </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <p> {{ element.price }} </p>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef> Estado </mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          <p> {{ element.status }} </p>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <ng-container *ngIf='loaded && !dataSource?.data?.length'>
+      <h5 class='text-center'>No tienes ninguna orden
+        <=-(</h5>
+    </ng-container>
+    <ng-container *ngIf='!loaded'>
+      <mat-spinner class="mx-auto my-3"></mat-spinner>
+    </ng-container>
+  </div>
+  <mat-paginator [length]='dataSource?.data?.length' [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</mat-card>

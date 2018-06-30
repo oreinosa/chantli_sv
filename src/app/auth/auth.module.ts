@@ -18,7 +18,9 @@ import { SubscriptionsComponent } from './profile/subscriptions/subscriptions.co
     ProfileComponent,
     InformationComponent,
     SignInComponent,
-    SignUpComponent, ForgotPasswordComponent, SubscriptionsComponent
+    SignUpComponent,
+    ForgotPasswordComponent,
+    SubscriptionsComponent
   ],
 })
 export class AuthModule { }
