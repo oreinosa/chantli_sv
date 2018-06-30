@@ -7,7 +7,7 @@ export interface User {
   photoURL?: string;
   role?: string;
   workplace?: string,
-  balance?: number;
+  debit?: number;
   credit?: number;
   fcmTokens?: { [token: string]: true };
 }
@@ -19,7 +19,7 @@ export class User {
     public photoURL?: string,
     public role?: string,
     public workplace?: string,
-    public balance?: number,
+    public debit?: number,
     public credit?: number,
     public fcmTokens?: { [token: string]: true }
   ) { }

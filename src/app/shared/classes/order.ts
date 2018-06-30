@@ -18,8 +18,8 @@ export class Order {
       by?: firebase.firestore.Timestamp
     },
     public paid?: {
-      by: firebase.firestore.Timestamp,
-      flag: false
+      flag?: boolean,
+      by?: firebase.firestore.Timestamp
     }
   ) { }
 }

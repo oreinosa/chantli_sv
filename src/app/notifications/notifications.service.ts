@@ -8,7 +8,7 @@ export class NotificationsService {
 
   constructor(
   ) {
-    console.log('notifications service');
+    // console.log('notifications service');
   }
 
   show(body: string, title: string = 'Notificación', type: string = 'info', timeout: number = 1500) : void{

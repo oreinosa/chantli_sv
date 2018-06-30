@@ -11,7 +11,7 @@ export class AvatarComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log('USER IS ', this.user);
+    // console.log('USER IS ', this.user);
   }
 
 }

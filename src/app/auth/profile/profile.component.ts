@@ -12,7 +12,7 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
     this.links = [
       { label: 'Información de usuario', route: 'info', icon: 'book' },
-      { label: 'Subscripción de notificaciones', route: 'notificaciones', icon: 'notifications' }
+      // { label: 'Subscripción de notificaciones', route: 'notificaciones', icon: 'notifications' }
     ]; 
   }
 

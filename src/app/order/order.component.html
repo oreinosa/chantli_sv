@@ -2,7 +2,7 @@
   <div class='col-12 title'>
     <mat-card class='mat-elevation-z0'>
       <h1>Menu de la semana</h1>
-      <h4>Selecciona el día que quieres ordenar</h4>                  
+      <h4>Selecciona el día que quieres ordenar</h4>
     </mat-card>
   </div>
   <ng-container *ngIf='menus; else loading'>
@@ -55,17 +55,16 @@
               </ng-container>
             </ng-container>
             <ng-template #menuNotAvailable>
-              <div class="col-12 col-md-6 mx-auto">
+              <div class="col-12 col-md-6 mx-auto" *ngIf='DOW[dow-1] as day'>
                 <mat-card>
                   <mat-card-content>
-                    <h4 class='text-center'>No hay menú para {{ DOW[dow-1] | capitalize }}
+                    <h4 class='text-center'>No hay menú para {{ day | capitalize }}
                       <:-(</h4>
                   </mat-card-content>
                 </mat-card>
               </div>
             </ng-template>
           </div>
-
         </div>
       </ng-container>
     </ng-template>

@@ -48,7 +48,7 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
 
     this.auth
       .user.pipe(
-      take(1),
+      takeUntil(this.ngUnsubscribe),
       tap(user => {
         console.log(user);
         this.user = user;

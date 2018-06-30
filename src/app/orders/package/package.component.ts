@@ -46,7 +46,7 @@ export class PackageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    // this.dataSource.sort = this.sort;
+    this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
 
@@ -66,11 +66,12 @@ export class PackageComponent implements OnInit, AfterViewInit, OnDestroy {
       this.dataSource.data = data;
       return;
     }
-
+    // console.log(this.sort.active);
     this.dataSource.data = data.sort((a, b) => {
       let isAsc = this.sort.direction == 'asc';
       switch (this.sort.active) {
-        case 'user': case 'principal': case 'bebida': return this.compare(a[this.sort.active], b[this.sort.active], isAsc);
+        case 'user': return this.compare(a.user.name, b.user.name, isAsc);
+        case 'principal': case 'bebida': return this.compare(a.products[this.sort.active], b.products[this.sort.active], isAsc);
         case 'date': return this.compare(a.date.for, b.date.for, isAsc);
         default: return 0;
       }
@@ -78,6 +79,7 @@ export class PackageComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   compare(a, b, isAsc) {
+    // console.log(a, 'vs', b)
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 

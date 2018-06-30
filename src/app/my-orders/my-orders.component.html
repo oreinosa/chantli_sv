@@ -36,7 +36,11 @@
             <router-outlet></router-outlet>
           </div>
         </div>
-        <ng-container *ngIf='action.name === "lista"'>
+        <ng-container *ngIf='action.name === "lista" && user'>
+          <div class="balance-container">
+            <h3>Total pendiente : {{ user.debit }}</h3>
+            <h3>Total credito : {{ user.credit }}</h3>
+          </div>
           <div class='table-container'>
             <mat-table #table matSort [dataSource]="dataSource" class='data-table'>
               <!-- Products Column -->
@@ -81,9 +85,9 @@
                 <mat-header-cell *matHeaderCellDef> Pago </mat-header-cell>
                 <mat-cell *matCellDef="let element" class='text-center'>
                   <p>
-                    <mat-icon [ngClass]='!!element?.paid ? "paid" : "pending"'>{{ !!element?.paid ? "check_circle" : "highlight_off"}}</mat-icon>
+                    <mat-icon [ngClass]='!!element?.paid?.flag ? "paid" : "pending"'>{{ !!element?.paid?.flag ? "check_circle" : "highlight_off"}}</mat-icon>
                   </p>
-                  <p *ngIf='element?.paid?.toDate() as date'>
+                  <p *ngIf='element?.paid?.by?.toDate() as date'>
                     {{ date | spanishDate }}
                   </p>
                 </mat-cell>
@@ -97,8 +101,8 @@
                     (click)='onAction("editar",element)'>
                     <mat-icon>edit</mat-icon>
                   </button>
-                  <button type='button' mat-icon-button matTooltip='Cancelar' *ngIf='element.status !== "Entregado"' [routerLink]='["cancelar",element.id]'
-                    (click)='onAction("cancelar",element)'>
+                  <button type='button' mat-icon-button matTooltip='Cancelar' *ngIf='(element.status !=  "Entregado") && (element.status != "Cancelado") && (element.status != "Cancelado (reembolso)")'
+                    [routerLink]='["cancelar",element.id]' (click)='onAction("cancelar",element)'>
                     <mat-icon>cancel</mat-icon>
                   </button>
                   <button type='button' mat-icon-button matTooltip='Comentario' *ngIf='element.status === "Entregado"' [routerLink]='["comentario",element.id]'
@@ -119,7 +123,7 @@
               <mat-spinner class="mx-auto my-3"></mat-spinner>
             </ng-container>
           </div>
-          <mat-paginator [length]='dataSource?.data?.length' [pageSizeOptions]="[5, 10, 30]" [pageSize]='limitSubject | async'></mat-paginator>
+          <mat-paginator [length]='dataSource?.data?.length' [pageSize]='limitSubject | async'></mat-paginator>
         </ng-container>
       </mat-card-content>
     </mat-card>

@@ -38,7 +38,7 @@ export class OrderComponent implements OnInit {
     this.orderService
       .getWeekMenus().pipe(
       takeUntil(this.ngUnsubscribe),
-      tap(menus => console.log(menus)),
+      // tap(menus => console.log(menus)),
       tap(menus => this.menus = menus),
     )
       .subscribe(data => {

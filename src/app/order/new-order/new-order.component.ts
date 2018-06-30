@@ -1,4 +1,4 @@
-import * as firebase from 'firebase';
+import * as firebaseApp from 'firebase/app';
 import { Product } from './../../shared/classes/product';
 import { NewOrder } from './../../shared/classes/new-order';
 import { Component, OnInit } from '@angular/core';
@@ -79,7 +79,7 @@ export class NewOrderComponent implements OnInit {
   onConfirm(tortillas: number, price: number) {
     let products = this.newOrder.products;
     let acompanamientos: string[] = products.acompanamientos.map(product => product.name);
-    let orderedBy = firebase.firestore.Timestamp.fromDate(new Date());
+    let orderedBy = firebaseApp.firestore.Timestamp.fromDate(new Date());
     // orderedBy.setUTCHours(12, 0, 0);
 
     let order: Order = {
@@ -99,6 +99,9 @@ export class NewOrderComponent implements OnInit {
         id: this.user.id,
         name: this.user.name,
         workplace: this.user.workplace,
+      },
+      paid: {
+        flag: false
       }
     };
 

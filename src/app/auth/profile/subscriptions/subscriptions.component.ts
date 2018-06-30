@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MessagingService } from '../../../messaging/messaging.service';
+// import { MessagingService } from '../../../messaging/messaging.service';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../auth.service';
 import { take, tap, map } from 'rxjs/operators';
@@ -16,7 +16,7 @@ export class SubscriptionsComponent implements OnInit {
   subscriptions: Subscription;
   tokens: any;
   constructor(
-    private messagingService: MessagingService,
+    // private messagingService: MessagingService,
     private authService: AuthService
   ) { }
 
@@ -34,10 +34,10 @@ export class SubscriptionsComponent implements OnInit {
   onSubmit() {
     if (this.arrivalsFlag) {
       console.log('subscribe to arrivals alert');
-      this.messagingService
-        .subscribeToTopic('arrival', this.tokens)
-        .then(res => console.log(res))
-        .catch(error => console.log(error));
+      // this.messagingService
+      //   .subscribeToTopic('arrival', this.tokens)
+      //   .then(res => console.log(res))
+      //   .catch(error => console.log(error));
     }
   }
 

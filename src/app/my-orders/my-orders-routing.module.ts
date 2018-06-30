@@ -1,4 +1,4 @@
-import { FeedbackComponent } from './../core/feedback/feedback.component';
+import { FeedbackOrderComponent } from './feedback-order/feedback-order.component';
 import { EditOrderComponent } from './edit-order/edit-order.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
@@ -11,7 +11,7 @@ const routes: Routes = [
     path: 'mis-ordenes', component: MyOrdersComponent, canActivate: [AuthGuard], children: [
       { path: 'editar/:id', component: EditOrderComponent },
       { path: 'cancelar/:id', component: CancelOrderComponent },
-      { path: 'comentario/:id', component: FeedbackComponent }
+      { path: 'comentario/:id', component: FeedbackOrderComponent }
     ]
   }
 ];

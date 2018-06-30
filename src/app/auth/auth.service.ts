@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
-import * as firebase from 'firebase';
+import * as firebaseApp from 'firebase/app';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
 
@@ -53,14 +53,14 @@ export class AuthService {
     return this.afAuth.auth
       .signInWithEmailAndPassword(signIn.email, signIn.password)
       .catch(e => this.notificationsService.show('Correo electrónico o contraseaña incorrecta', 'Error', 'danger'))
-      .then((credential: firebase.auth.UserCredential) => this.notificationsService.show(`Hola, ${credential.user.displayName}`, 'Autenticación', 'info'));
+      .then((credential: firebaseApp.auth.UserCredential) => this.notificationsService.show(`Hola, ${credential.user.displayName}`, 'Autenticación', 'info'));
   }
 
   signInSocial(provider: string) {
     let _provider;
     switch (provider) {
       case 'google':
-        _provider = new firebase.auth.GoogleAuthProvider();
+        _provider = new firebaseApp.auth.GoogleAuthProvider();
         break;
     }
 
@@ -125,7 +125,7 @@ export class AuthService {
             name: user.displayName,
             role: 'Cliente',
             photoURL: user.photoURL,
-            balance: 0,
+            debit: 0,
             credit: 0
           };
           if (signUp) {

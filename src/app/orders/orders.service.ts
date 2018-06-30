@@ -5,6 +5,8 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument 
 import { Injectable } from '@angular/core';
 import { User } from '../shared/classes/user';
 
+import * as firebaseApp from 'firebase/app';
+
 @Injectable()
 export class OrdersService {
 
@@ -16,7 +18,7 @@ export class OrdersService {
 
   filteredOrders = new BehaviorSubject<Order[]>([]);
 
-  payingUser = new Subject<User>();
+  private $payingUser = new Subject<User>();
 
   private $mode = new BehaviorSubject<string>('empacar');
 
@@ -41,8 +43,12 @@ export class OrdersService {
     this.filteredOrders.next(orders);
   }
 
-  getPayingUser(): Observable<User> {
-    return this.payingUser.asObservable();
+  get payingUser(): Observable<User> {
+    return this.$payingUser.asObservable();
+  }
+
+  setPayingUser(user: User) {
+    this.$payingUser.next(user);
   }
 
   getUsers() {
@@ -103,6 +109,22 @@ export class OrdersService {
       );
   }
 
+  getOrdersByWorkplace(workplace: string) {
+    this.ordersCol = this.fs.collection<Order>('ordenes', ref => ref.where('user.workplace', '==', workplace).where('paid.flag', '==', false));
+
+    return this.ordersCol
+      .snapshotChanges()
+      .pipe(
+      map(actions => {
+        return actions.map(a => {
+          let data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return { id, ...data } as Order;
+        })
+      })
+      );
+  }
+
   private compare(a, b, isAsc) {
     if (a == b) {
       return 0;
@@ -115,11 +137,11 @@ export class OrdersService {
     return this.ordersCol.doc<Order>(id).update({ status: status });
   }
 
-  updateBalance(id: string, balance: number, credit: number) {
+  updateBalance(id: string, debit: number, credit: number) {
     return this.usersCol
       .doc(id)
       .update({
-        balance: balance,
+        debit: debit,
         credit: credit
       });
   }
@@ -129,7 +151,12 @@ export class OrdersService {
     let ref;
     for (let order of orders) {
       ref = this.ordersCol.doc(order.id).ref;
-      batch.update(ref, { paid: new Date() });
+      batch.update(ref, {
+        paid: {
+          flag: true,
+          by: firebaseApp.firestore.Timestamp.fromDate(new Date())
+        }
+      });
     }
     return batch.commit();
   }
@@ -138,7 +165,10 @@ export class OrdersService {
     return this.ordersCol
       .doc<Order>(id)
       .update({
-        paid: new Date()
+        paid: {
+          flag: true,
+          by: firebaseApp.firestore.Timestamp.fromDate(new Date())
+        }
       });
   }
 

@@ -1,6 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
 import { Unsubscribe } from './../../shared/classes/unsubscribe';
-import { OrdersService } from './../orders.service';
+// import { OrdersService } from './../orders.service';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 interface Mode {
@@ -19,7 +19,7 @@ export class OrdersModeComponent extends Unsubscribe implements OnInit {
   actions: Mode[];
 
   constructor(
-    private ordersService: OrdersService
+    // private ordersService: OrdersService
   ) { super() }
 
   ngOnInit() {
@@ -29,10 +29,10 @@ export class OrdersModeComponent extends Unsubscribe implements OnInit {
       { icon: '', action: 'credito' },
     ];
 
-    this.ordersService.mode.pipe(
-      takeUntil(this.ngUnsubscribe)
-    )
-      .subscribe(mode => console.log(mode));
+    // this.ordersService.mode.pipe(
+    //   takeUntil(this.ngUnsubscribe)
+    // )
+    //   .subscribe(mode => console.log(mode));
   }
 
 }

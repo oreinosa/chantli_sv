@@ -29,7 +29,7 @@ export class NavComponent {
       startWith(null)
     )
       .subscribe(user => {
-        console.log(!!user);
+        // console.log(!!user);
         let links: Link[] = [], actions: Link[] = [];
 
         links.push(

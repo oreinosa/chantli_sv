@@ -9,9 +9,18 @@ import { Order } from 'src/app/shared/classes/order';
 export class OrdersOverviewComponent implements OnInit {
   @Input() orders: Order[];
 
+  
+
   constructor() { }
 
   ngOnInit() {
+    this.generateOverview();
   }
+
+  generateOverview(){
+
+  }
+
+
 
 }

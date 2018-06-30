@@ -19,7 +19,7 @@ export class MyOrdersService {
   }
 
   getMyOrders(limit: number = 10, user: User): Observable<Order[]> {
-    this.myOrdersCollection = this.af.collection<Order>('ordenes', ref => ref.where('user.id', '==', user.id).orderBy('date', 'desc').limit(limit));
+    this.myOrdersCollection = this.af.collection<Order>('ordenes', ref => ref.where('user.id', '==', user.id).orderBy('date.for', 'desc').limit(limit));
 
     return this.myOrdersCollection
       .snapshotChanges().pipe(
@@ -43,7 +43,7 @@ export class MyOrdersService {
   }
 
   cancelOrder(id: string) {
-    this.myOrdersCollection.doc(id).update({
+    return this.myOrdersCollection.doc(id).update({
       status: 'Cancelado'
     });
   }

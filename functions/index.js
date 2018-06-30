@@ -16,7 +16,7 @@ exports.aggregateBalance = functions.firestore
       .get()
       .then(userDoc => {
         const user = userDoc.data();
-        let balance = user.balance;
+        let debit = user.debit;
         let credit = user.credit;
         console.log(credit, 'vs', price);
         if (credit >= price) {
@@ -24,17 +24,20 @@ exports.aggregateBalance = functions.firestore
           console.log(`New credit : $${credit}`);
           return orderDoc.ref
             .update({
-              paid: new Date()
+              paid: {
+                flag: true,
+                by: new Date()
+              }
             })
             .then(() => userRef.update({
               credit: credit,
             }));
         } else {
-          balance += price;
-          console.log(`New balance : $${balance}`);
+          debit += price;
+          console.log(`New debit : $${debit}`);
           return userRef
             .update({
-              balance: balance
+              debit: debit
             });
         }
       })

@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatCardModule,
   MatButtonModule,
+  MatButtonToggleModule,
   MatProgressSpinnerModule,
   MatListModule,
   MatInputModule,
@@ -48,6 +49,7 @@ import { TtdPipe } from './pipes/ttd.pipe';
     MatCardModule,
     MatSelectModule,
     MatButtonModule,
+    MatButtonToggleModule,
     MatListModule,
     MatInputModule,
     MatRadioModule,
@@ -78,6 +80,7 @@ import { TtdPipe } from './pipes/ttd.pipe';
     MatCardModule,
     MatSelectModule,
     MatButtonModule,
+    MatButtonToggleModule,
     MatListModule,
     MatInputModule,
     MatRadioModule,

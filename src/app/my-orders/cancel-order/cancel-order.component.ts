@@ -8,13 +8,14 @@ import { MyOrder } from '../my-order';
   styleUrls: ['./cancel-order.component.css']
 })
 export class CancelOrderComponent extends MyOrder {
-  onSubmit(): void {
-    throw new Error("Method not implemented.");
-  }
-
   constructor(
     myOrderService: MyOrdersService,
     router: Router
   ) { super(myOrderService, router); }
 
+  onSubmit(): void {
+    this.myOrderService.cancelOrder(this.order.id)
+      .then(() => this.onCancel())
+      .catch(e => console.log(e));
+  }
 }
