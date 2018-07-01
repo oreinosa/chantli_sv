@@ -11,6 +11,7 @@ import { FiltersComponent } from './filters/filters.component';
 import { OrdersModeComponent } from './orders-mode/orders-mode.component';
 import { WorkplacesService } from 'src/app/admin/workplaces/workplaces.service';
 import { OrdersOverviewComponent } from './orders-overview/orders-overview.component';
+import { ConfirmStatusChangeComponent } from './confirm-status-change/confirm-status-change.component';
 
 @NgModule({
   imports: [
@@ -26,8 +27,12 @@ import { OrdersOverviewComponent } from './orders-overview/orders-overview.compo
     PaymentComponent,
     FiltersComponent,
     OrdersModeComponent,
-    OrdersOverviewComponent
+    OrdersOverviewComponent,
+    ConfirmStatusChangeComponent
   ],
-  providers: [OrdersService, WorkplacesService]
+  providers: [OrdersService, WorkplacesService],
+  entryComponents: [
+    ConfirmStatusChangeComponent
+  ],
 })
 export class OrdersModule { }

@@ -1,9 +1,10 @@
+import { ConfirmStatusChangeComponent } from './../confirm-status-change/confirm-status-change.component';
 import { OnDestroy } from '@angular/core';
 import { OrdersService } from './../orders.service';
 import { Order } from './../../shared/classes/order';
 import { Subject } from 'rxjs';
 import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
-import { MatSort, MatTableDataSource, MatPaginator } from '@angular/material';
+import { MatSort, MatTableDataSource, MatPaginator, MatDialog } from '@angular/material';
 import { tap, takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -17,21 +18,13 @@ export class PackageComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input() dataSource = new MatTableDataSource<Order>([]);
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-
-  statuses = [
-    "Nueva orden",
-    "Empacado",
-    "Entregado",
-    "Cancelado",
-    "Cancelado (reembolso)"
-  ];
-
   range: string;
 
   public displayedColumns = ['user', 'principal', 'acompanamientos', 'bebida', "date", 'actions'];
 
   constructor(
-    private ordersService: OrdersService
+    private ordersService: OrdersService,
+    public dialog: MatDialog
   ) { }
 
   ngOnInit() {
@@ -83,8 +76,19 @@ export class PackageComponent implements OnInit, AfterViewInit, OnDestroy {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
-  onUpdateStatus(orderId: string, status: string) {
-    this.ordersService.onUpdateStatus(orderId, status);
+  onUpdateStatus(order: Order, newStatus: string) {
+    const dialogRef = this.dialog.open(ConfirmStatusChangeComponent, {
+      width: '250px',
+      data: {
+        newStatus: newStatus,
+        order: order
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) this.ordersService.updateOrderstatus(order.id, newStatus);
+    });
+
   }
 
 }

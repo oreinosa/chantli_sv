@@ -55,11 +55,24 @@
     <ng-container matColumnDef="actions">
       <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <mat-form-field class="full-width">
-          <mat-select placeholder='Estado' [value]='element.status' (selectionChange)='onUpdateStatus(element.id, $event.value)'>
-            <mat-option *ngFor='let status of statuses' [value]='status'>{{ status }}</mat-option>
-          </mat-select>
-        </mat-form-field>
+        <ng-container *ngIf='element.status as status'>
+          <button mat-button disabled>
+            {{ status }}
+          </button>
+          <button mat-button type='button' *ngIf='status == "Nueva orden"'
+            (click)='onUpdateStatus(element, "Empacado")'>
+            Empacar
+          </button>
+          <button mat-button type='button' *ngIf='status == "Empacado"' (click)='onUpdateStatus(element, "Entregado")'>
+            Entregar
+          </button>
+          <button mat-button type='button' *ngIf='!(status == "Cancelado" || status == "Cancelado (reembolso)")' (click)='onUpdateStatus(element, "Cancelado")'>
+            Cancelar
+          </button>
+          <button mat-button type='button' *ngIf='!(status == "Cancelado (reembolso)")' (click)='onUpdateStatus(element, "Cancelado (reembolso)")'>
+            Reembolsar
+          </button>
+        </ng-container>
       </mat-cell>
     </ng-container>
 

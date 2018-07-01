@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 import { User } from '../shared/classes/user';
 
 import * as firebaseApp from 'firebase/app';
+import { NotificationsService } from 'src/app/notifications/notifications.service';
 
 @Injectable()
 export class OrdersService {
@@ -23,7 +24,8 @@ export class OrdersService {
   private $mode = new BehaviorSubject<string>('empacar');
 
   constructor(
-    private fs: AngularFirestore
+    private fs: AngularFirestore,
+    private notifications: NotificationsService
   ) {
     let date = new Date();
     let firstDayOfYear = new Date();
@@ -109,6 +111,7 @@ export class OrdersService {
       );
   }
 
+
   getOrdersByWorkplace(workplace: string) {
     this.ordersCol = this.fs.collection<Order>('ordenes', ref => ref.where('user.workplace', '==', workplace).where('paid.flag', '==', false));
 
@@ -121,8 +124,7 @@ export class OrdersService {
           const id = a.payload.doc.id;
           return { id, ...data } as Order;
         })
-      })
-      );
+      }));
   }
 
   private compare(a, b, isAsc) {
@@ -132,9 +134,14 @@ export class OrdersService {
     return (a < b ? -1 : 1) * (isAsc ? 1 : - 1);
   }
 
-  onUpdateStatus(id: string, status: string) {
-    console.log(id, ' set to ', status);
-    return this.ordersCol.doc<Order>(id).update({ status: status });
+
+  updateOrderstatus(id: string, newStatus: string) {
+    console.log(id, ' set to ', newStatus);
+    return this.ordersCol.doc<Order>(id)
+      .update({
+        status: newStatus
+      })
+      .then(() => this.notifications.show(`Orden actualizada a ${newStatus}`, 'Ordenes', 'info'));
   }
 
   updateBalance(id: string, debit: number, credit: number) {
