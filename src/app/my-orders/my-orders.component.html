@@ -38,8 +38,8 @@
         </div>
         <ng-container *ngIf='action.name === "lista" && user'>
           <div class="balance-container">
-            <h3>Total pendiente : {{ user.debit }}</h3>
-            <h3>Total credito : {{ user.credit }}</h3>
+            <h3>Total pendiente : {{ user?.debit | currency }}</h3>
+            <h3>Total credito : {{ user?.credit | currency }}</h3>
           </div>
           <div class='table-container'>
             <mat-table #table matSort [dataSource]="dataSource" class='data-table'>
