@@ -1,8 +1,24 @@
 <mat-card>
+	<h1>Backup</h1>
+	<button mat-button type='button' (click)='backup()'>Backup products</button>
+	<!-- {{ backupData | json}} -->
+</mat-card>
+
+<hr>
+<mat-card>
 	<mat-card-header>
 		<mat-card-title>
 			<h3>Productos</h3>
 		</mat-card-title>
+		<mat-card-subtitle *ngIf='($categories | async) as categories'>
+			<h5>Por categoría :
+				<mat-form-field>
+					<mat-select [ngModel]='selectedCategory | async' (selectionChange)='selectedCategory.next($event.value)'>
+						<mat-option *ngFor='let category of categories' [value]='category.name'>{{ category.name }}</mat-option>
+					</mat-select>
+				</mat-form-field>
+			</h5>
+		</mat-card-subtitle>
 	</mat-card-header>
 	<mat-card-content>
 		<div class="row">
@@ -45,14 +61,6 @@
 							<mat-header-cell *matHeaderCellDef> Imagen </mat-header-cell>
 							<mat-cell *matCellDef="let element">
 								<img [src]="element.imageURL" [alt]="element.name" class="img-fluid">
-							</mat-cell>
-						</ng-container>
-
-						<!-- Category Column -->
-						<ng-container matColumnDef="category">
-							<mat-header-cell *matHeaderCellDef mat-sort-header> Categoría </mat-header-cell>
-							<mat-cell *matCellDef="let element">
-								{{ element.category }}
 							</mat-cell>
 						</ng-container>
 

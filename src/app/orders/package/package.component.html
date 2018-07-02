@@ -9,7 +9,7 @@
   </mat-card-content>
 </mat-card>
 
-<mat-card *ngIf='range === "Para ahora"'>
+<mat-card *ngIf='range === "Para ahora" && dataSource?.data?.length'>
   <mat-card-header>
     <mat-card-title>
       <h5>Información de órdenes</h5>
