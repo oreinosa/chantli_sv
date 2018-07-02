@@ -23,18 +23,18 @@ export class MenusService extends DAOSubcollection<Menu, Product> {
     return this.objectCollection
       .snapshotChanges()
       .pipe(
-      map(actions => {
-        // console.log(actions);
-        return actions.map(a => {
-          let data = a.payload.doc.data() as Menu;
-          data['id'] = a.payload.doc.id;
-          return data;
-        })
-      }));
+        map(actions => {
+          // console.log(actions);
+          return actions.map(a => {
+            let data = a.payload.doc.data() as Menu;
+            data['id'] = a.payload.doc.id;
+            return data;
+          })
+        }));
   }
 
   add(menu: Menu, products: Product[]) {
-    let correctedDate = new Date(menu.date.toDate());
+    let correctedDate = new Date(menu.date);
     correctedDate.setHours(6, 0, 0);
     let correctedTimestamp = firebase.firestore.Timestamp.fromDate(correctedDate);
     menu.date = correctedTimestamp;
@@ -43,11 +43,11 @@ export class MenusService extends DAOSubcollection<Menu, Product> {
   }
 
   update(id: string, menu: Menu, products: Product[], deletedProducts: Product[]) {
-    let correctedDate = new Date(menu.date.toDate());
+    let correctedDate = new Date(menu.date);
     correctedDate.setHours(6, 0, 0);
     let correctedTimestamp = firebase.firestore.Timestamp.fromDate(correctedDate);
     menu.date = correctedTimestamp;
-    
+
     return super.update(id, menu, products, deletedProducts);
   }
 

@@ -74,11 +74,4 @@ export class EditMenuComponent extends EditSubcollection<Menu, Product> {
     return '';
   }
 
-  onSubmit(menu: Menu): Promise<void> {
-    const dateString = menu.date as string;
-    const date = new Date(dateString);
-    menu.date = firebaseApp.firestore.Timestamp.fromDate(date);
-    return super.onSubmit(menu);
-  }
-
 }
