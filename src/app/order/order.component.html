@@ -2,6 +2,7 @@
   <div class='col-12 title'>
     <mat-card class='mat-elevation-z0'>
       <h1>Menu de la semana</h1>
+      <h3 *ngIf='monday && friday'>Del {{ monday | spanishDate:"short" }} al {{ friday | spanishDate:"short" }}</h3>
       <h4>Selecciona el día que quieres ordenar</h4>
     </mat-card>
   </div>
@@ -28,7 +29,7 @@
               </ng-container>
               <ng-template #selectedDay>
                 <a mat-tab-link class='active'>
-                  {{ DOW[dow-1] | capitalize }}
+                  {{ (DOW[dow-1] ? DOW[dow-1] : "") | capitalize }}
                 </a>
               </ng-template>
             </nav>

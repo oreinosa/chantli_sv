@@ -27,8 +27,8 @@ export class OrdersService {
     private fs: AngularFirestore,
     private notifications: NotificationsService
   ) {
-    let date = new Date();
-    let firstDayOfYear = new Date();
+    // let date = new Date();
+    // let firstDayOfYear = new Date();
     this.ordersCol = this.fs.collection<Order>('ordenes');
     this.usersCol = this.fs.collection<User>('usuarios', ref => ref.orderBy('name', 'asc'));
   }

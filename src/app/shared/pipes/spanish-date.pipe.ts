@@ -7,13 +7,23 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class SpanishDatePipe implements PipeTransform {
 
-  transform(dateObject: Date, args?: any): string {
-    let year = dateObject.getFullYear().toString();
-    let month = MONTHS[dateObject.getMonth()];
-    let day = dateObject.getDate().toString();
-    day = Number.parseInt(day) < 10 ? `0${day}` : day;
-    let dow = dateObject.getDay();
-    return DOW[dow] + ' ' + day + '/' + month + '/' + year;
+  transform(dateObject: Date, format: string = 'long'): string {
+    let dateString = '';
+    const year = dateObject.getFullYear().toString();
+    const month = MONTHS[dateObject.getMonth()];
+    const day = dateObject.getDate();
+    const dow = dateObject.getDay();
+
+    switch (format) {
+      case "long":
+        dateString = DOW[dow] + ' ' + day + '/' + month + '/' + year;
+        break;
+      case "short":
+        dateString = day + ' ' + month;
+    }
+    // .toString();
+    // day = Number.parseInt(day) < 10 ? `0${day}` : day;
+    return dateString;
   }
 
 }

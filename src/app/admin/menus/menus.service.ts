@@ -6,6 +6,8 @@ import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument 
 import { Product } from '../../shared/classes/product';
 import { DAOSubcollection } from '../../shared/classes/dao-subcollection';
 import { map } from 'rxjs/operators';
+import * as firebase from 'firebase/app';
+
 @Injectable()
 export class MenusService extends DAOSubcollection<Menu, Product> {
 
@@ -21,24 +23,31 @@ export class MenusService extends DAOSubcollection<Menu, Product> {
     return this.objectCollection
       .snapshotChanges()
       .pipe(
-        map(actions => {
-          // console.log(actions);
-          return actions.map(a => {
-            let data = a.payload.doc.data() as Menu;
-            data['id'] = a.payload.doc.id;
-            return data;
-          })
-        }));
+      map(actions => {
+        // console.log(actions);
+        return actions.map(a => {
+          let data = a.payload.doc.data() as Menu;
+          data['id'] = a.payload.doc.id;
+          return data;
+        })
+      }));
   }
 
   add(menu: Menu, products: Product[]) {
-    menu.date.toDate().setUTCHours(12, 0, 0);
-    console.log(menu.date.toDate());
+    let correctedDate = new Date(menu.date.toDate());
+    correctedDate.setHours(6, 0, 0);
+    let correctedTimestamp = firebase.firestore.Timestamp.fromDate(correctedDate);
+    menu.date = correctedTimestamp;
+    // console.log(menu.date.toDate());
     return super.add(menu, products);
   }
 
   update(id: string, menu: Menu, products: Product[], deletedProducts: Product[]) {
-    menu.date.toDate().setUTCHours(12, 0, 0);
+    let correctedDate = new Date(menu.date.toDate());
+    correctedDate.setHours(6, 0, 0);
+    let correctedTimestamp = firebase.firestore.Timestamp.fromDate(correctedDate);
+    menu.date = correctedTimestamp;
+    
     return super.update(id, menu, products, deletedProducts);
   }
 

@@ -19,10 +19,13 @@ export class OrderComponent implements OnInit {
   DOW: string[];
   dow: number;
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
+  monday: Date;
+  friday: Date;
+
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.TabletPortrait])
     .pipe(
     map(result => result.matches),
-    share()
+    // share()
     );
 
   constructor(
@@ -37,13 +40,15 @@ export class OrderComponent implements OnInit {
   ngOnInit() {
     this.orderService
       .getWeekMenus().pipe(
-      takeUntil(this.ngUnsubscribe),
-      // tap(menus => console.log(menus)),
-      tap(menus => this.menus = menus),
-    )
+      takeUntil(this.ngUnsubscribe))
       .subscribe(data => {
+        this.menus = data;
+        this.monday = this.orderService.monday;
+        this.friday = this.orderService.friday;
         const date = new Date();
-        this.dow = date.getDay();
+        let day = date.getDay();
+        if (day === 0 || day === 6) { day = 1; }
+        this.dow = day;
         this.selectedMenus = this.menus.filter(menu => menu.date.toDate().getDay() === this.dow);
       });
   }

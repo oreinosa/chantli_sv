@@ -8,6 +8,9 @@ import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { startWith, map, takeUntil } from 'rxjs/operators';
 import { EditSubcollection } from '../../../shared/classes/edit-subcollection';
+
+import * as firebaseApp from 'firebase/app';
+
 @Component({
   selector: 'app-edit-menu',
   templateUrl: './edit-menu.component.html',
@@ -15,7 +18,7 @@ import { EditSubcollection } from '../../../shared/classes/edit-subcollection';
 })
 export class EditMenuComponent extends EditSubcollection<Menu, Product> {
   stateCtrl: FormControl;
-
+  date: string;
   filteredProducts: Observable<Product[]>;
   products: Product[];
 
@@ -29,8 +32,8 @@ export class EditMenuComponent extends EditSubcollection<Menu, Product> {
     this.stateCtrl = new FormControl();
     this.filteredProducts = this.stateCtrl.valueChanges
       .pipe(
-        startWith(''),
-        map(product => product ? this.filterProducts(product) : this.products.slice())
+      startWith(''),
+      map(product => product ? this.filterProducts(product) : this.products.slice())
       );
   }
 
@@ -39,15 +42,15 @@ export class EditMenuComponent extends EditSubcollection<Menu, Product> {
     this.productsService
       .getAll()
       .pipe(
-        takeUntil(this.ngUnsubscribe),
-        map(products => products.filter(product => product.category === "Principal" || product.category === "Acompañamiento")),
-        map(products => products.sort((a, b) => {
-          if (a.name < b.name)
-            return -1;
-          if (a.name > b.name)
-            return 1;
-          return 0;
-        }))
+      takeUntil(this.ngUnsubscribe),
+      map(products => products.filter(product => product.category === "Principal" || product.category === "Acompañamiento")),
+      map(products => products.sort((a, b) => {
+        if (a.name < b.name)
+          return -1;
+        if (a.name > b.name)
+          return 1;
+        return 0;
+      }))
       )
       .subscribe(products => this.products = products);
 
@@ -60,6 +63,22 @@ export class EditMenuComponent extends EditSubcollection<Menu, Product> {
   filterProducts(name: string) {
     return this.products.filter(product =>
       product.name.toLowerCase().includes(name.toLowerCase()));
+  }
+
+  getMenuDateString(date: any): Date | string {
+    // console.log(date);
+    if (date instanceof firebaseApp.firestore.Timestamp) {
+      const timestamp = date as firebaseApp.firestore.Timestamp;
+      return timestamp.toDate().toISOString();
+    }
+    return '';
+  }
+
+  onSubmit(menu: Menu): Promise<void> {
+    const dateString = menu.date as string;
+    const date = new Date(dateString);
+    menu.date = firebaseApp.firestore.Timestamp.fromDate(date);
+    return super.onSubmit(menu);
   }
 
 }

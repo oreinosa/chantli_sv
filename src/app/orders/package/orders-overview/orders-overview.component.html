@@ -1,0 +1,56 @@
+<ng-container *ngIf='!$loading; else loading'>
+  <div class="row">
+    <ng-container *ngIf='orders?.length'>
+      <div class="col-12 text-center">
+        <h5>Información de órdenes</h5>
+      </div>
+      <ng-container *ngIf='daily'>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <h6>
+            <b>
+              Principales
+            </b>
+          </h6>
+          <p *ngFor='let principal of principales'>
+            {{ principal }}
+          </p>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <h6>
+            <b>
+              Acompañamientos
+            </b>
+          </h6>
+          <p *ngFor='let ac of acompanamientos'>
+            {{ ac }}
+          </p>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <h6>
+            <b>
+              Bebidas
+            </b>
+          </h6>
+          <p *ngFor='let bebida of bebidas'>
+            {{ bebida }}
+          </p>
+        </div>
+        <div class="col-12 col-sm-6 col-lg-3">
+          <h6>
+            <b>
+              Tortillas
+            </b>
+          </h6>
+          <p>
+            {{ tortillas }}
+          </p>
+        </div>
+      </ng-container>
+    </ng-container>
+  </div>
+</ng-container>
+<ng-template #loading>
+  <div class="col-12 ">
+    <mat-spinner class='mx-auto'></mat-spinner>
+  </div>
+</ng-template>

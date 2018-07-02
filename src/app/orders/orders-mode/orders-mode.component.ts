@@ -26,7 +26,7 @@ export class OrdersModeComponent extends Unsubscribe implements OnInit {
     this.actions = [
       { icon: 'assignment_late', action: 'empacar' },
       { icon: 'attach_money', action: 'pagar' },
-      { icon: '', action: 'credito' },
+      { icon: 'feedback', action: 'comentarios' },
     ];
 
     // this.ordersService.mode.pipe(

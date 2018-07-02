@@ -4,8 +4,8 @@
       <div class="col-12">
         <h4>Editar menu</h4>
         <div class="col-6 mx-auto">
-          <mat-form-field>
-            <input matInput [matDatepicker]="picker" placeholder="Fecha" [ngModel]='object.date' name='date' id='date' required>
+          <mat-form-field *ngIf='getMenuDateString(object.date) as dateString'>
+            <input matInput [matDatepicker]="picker" placeholder="Fecha" [ngModel]='dateString' name='date' id='date' required>
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
@@ -34,7 +34,7 @@
       </div>
       <div class="col-12 col-sm-8">
         <div class="row">
-          <ng-container *ngIf='selectedSubcollectionObjects | editingSubcollection:object?.products:refresh as productsSelected; else noAddedProducts'>
+          <ng-container *ngIf='selectedSubcollectionObjects | editingSubcollection:object?.productos:refresh as productsSelected; else noAddedProducts'>
             <div class="col-12">
               <p>Productos agregados</p>
             </div>

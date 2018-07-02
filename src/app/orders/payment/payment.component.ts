@@ -158,6 +158,11 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     let currentDebit: number = this.payingUser.debit;
     let newDebit = currentDebit - this.totalDue;
     let newCredit = this.payingUser.credit;
+    if (newCredit && !this.addChange) {
+      let usedCredit = (this.totalDue - this.payment + this.change);
+      console.log('used credit ', usedCredit);
+      newCredit -= usedCredit;
+    }
     if (this.addChange) {
       newCredit += this.change;
     }

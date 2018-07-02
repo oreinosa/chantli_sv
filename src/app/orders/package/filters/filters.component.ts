@@ -1,16 +1,16 @@
 import { OnDestroy } from '@angular/core';
-import { Order } from './../../shared/classes/order';
+import { Order } from './../../../shared/classes/order';
 import { MatTableDataSource } from '@angular/material';
-import { DateRange } from './../../shared/classes/date-range';
+import { DateRange } from './../../../shared/classes/date-range';
 import { startWith, map, takeUntil, take, switchMap, tap } from 'rxjs/operators';
-import { WorkplacesService } from './../../admin/workplaces/workplaces.service';
+import { WorkplacesService } from './../../../admin/workplaces/workplaces.service';
 import { FormControl } from '@angular/forms';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
-import { Workplace } from './../../shared/classes/workplace';
-import { User } from './../../shared/classes/user';
+import { Workplace } from './../../../shared/classes/workplace';
+import { User } from './../../../shared/classes/user';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { OrdersService } from '../orders.service';
-import { MONTHS } from '../../shared/classes/months';
+import { OrdersService } from '../../orders.service';
+import { MONTHS } from '../../../shared/classes/months';
 
 @Component({
   selector: 'app-filters',
@@ -29,7 +29,9 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   filteredUsers: Observable<User[]>;
 
-  // dateFilter: BehaviorSubject<DateRange>;
+  rangeFrom = new Date();
+  rangeTo = new Date();
+
   monthFilter: BehaviorSubject<number>;
 
   selectedUserCtrl: FormControl = new FormControl('');
@@ -57,6 +59,9 @@ export class FiltersComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    // this.today.setMonth(6);
+    // this.today.setDate(31);
+
     let currentYear = this.today.getFullYear();
     let currentMonth = this.today.getMonth();
     this.selectedMonth = currentMonth;
@@ -77,8 +82,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
       .getUsers()
       .pipe(
       takeUntil(this.ngUnsubscribe),
-      )
-      // .do(users => console.log(users))
+    )
       .subscribe(users => this.allUsers = users);
 
     this.workplacesService
@@ -86,7 +90,6 @@ export class FiltersComponent implements OnInit, OnDestroy {
       .pipe(
       take(1)
       )
-      // .do(workplaces => console.log(workplaces))
       .subscribe(workplaces => this.workplaces = workplaces);
 
     this.filteredUsers = this.selectedUserCtrl
@@ -110,11 +113,8 @@ export class FiltersComponent implements OnInit, OnDestroy {
       }),
       switchMap(({ from, to }) => this.ordersService.getOrders(from, to)),
       takeUntil(this.ngUnsubscribe),
-      // .map(orders => orders.sort((a, b) => this.compare(a.date.by, b.date.by, false))),
-      // .map(orders => orders.sort((a, b) => this.compare(a.date.for, b.date.for, false))),
-      // .map(orders => orders.sort((a, b) => this.compare(a.products.principal, b.products.principal, true))),
-      tap(orders => console.log('Orders : ', orders))
-      )
+      // tap(orders => console.log('Orders : ', orders))
+    )
       .subscribe(orders => {
         this.allOrders = orders;
         this.applyFilters();
@@ -125,17 +125,6 @@ export class FiltersComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }
-
-  // selectUser() {
-  //   let userName = this.selectedUserCtrl.value;
-  //   if (!userName) {
-  //     this.ordersService.payingUser.next(null);
-  //     return;
-  //   }
-  //   console.log(userName, ' is paying now')
-  //   let user = this.filterUsers(userName)[0];
-  //   this.ordersService.payingUser.next(user);
-  // }
 
   selectMonth() {
     let month = this.selectedMonth;
@@ -176,30 +165,38 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   filterByDateRange() {
     let dateRange = this.selectedRange;
-    let from = new Date();
-    let to = new Date();
+
     let rangeString: string;
     // console.log(`Filter by dateRange : `, dateRange);
 
     switch (dateRange) {
       case "today":
+        let from = new Date(this.today);
         from.setHours(0, 0, 0);
+        this.rangeFrom = from;
+
+        let to = new Date(this.today);
         to.setHours(22, 0, 0);
-        rangeString = `Para ahora `;
+        this.rangeTo = to;
+
+        rangeString = `Para ahora`;
         break;
       case "week":
-        from = this.getMonday();
-        to = this.getFriday();
-        rangeString = `Para la semana (${from.toLocaleDateString()} al ${to.toLocaleDateString()})`;
+        this.rangeFrom = this.getMonday();
+        this.rangeTo = this.getFriday();
+        rangeString = `Para la semana (${this.rangeFrom.toLocaleDateString()} al ${this.rangeTo.toLocaleDateString()})`;
         break;
       case "month":
-        from = this.getFirstDayMonth();
-        to = this.getLastDayMonth();
+        this.rangeFrom = this.getFirstDayMonth();
+        this.rangeTo = this.getLastDayMonth();
         rangeString = `Para el mes`;
+        break;
+      case "specific":
+        rangeString = `Desde ${this.rangeFrom.toLocaleDateString()} al ${this.rangeTo.toLocaleDateString()}`;
         break;
     }
     // console.log(from, to);
-    this.filteredOrders = this.filteredOrders.filter(order => order.date.for.toDate() >= from && order.date.for.toDate() <= to);
+    this.filteredOrders = this.filteredOrders.filter(order => order.date.for.toDate() >= this.rangeFrom && order.date.for.toDate() <= this.rangeTo);
     this.selectRangeEmitter.emit(rangeString);
   }
 
@@ -223,49 +220,49 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
 
   private getMonday(): Date {
-    let d = new Date();
+    let d = new Date(this.today);
     var day = d.getDay(),
       diff = d.getDate() - day + 1;
     if (day == 6) {
       diff += 7;
     }
     d.setDate(diff);
-    d.setUTCHours(11, 0, 0);
-    // console.log(d);
+    d.setHours(1, 0, 0);
+    console.log('Monday is ', d);
     return d;
   }
 
   private getFriday(): Date {
-    let d = new Date();
+    let d = new Date(this.today);
     var day = d.getDay(),
       diff = d.getDate() - day + 5;
     if (day == 6) diff += 7;
     d.setDate(diff);
-    d.setUTCHours(13, 0, 0);
-    // console.log(d);
+    d.setHours(23, 0, 0);
+    console.log('Friday is ', d);
     return d;
   }
 
-  private getFirstDayMonth(month?: number): Date {
-    let d = new Date();
+  getFirstDayMonth(month?: number): Date {
+    let d = new Date(this.today);
     // month ? d.setMonth(month) : false;
     // d.setDate(1);
     let _month = month ? month : d.getMonth();
     let year = this.selectedYear;
     d.setFullYear(year, _month, 1);
-    d.setUTCHours(1, 0, 0);
-    // console.log(d);
+    d.setHours(1, 0, 0);
+    // console.log('First day of ', _month, ' is ', d);
     return d;
   }
 
 
-  private getLastDayMonth(month?: number): Date {
-    let d = new Date();
+  getLastDayMonth(month?: number): Date {
+    let d = new Date(this.today);
     let _month = month ? month : d.getMonth();
     let year = this.selectedYear;
     d.setFullYear(year, _month + 1, 0);
-    d.setUTCHours(24, 0, 0);
-    // console.log(d);
+    d.setHours(23, 0, 0);
+    // console.log('Last day of ', _month, ' is ', d);
     return d;
   }
 

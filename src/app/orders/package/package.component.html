@@ -1,84 +1,97 @@
-<h5>{{ range }}</h5>
-<app-filters (selectedRange)='onSelectRange($event)'></app-filters>
-<hr>
-<div class="table-container">
-  <mat-table #table [dataSource]="dataSource" class='data-table' matSort (matSortChange)="sortData()">
-    <!-- Name Column -->
-    <ng-container matColumnDef="user">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <p>
-          {{element.user.name}}
-        </p>
-        <!-- <p>( {{element.user.workplace}} )</p> -->
-      </mat-cell>
-    </ng-container>
-
-    <!-- Principal Column -->
-    <ng-container matColumnDef="principal">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Principal </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <p>
-          {{element.products.principal}}
-        </p>
-      </mat-cell>
-    </ng-container>
-
-    <!-- Acompanamientos Column -->
-    <ng-container matColumnDef="acompanamientos">
-      <mat-header-cell *matHeaderCellDef> Acompañamientos </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <ng-container *ngFor='let acompanamiento of element.products?.acompanamientos'>
-          <p> {{ acompanamiento }}</p>
+<div class="row">
+  <div class="col-12">
+    <h5>{{ range }}</h5>
+  </div>
+  <div class="col-12">
+    <app-filters (selectedRange)='onSelectRange($event)'></app-filters>
+  </div>
+  <div class="col-12">
+    <app-orders-overview [daily]='range === "Para ahora"'></app-orders-overview>
+  </div>
+  <div class="col-12">
+    <div class="table-container">
+      <mat-table #table [dataSource]="dataSource" class='data-table' matSort (matSortChange)="sortData()">
+        <!-- Name Column -->
+        <ng-container matColumnDef="user">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Cliente </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <p>
+              {{element.user.name}}
+            </p>
+            <!-- <p>( {{element.user.workplace}} )</p> -->
+          </mat-cell>
         </ng-container>
-        <p>{{ element.tortillas + ' tortilla' + (element.tortillas > 1 ? 's' : '') }}
-        </p>
-      </mat-cell>
-    </ng-container>
-    <!-- Bebida Column -->
-    <ng-container matColumnDef="bebida">
-      <mat-header-cell *matHeaderCellDef mat-sort-header> Bebida </mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <p> {{element.products?.bebida}} </p>
-      </mat-cell>
-    </ng-container>
 
-    <!-- Date Column -->
-    <ng-container matColumnDef="date">
-      <mat-header-cell *matHeaderCellDef mat-sort-header>Para</mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <p> {{ element.date.for.toDate() | spanishDate }}</p>
-      </mat-cell>
-    </ng-container>
-
-    <!-- Actions Column -->
-    <ng-container matColumnDef="actions">
-      <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        <ng-container *ngIf='element.status as status'>
-          <button mat-button disabled>
-            {{ status }}
-          </button>
-          <button mat-button type='button' *ngIf='status == "Nueva orden"'
-            (click)='onUpdateStatus(element, "Empacado")'>
-            Empacar
-          </button>
-          <button mat-button type='button' *ngIf='status == "Empacado"' (click)='onUpdateStatus(element, "Entregado")'>
-            Entregar
-          </button>
-          <button mat-button type='button' *ngIf='!(status == "Cancelado" || status == "Cancelado (reembolso)")' (click)='onUpdateStatus(element, "Cancelado")'>
-            Cancelar
-          </button>
-          <button mat-button type='button' *ngIf='!(status == "Cancelado (reembolso)")' (click)='onUpdateStatus(element, "Cancelado (reembolso)")'>
-            Reembolsar
-          </button>
+        <!-- Principal Column -->
+        <ng-container matColumnDef="principal">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Principal </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <p>
+              {{element.products.principal}}
+            </p>
+          </mat-cell>
         </ng-container>
-      </mat-cell>
-    </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]='(row.status === "Cancelado" || row.status === "Cancelado (reembolso)") ? "cancelled" : ""'></mat-row>
-  </mat-table>
+        <!-- Acompanamientos Column -->
+        <ng-container matColumnDef="acompanamientos">
+          <mat-header-cell *matHeaderCellDef> Acompañamientos </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <ng-container *ngFor='let acompanamiento of element.products?.acompanamientos'>
+              <p> {{ acompanamiento }}</p>
+            </ng-container>
+            <p>{{ element.tortillas + ' tortilla' + (element.tortillas > 1 ? 's' : '') }}
+            </p>
+          </mat-cell>
+        </ng-container>
+        <!-- Bebida Column -->
+        <ng-container matColumnDef="bebida">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Bebida </mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <p> {{element.products?.bebida}} </p>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Date Column -->
+        <ng-container matColumnDef="date">
+          <mat-header-cell *matHeaderCellDef mat-sort-header>Para</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <p> {{ element.date.for.toDate() | spanishDate }}</p>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+          <mat-cell *matCellDef="let element">
+            <ng-container *ngIf='element.status as status'>
+              <button mat-button disabled>
+                {{ status }}
+              </button>
+              <button mat-button type='button' *ngIf='status == "Nueva orden"' (click)='onUpdateStatus(element, "Empacado")'>
+                Empacar
+              </button>
+              <button mat-button type='button' *ngIf='status == "Empacado"' (click)='onUpdateStatus(element, "Entregado")'>
+                Entregar
+              </button>
+              <button mat-button type='button' *ngIf='status == "Nueva orden" && !(status != "Entregado")' (click)='onUpdateStatus(element, "Cancelado")'>
+                Cancelar
+              </button>
+              <button mat-button type='button' *ngIf='!(status == "Cancelado (reembolso)" || status == "Entregado") && element?.paid?.flag'
+                (click)='onUpdateStatus(element, "Cancelado (reembolso)")'>
+                Reembolsar
+              </button>
+              <!-- <button mat-button type='button' *ngIf='!(status == "Cancelado (reembolso)")' (click)='onUpdateStatus(element, "Cancelado (reembolso)")'>
+                  Reembolsar
+                </button> -->
+            </ng-container>
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]='(row.status === "Cancelado" || row.status === "Cancelado (reembolso)") ? "cancelled" : ""'></mat-row>
+      </mat-table>
+    </div>
+    <mat-paginator #paginator [pageSize]="20" [length]='dataSource?.data?.length' [pageSizeOptions]="[10, 20, 40, 100]" [showFirstLastButtons]="true">
+    </mat-paginator>
+  </div>
 </div>
-<mat-paginator #paginator [pageSize]="20" [length]='dataSource?.data?.length' [pageSizeOptions]="[10, 20, 40, 100]" [showFirstLastButtons]="true">
-</mat-paginator>

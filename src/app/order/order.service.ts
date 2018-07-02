@@ -15,11 +15,21 @@ export class OrderService {
   private ordersCol: AngularFirestoreCollection<Order>;
   menuSubject = new BehaviorSubject<Menu>(null);
 
+  private $monday: Date;
+  private $friday: Date;
+
   constructor(
     private af: AngularFirestore,
     private notificationsService: NotificationsService,
     private router: Router
   ) {
+  }
+
+  get monday(): Date {
+    return this.$monday;
+  }
+  get friday(): Date {
+    return this.$friday;
   }
 
   submitNewOrder(order: Order) {
@@ -30,30 +40,37 @@ export class OrderService {
   }
 
   getWeekMenus(): Observable<Menu[]> {
-    const d = new Date();
-    d.setDate(29);
+    let d = new Date();
+    // d.setMonth(1);
+    // d.setDate(15);
+    console.log('today is ', d);
+
+    // d.setDate(29);
     // console.log('Today date : ', d);
     // console.log('Monday : ', this.getMonday(d));
     // console.log('Friday : ', this.getFriday(d));
+
+    this.$monday = this.getMonday(d);
+    this.$friday = this.getFriday(d);
 
     this.menusCol = this.af.collection<Menu>('menus',
       ref =>
         ref
           // .where('active', '==', true)
-          .where('date', '>=', this.getMonday(d))
-          .where('date', '<=', this.getFriday(d))
+          .where('date', '>=', this.monday)
+          .where('date', '<=', this.friday)
     );
 
     return this.menusCol
       .snapshotChanges()
       .pipe(
-        map(actions => {
-          return actions.map(a => {
-            let data = a.payload.doc.data();
-            const id = a.payload.doc.id;
-            return { id, ...data } as Menu;
-          });
-        })
+      map(actions => {
+        return actions.map(a => {
+          let data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return { id, ...data } as Menu;
+        });
+      })
       );
   }
 
@@ -62,13 +79,13 @@ export class OrderService {
     return this.bebidasCol
       .snapshotChanges()
       .pipe(
-        map(actions => {
-          return actions.map(a => {
-            const data = a.payload.doc.data();
-            const id = a.payload.doc.id;
-            return { id, ...data } as Product;
-          });
-        })
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return { id, ...data } as Product;
+        });
+      })
       );
   }
 
@@ -97,10 +114,12 @@ export class OrderService {
       diff = d.getDate() - day + 1;
     if (day == 6) {
       diff += 7;
+    } else if (day == 0) {
+      // diff -= 7;
     }
     d.setDate(diff);
     d.setHours(0, 0, 0);
-    // console.log(d);
+    console.log(d);
     return new Date(d);
   }
 
@@ -114,7 +133,7 @@ export class OrderService {
     // }
     d.setDate(diff);
     d.setHours(23, 0, 0);
-    // console.log(d);
+    console.log(d);
     return new Date(d);
   }
 

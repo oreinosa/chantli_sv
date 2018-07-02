@@ -15,11 +15,11 @@ export class NavComponent {
   links: Link[];
   actions: Link[];
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.TabletPortrait])
     .pipe(
     map(result => result.matches),
-    share()
-    );
+    // share()
+  );
 
   constructor(
     private breakpointObserver: BreakpointObserver,

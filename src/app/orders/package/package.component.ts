@@ -1,4 +1,4 @@
-import { ConfirmStatusChangeComponent } from './../confirm-status-change/confirm-status-change.component';
+import { ConfirmStatusChangeComponent } from './confirm-status-change/confirm-status-change.component';
 import { OnDestroy } from '@angular/core';
 import { OrdersService } from './../orders.service';
 import { Order } from './../../shared/classes/order';
@@ -50,10 +50,15 @@ export class PackageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onSelectRange(range: string) {
     this.range = range;
+    if (range === "Para ahora") {
+      this.displayedColumns = ['user', 'principal', 'acompanamientos', 'bebida', 'actions'];
+    } else {
+      this.displayedColumns = ['user', 'principal', 'acompanamientos', 'bebida', 'date', 'actions'];
+    }
   }
 
   sortData() {
-    console.log('sort data');
+    // console.log('sort data');
     const data = this.orders.slice();
     if (!this.sort.active || this.sort.direction == '') {
       this.dataSource.data = data;

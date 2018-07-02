@@ -44,48 +44,52 @@ exports.aggregateBalance = functions.firestore
       .catch(err => console.log(err))
   });
 
-exports.returnPaidOrder = functions.firestore
-  .document('ordenes/{orderId}')
-  .onUpdate(change => {
-    const orderBefore = change.before.data();
-    const orderAfter = change.after.data();
-    let flag = false;
-    console.log(orderBefore.status, ' vs ', orderAfter.status);
-    if (orderBefore.status !== orderAfter.status) {
-      switch (orderBefore.status) {
-        case "Cancelado (reembolso)":
-          break;
-        default:
-          if (orderAfter.paid.flag) {
-            switch (orderAfter.status) {
-              case "Cancelado (reembolso)":
-                flag = true;
-                break;
-            }
-          }
-      }
-      if (flag) {
-        const userId = orderAfter.user.id;
-        const price = orderAfter.price;
-        const userRef = admin.firestore().collection('usuarios').doc(userId);
+// exports.returnPaidOrder = functions
+//   .https
+//   .onCall((data, context) => {
+//     const userId = data.userId; // user id 
+//     const orderId = data.orderId; // order id 
+    
+//     const tokens = data.tokens;
+//     const orderBefore = change.before.data();
+//     const orderAfter = change.after.data();
+//     let flag = false;
+//     console.log(orderBefore.status, ' vs ', orderAfter.status);
+//     if (orderBefore.status !== orderAfter.status) {
+//       switch (orderBefore.status) {
+//         case "Cancelado (reembolso)":
+//           break;
+//         default:
+//           if (orderAfter.paid.flag) {
+//             switch (orderAfter.status) {
+//               case "Cancelado (reembolso)":
+//                 flag = true;
+//                 break;
+//             }
+//           }
+//       }
+//       if (flag) {
+//         const userId = orderAfter.user.id;
+//         const price = orderAfter.price;
+//         const userRef = admin.firestore().collection('usuarios').doc(userId);
 
-        return userRef
-          .get()
-          .then(userDoc => {
-            const user = userDoc.data();
-            let credit = user.credit;
-            credit += price;
-            console.log(`New credit : $${credit}`);
-            return userRef
-              .update({
-                credit: credit
-              });
-          })
-          .catch(err => console.log(err));
-      }
-    }
-    return false;
-  });
+//         return userRef
+//           .get()
+//           .then(userDoc => {
+//             const user = userDoc.data();
+//             let credit = user.credit;
+//             credit += price;
+//             console.log(`New credit : $${credit}`);
+//             return userRef
+//               .update({
+//                 credit: credit
+//               });
+//           })
+//           .catch(err => console.log(err));
+//       }
+//     }
+//     return false;
+//   });
 
 exports.notifyArrival = functions.firestore
   .document('/llegadas/{arrivalId}')
