@@ -31,9 +31,9 @@ export class PackageComponent implements OnInit, AfterViewInit, OnDestroy {
     this.ordersService
       .filteredOrders
       .pipe(
-      takeUntil(this.ngUnsubscribe),
-      tap(orders => console.log(orders)),
-      tap(orders => this.orders = orders)
+        takeUntil(this.ngUnsubscribe),
+        tap(orders => console.log(orders)),
+        tap(orders => this.orders = orders)
       )
       .subscribe(orders => this.sortData());
   }
@@ -91,7 +91,9 @@ export class PackageComponent implements OnInit, AfterViewInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) this.ordersService.updateOrderstatus(order.id, newStatus);
+      if (result) {
+        this.ordersService.updateOrderstatus(order, newStatus);
+      }
     });
 
   }

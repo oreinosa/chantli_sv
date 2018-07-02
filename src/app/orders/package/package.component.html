@@ -1,14 +1,32 @@
-<div class="row">
-  <div class="col-12">
-    <h5>{{ range }}</h5>
-  </div>
-  <div class="col-12">
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <h5>{{ range }}</h5>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
     <app-filters (selectedRange)='onSelectRange($event)'></app-filters>
-  </div>
-  <div class="col-12">
-    <app-orders-overview [daily]='range === "Para ahora"'></app-orders-overview>
-  </div>
-  <div class="col-12">
+  </mat-card-content>
+</mat-card>
+
+<mat-card *ngIf='range === "Para ahora"'>
+  <mat-card-header>
+    <mat-card-title>
+      <h5>Información de órdenes</h5>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <app-orders-overview></app-orders-overview>
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <h5>Lista de órdenes</h5>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
     <div class="table-container">
       <mat-table #table [dataSource]="dataSource" class='data-table' matSort (matSortChange)="sortData()">
         <!-- Name Column -->
@@ -73,25 +91,28 @@
               <button mat-button type='button' *ngIf='status == "Empacado"' (click)='onUpdateStatus(element, "Entregado")'>
                 Entregar
               </button>
-              <button mat-button type='button' *ngIf='status == "Nueva orden" && !(status != "Entregado")' (click)='onUpdateStatus(element, "Cancelado")'>
-                Cancelar
-              </button>
-              <button mat-button type='button' *ngIf='!(status == "Cancelado (reembolso)" || status == "Entregado") && element?.paid?.flag'
-                (click)='onUpdateStatus(element, "Cancelado (reembolso)")'>
-                Reembolsar
-              </button>
-              <!-- <button mat-button type='button' *ngIf='!(status == "Cancelado (reembolso)")' (click)='onUpdateStatus(element, "Cancelado (reembolso)")'>
-                  Reembolsar
-                </button> -->
+              <ng-container *ngIf='element?.paid?.flag; else onlyCancel'>
+                <button mat-button type='button' *ngIf='(status == "Nueva orden" || status == "Cancelado")' (click)='onUpdateStatus(element, "Cancelado (reembolso)")'>
+                  Cancelar y reembolsar
+                </button>
+                <button mat-button type='button' *ngIf='(status == "Nueva orden" || status == "Cancelado")' (click)='onUpdateStatus(element, "Cancelado (credito)")'>
+                  Cancelar y dar credito
+                </button>
+              </ng-container>
+              <ng-template #onlyCancel>
+                <button mat-button type='button' *ngIf='(status == "Nueva orden")' (click)='onUpdateStatus(element, "Cancelado")'>
+                  Cancelar
+                </button>
+              </ng-template>
             </ng-container>
           </mat-cell>
         </ng-container>
 
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]='(row.status === "Cancelado" || row.status === "Cancelado (reembolso)") ? "cancelled" : ""'></mat-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]='(row.status === "Cancelado" || row.status === "Cancelado (reembolso)" || row.status === "Cancelado (credito)") ? "cancelled" : ""'></mat-row>
       </mat-table>
     </div>
     <mat-paginator #paginator [pageSize]="20" [length]='dataSource?.data?.length' [pageSizeOptions]="[10, 20, 40, 100]" [showFirstLastButtons]="true">
     </mat-paginator>
-  </div>
-</div>
+  </mat-card-content>
+</mat-card>

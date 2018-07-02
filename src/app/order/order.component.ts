@@ -22,11 +22,11 @@ export class OrderComponent implements OnInit {
   monday: Date;
   friday: Date;
 
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.Handset, Breakpoints.TabletPortrait])
+  isHandset$: Observable<boolean> = this.breakpointObserver.observe([Breakpoints.XSmall, Breakpoints.Small])
     .pipe(
-    map(result => result.matches),
+      map(result => result.matches),
     // share()
-    );
+  );
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -40,7 +40,7 @@ export class OrderComponent implements OnInit {
   ngOnInit() {
     this.orderService
       .getWeekMenus().pipe(
-      takeUntil(this.ngUnsubscribe))
+        takeUntil(this.ngUnsubscribe))
       .subscribe(data => {
         this.menus = data;
         this.monday = this.orderService.monday;

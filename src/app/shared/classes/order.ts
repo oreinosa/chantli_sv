@@ -19,7 +19,8 @@ export class Order {
     },
     public paid?: {
       flag?: boolean,
-      by?: firebase.firestore.Timestamp
-    }
+      by?: firebase.firestore.Timestamp,
+    },
+    public cancelled?: firebase.firestore.Timestamp
   ) { }
 }

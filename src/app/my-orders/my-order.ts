@@ -29,7 +29,7 @@ export abstract class MyOrder implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  abstract onSubmit(): void;
+  abstract onSubmit(...args): void;
 
   onCancel(): void {
     this.myOrderService.onAction('lista', null);

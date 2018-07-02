@@ -205,6 +205,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
       this.filteredOrders = this.filteredOrders.filter(order => {
         switch (order.status) {
           case 'Cancelado':
+          case 'Cancelado (credito)':
           case 'Cancelado (reembolso)':
             return false;
         }

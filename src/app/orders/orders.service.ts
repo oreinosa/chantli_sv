@@ -7,6 +7,7 @@ import { User } from '../shared/classes/user';
 
 import * as firebaseApp from 'firebase/app';
 import { NotificationsService } from 'src/app/notifications/notifications.service';
+import { AngularFireFunctions } from 'angularfire2/functions';
 
 @Injectable()
 export class OrdersService {
@@ -25,7 +26,8 @@ export class OrdersService {
 
   constructor(
     private fs: AngularFirestore,
-    private notifications: NotificationsService
+    private functions: AngularFireFunctions,
+    private notifications: NotificationsService,
   ) {
     // let date = new Date();
     // let firstDayOfYear = new Date();
@@ -57,13 +59,13 @@ export class OrdersService {
     return this.usersCol
       .snapshotChanges()
       .pipe(
-      map(actions => {
-        return actions.map(a => {
-          const data = a.payload.doc.data();
-          const id = a.payload.doc.id;
-          return { id, ...data } as User;
-        });
-      })
+        map(actions => {
+          return actions.map(a => {
+            const data = a.payload.doc.data();
+            const id = a.payload.doc.id;
+            return { id, ...data } as User;
+          });
+        })
       );
   }
 
@@ -85,13 +87,13 @@ export class OrdersService {
     return this.ordersCol
       .snapshotChanges()
       .pipe(
-      map(actions => {
-        return actions.map(a => {
-          let data = a.payload.doc.data();
-          const id = a.payload.doc.id;
-          return { id, ...data } as Order;
+        map(actions => {
+          return actions.map(a => {
+            let data = a.payload.doc.data();
+            const id = a.payload.doc.id;
+            return { id, ...data } as Order;
+          })
         })
-      })
       );
   }
 
@@ -101,13 +103,13 @@ export class OrdersService {
     return this.ordersCol
       .snapshotChanges()
       .pipe(
-      map(actions => {
-        return actions.map(a => {
-          let data = a.payload.doc.data();
-          const id = a.payload.doc.id;
-          return { id, ...data } as Order;
+        map(actions => {
+          return actions.map(a => {
+            let data = a.payload.doc.data();
+            const id = a.payload.doc.id;
+            return { id, ...data } as Order;
+          })
         })
-      })
       );
   }
 
@@ -118,13 +120,13 @@ export class OrdersService {
     return this.ordersCol
       .snapshotChanges()
       .pipe(
-      map(actions => {
-        return actions.map(a => {
-          let data = a.payload.doc.data();
-          const id = a.payload.doc.id;
-          return { id, ...data } as Order;
-        })
-      }));
+        map(actions => {
+          return actions.map(a => {
+            let data = a.payload.doc.data();
+            const id = a.payload.doc.id;
+            return { id, ...data } as Order;
+          })
+        }));
   }
 
   private compare(a, b, isAsc) {
@@ -135,13 +137,30 @@ export class OrdersService {
   }
 
 
-  updateOrderstatus(id: string, newStatus: string) {
-    console.log(id, ' set to ', newStatus);
-    return this.ordersCol.doc<Order>(id)
-      .update({
-        status: newStatus
-      })
+  updateOrderstatus(order: Order, newStatus: string) {
+    console.log(order.id, ' set to ', newStatus);
+    
+    return this.ordersCol.doc<Order>(order.id)
+      .update(order)
       .then(() => this.notifications.show(`Orden actualizada a ${newStatus}`, 'Ordenes', 'info'));
+  }
+
+  cancelOrder(order: Order, cancelStatus: string) {
+    let updatedOrder: Partial<Order> = {
+      status: cancelStatus
+    };
+    if (cancelStatus !== "Cancelado") {
+      updatedOrder.paid = firebaseApp.firestore.FieldValue.delete() as any;
+      updatedOrder.cancelled = firebaseApp.firestore.Timestamp.fromDate(new Date());
+    }
+    if (cancelStatus !== "Cancelado (reembolso)") {
+      this.functions.httpsCallable('cancelOrder')({
+        orderId: order.id,
+        action: cancelStatus
+      })
+        .subscribe(a => console.log(a), e => console.log('error ', e));
+    }
+    return this.updateOrderstatus(updatedOrder, cancelStatus);
   }
 
   updateBalance(id: string, debit: number, credit: number) {

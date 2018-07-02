@@ -1,51 +1,46 @@
 <ng-container *ngIf='!$loading; else loading'>
   <div class="row">
     <ng-container *ngIf='orders?.length'>
-      <div class="col-12 text-center">
-        <h5>Información de órdenes</h5>
+      <div class="col-12 col-sm-6 col-lg-3">
+        <h6>
+          <b>
+            Principales
+          </b>
+        </h6>
+        <p *ngFor='let principal of principales'>
+          {{ principal?.label }} ==> {{ principal?.count }}
+        </p>
       </div>
-      <ng-container *ngIf='daily'>
-        <div class="col-12 col-sm-6 col-lg-3">
-          <h6>
-            <b>
-              Principales
-            </b>
-          </h6>
-          <p *ngFor='let principal of principales'>
-            {{ principal }}
+      <div class="col-12 col-sm-6 col-lg-3">
+        <h6>
+          <b>
+            Acompañamientos
+          </b>
+        </h6>
+        <p *ngFor='let ac of acompanamientos'>
+            {{ ac?.label }} ==> {{ ac?.count }}
           </p>
-        </div>
-        <div class="col-12 col-sm-6 col-lg-3">
-          <h6>
-            <b>
-              Acompañamientos
-            </b>
-          </h6>
-          <p *ngFor='let ac of acompanamientos'>
-            {{ ac }}
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3">
+        <h6>
+          <b>
+            Bebidas
+          </b>
+        </h6>
+        <p *ngFor='let bebida of bebidas'>
+            {{ bebida?.label }} ==> {{ bebida?.count }}
           </p>
-        </div>
-        <div class="col-12 col-sm-6 col-lg-3">
-          <h6>
-            <b>
-              Bebidas
-            </b>
-          </h6>
-          <p *ngFor='let bebida of bebidas'>
-            {{ bebida }}
-          </p>
-        </div>
-        <div class="col-12 col-sm-6 col-lg-3">
-          <h6>
-            <b>
-              Tortillas
-            </b>
-          </h6>
-          <p>
-            {{ tortillas }}
-          </p>
-        </div>
-      </ng-container>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-3">
+        <h6>
+          <b>
+            Tortillas
+          </b>
+        </h6>
+        <p>
+          {{ tortillas }}
+        </p>
+      </div>
     </ng-container>
   </div>
 </ng-container>

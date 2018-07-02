@@ -10,7 +10,6 @@ exports.aggregateBalance = functions.firestore
     const price = order.price;
     // ref to the parent document
     const userRef = admin.firestore().collection('usuarios').doc(userId)
-
     // get all comments and aggregate
     return userRef
       .get()
@@ -44,52 +43,48 @@ exports.aggregateBalance = functions.firestore
       .catch(err => console.log(err))
   });
 
-// exports.returnPaidOrder = functions
-//   .https
-//   .onCall((data, context) => {
-//     const userId = data.userId; // user id 
-//     const orderId = data.orderId; // order id 
-    
-//     const tokens = data.tokens;
-//     const orderBefore = change.before.data();
-//     const orderAfter = change.after.data();
-//     let flag = false;
-//     console.log(orderBefore.status, ' vs ', orderAfter.status);
-//     if (orderBefore.status !== orderAfter.status) {
-//       switch (orderBefore.status) {
-//         case "Cancelado (reembolso)":
-//           break;
-//         default:
-//           if (orderAfter.paid.flag) {
-//             switch (orderAfter.status) {
-//               case "Cancelado (reembolso)":
-//                 flag = true;
-//                 break;
-//             }
-//           }
-//       }
-//       if (flag) {
-//         const userId = orderAfter.user.id;
-//         const price = orderAfter.price;
-//         const userRef = admin.firestore().collection('usuarios').doc(userId);
+exports.cancelOrder = functions
+  .https
+  .onCall((data, context) => {
+    const orderId = data.orderId; // order id 
+    const action = data.action; // "cancelar" o "reembolsar" o "credito"
+    console.log(action, ' order ', orderId);
+    const orderRef = admin.firestore().collection('ordenes').doc(orderId)
 
-//         return userRef
-//           .get()
-//           .then(userDoc => {
-//             const user = userDoc.data();
-//             let credit = user.credit;
-//             credit += price;
-//             console.log(`New credit : $${credit}`);
-//             return userRef
-//               .update({
-//                 credit: credit
-//               });
-//           })
-//           .catch(err => console.log(err));
-//       }
-//     }
-//     return false;
-//   });
+    return orderRef
+      .get()
+      .then(orderDoc => {
+        const order = orderDoc.data();
+        console.log('order data ', order);
+        const userRef = admin.firestore().collection('usuarios').doc(order.user.id);
+
+        return userRef
+          .get()
+          .then(userDoc => {
+            const user = userDoc.data();
+            switch (action) {
+              case "Cancelado (credito)":
+                const currentCredit = user.credit;
+                const newCredit = (currentCredit + order.price);
+                return userRef
+                  .update({
+                    credit: newCredit
+                  })
+                  .then(() => `Nuevo credito : ${newCredit}`);
+              case "Cancelado":
+                const currentDebit = user.debit;
+                const newDebit = (currentDebit - order.price);
+                return userRef
+                  .update({
+                    debit: newDebit
+                  })
+                  .then(() => `Nuevo debit : ${newDebit}`);
+            }
+          })
+          .catch(err => console.log(err));
+      })
+      .catch(err => console.log(err));
+  });
 
 exports.notifyArrival = functions.firestore
   .document('/llegadas/{arrivalId}')

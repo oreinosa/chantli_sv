@@ -101,7 +101,7 @@
                     (click)='onAction("editar",element)'>
                     <mat-icon>edit</mat-icon>
                   </button>
-                  <button type='button' mat-icon-button matTooltip='Cancelar' *ngIf='(element.status !=  "Entregado") && (element.status != "Cancelado") && (element.status != "Cancelado (reembolso)")'
+                  <button type='button' mat-icon-button matTooltip='Cancelar' *ngIf='(element.status ==  "Nueva orden")'
                     [routerLink]='["cancelar",element.id]' (click)='onAction("cancelar",element)'>
                     <mat-icon>cancel</mat-icon>
                   </button>

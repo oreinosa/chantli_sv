@@ -7,7 +7,7 @@ import { AuthService } from '../auth/auth.service';
 import { User } from '../shared/classes/user';
 import { Order } from '../shared/classes/order';
 
-import { take, takeUntil, tap, switchMap, startWith } from 'rxjs/operators';
+import { take, takeUntil, tap, switchMap, startWith, map } from 'rxjs/operators';
 import { Subject, Observable, BehaviorSubject } from 'rxjs';
 
 @Component({
@@ -48,25 +48,26 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
 
     this.auth
       .user.pipe(
-      takeUntil(this.ngUnsubscribe),
-      tap(user => {
-        console.log(user);
-        this.user = user;
-        this.limits = [5, 10, 30];
-        this.limitSubject = new BehaviorSubject<number>(5)
-      }),
-      switchMap(() => this.limitSubject),
-      takeUntil(this.ngUnsubscribe),
-      tap(limit => {
-        console.log('limit to ', limit);
-        this.loaded = false;
-      }),
-      switchMap(limit => this.myOrdersService.getMyOrders(limit, this.user)),
-      takeUntil(this.ngUnsubscribe),
-      tap(orders => {
-        console.log(orders);
-        this.dataSource.data = orders;
-      })
+        takeUntil(this.ngUnsubscribe),
+        tap(user => {
+          console.log(user);
+          this.user = user;
+          this.limits = [5, 10, 30];
+          this.limitSubject = new BehaviorSubject<number>(5)
+        }),
+        switchMap(() => this.limitSubject),
+        takeUntil(this.ngUnsubscribe),
+        tap(limit => {
+          console.log('limit to ', limit);
+          this.loaded = false;
+        }),
+        switchMap(limit => this.myOrdersService.getMyOrders(limit, this.user)),
+        takeUntil(this.ngUnsubscribe),
+        map(orders => orders.sort((a, b) => this.compare(a.date.for.toDate(), b.date.for.toDate(), false))),
+        tap(orders => {
+          console.log(orders);
+          this.dataSource.data = orders;
+        })
       )
       .subscribe(() => this.loaded = true);
 
@@ -75,6 +76,14 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
     )
       .subscribe(action => this.action = action)
   }
+
+  private compare(a, b, isAsc) {
+    if (a == b) {
+      return 0;
+    }
+    return (a < b ? -1 : 1) * (isAsc ? 1 : - 1);
+  }
+
 
   ngOnDestroy() {
     this.ngUnsubscribe.next();

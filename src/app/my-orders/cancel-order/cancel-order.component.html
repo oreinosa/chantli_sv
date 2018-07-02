@@ -1,5 +1,5 @@
-<mat-card class='mat-elevation-z0'>
-  <mat-card-content *ngIf='order'>
+<mat-card class='mat-elevation-z0' *ngIf='order'>
+  <mat-card-content>
     <h6>
       <b> Quieres cancelar esta orden?</b>
     </h6>
@@ -25,10 +25,18 @@
     </p>
   </mat-card-content>
   <mat-card-actions>
-    <button type='button' mat-button (click)='onSubmit()'>
-      <!-- <mat-icon>edit</mat-icon> -->
-      Cancelar
-    </button>
+    <ng-container *ngIf='order?.status as status'>
+      <ng-container *ngIf='order?.paid?.flag;else onlyCancel'>
+        <button mat-button type='button' *ngIf='(status == "Nueva orden" || status == "Cancelado")' (click)='onSubmit("Cancelado (credito)")'>
+          Cancelar y recibir credito
+        </button>
+      </ng-container>
+      <ng-template #onlyCancel>
+        <button mat-button type='button' *ngIf='(status == "Nueva orden")' (click)='onSubmit("Cancelado")'>
+          Cancelar
+        </button>
+      </ng-template>
+    </ng-container>
     <button type='button' mat-button (click)='onCancel()'>
       <!-- <mat-icon>edit</mat-icon> -->
       Atrás

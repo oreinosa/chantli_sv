@@ -13,8 +13,8 @@ export class CancelOrderComponent extends MyOrder {
     router: Router
   ) { super(myOrderService, router); }
 
-  onSubmit(): void {
-    this.myOrderService.cancelOrder(this.order.id)
+  onSubmit(cancelStatus: string): void {
+    this.myOrderService.cancelOrder(this.order, cancelStatus)
       .then(() => this.onCancel())
       .catch(e => console.log(e));
   }
