@@ -49,7 +49,7 @@
             <ng-container *ngIf='selectedMenus.length;else menuNotAvailable'>
               <!-- {{ selectedMenu | json }} -->
               <ng-container *ngFor='let selectedMenu of selectedMenus;last as isLast;let i=index'>
-                <div class="col-12 mx-auto menu-container" [ngClass]='selectedMenus.length > 1 ? "col-md-10 col-lg-6" : "col-md-8 col-lg-6"'>
+                <div class="col-12 menu-container" [ngClass]='selectedMenus.length > 1 ? "col-md-10 offset-md-1 col-lg-6 offset-lg-3" : "col-md-8 col-lg-6 mx-auto"'>
                   <app-day-menu [menu]='selectedMenu' (selected)='onOrderMenu($event)'></app-day-menu>
                   <br *ngIf='!isLast'>
                 </div>

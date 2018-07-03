@@ -20,13 +20,13 @@
       <div class="col-12 col-sm-6 col-md-4">
         <mat-form-field class='full-width'>
           <input matInput [max]='getLastDayMonth()' [min]='getFirstDayMonth()' [matDatepicker]="rangeFromPicker" placeholder="Desde"
-            [(ngModel)]='rangeFrom' name='rangeFrom' (dateChange)='selectedRange = "specific";applyFilters()'>
+            [(ngModel)]='rangeFrom' name='rangeFrom'>
           <mat-datepicker-toggle matSuffix [for]="rangeFromPicker"></mat-datepicker-toggle>
           <mat-datepicker #rangeFromPicker></mat-datepicker>
         </mat-form-field>
         <mat-form-field class='full-width'>
           <input matInput [max]='getLastDayMonth()' [min]='getFirstDayMonth()' [matDatepicker]="rangeToPicker" placeholder="Hasta"
-            [(ngModel)]='rangeTo' name='rangeTo' (dateChange)='selectedRange = "specific";applyFilters()'>
+            [(ngModel)]='rangeTo' name='rangeTo'>
           <mat-datepicker-toggle matSuffix [for]="rangeToPicker"></mat-datepicker-toggle>
           <mat-datepicker #rangeToPicker></mat-datepicker>
         </mat-form-field>
@@ -34,6 +34,9 @@
       <!-- DATE RANGES FILTER -->
       <div class="col-12 col-sm-6 col-md-4 my-3 ranges">
         <ng-container *ngIf='today.getMonth() === selectedMonth'>
+          <button mat-raised-button type='button' (click)='selectedRange = "specific";applyFilters()'>
+            Fecha específica
+          </button>
           <button mat-raised-button type='button' (click)='selectedRange = "today";applyFilters()' [disabled]='selectedRange==="today" || selectedRange==="day"'>
             Ahora ({{ today | spanishDate }})
           </button>

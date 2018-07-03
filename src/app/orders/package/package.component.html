@@ -57,7 +57,7 @@
             <ng-container *ngFor='let acompanamiento of element.products?.acompanamientos'>
               <p> {{ acompanamiento }}</p>
             </ng-container>
-            <p>{{ element.tortillas + ' tortilla' + (element.tortillas > 1 ? 's' : '') }}
+            <p *ngIf='element?.tortillas'>{{ element?.tortillas + ' tortilla' + (element.tortillas > 1 ? 's' : '') }}
             </p>
           </mat-cell>
         </ng-container>

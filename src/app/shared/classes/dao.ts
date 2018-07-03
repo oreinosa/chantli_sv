@@ -47,7 +47,7 @@ export abstract class DAO<T> {
     // console.log(id);
     return this.objectCollection
       .doc(id)
-      .set(object, { merge: true })
+      .update(object)
       .then(doc => {
         this.notificationsService.show(`${this.className} editado`, this.collectionName.charAt(0).toUpperCase() + this.collectionName.substr(1), 'info');
         return object;

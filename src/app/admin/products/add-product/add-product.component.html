@@ -24,9 +24,14 @@
     <mat-form-field *ngIf='object.category === "Bebida"'>
       <input matInput type="number" placeholder="Costo extra" [(ngModel)]='object.extra' name='extra' id='extra' required min=0>
     </mat-form-field>
-    <p *ngIf='object.category === "Principal"'>
-      <mat-checkbox [(ngModel)]='object.noSides' name='noSides' id='noSides'>Sin acompañamiento?</mat-checkbox>
-    </p>
+    <ng-container *ngIf='object.category === "Principal"'>
+      <p>
+        <mat-checkbox ([ngModel])='object.noSides' name='noSides' id='noSides'>Sin acompañamiento?</mat-checkbox>
+      </p>
+      <p>
+        <mat-checkbox ([ngModel])='object.noTortillas' name='noTortillas' id='noTortillas'>Sin tortillas?</mat-checkbox>
+      </p>
+    </ng-container>
     <app-uploader #uploader></app-uploader>
     <button mat-button type='submit' [disabled]='f.invalid || !uploader.imageURL'>Agregar</button>
     <button mat-button type='button' routerLink='../'>Atrás</button>

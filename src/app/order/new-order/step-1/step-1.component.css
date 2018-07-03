@@ -1,9 +1,9 @@
-.hover figure img {
+.hoverProduct figure img {
 	opacity: 1;
 	-webkit-transition: .3s ease-in-out;
 	transition: .3s ease-in-out;
 }
-.hover figure img:hover, .hover figure img.selected {
+.hoverProduct figure img:hover, .hoverProduct figure img.selected {
 	opacity: 0.5;
 }
 figure {
@@ -12,9 +12,10 @@ figure {
 	overflow: hidden;
 	height: 250px;	
 }
-.hover .img-fluid{
+.hoverProduct .img-fluid{
 	cursor: pointer;	
 }
 .img-fluid{
 	height: 250px;
+	width: 325px;
 }

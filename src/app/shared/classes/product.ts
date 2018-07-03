@@ -7,6 +7,7 @@ export interface Product {
   cost?: number;
   extra?: number;
   noSides?: boolean,
+  noTortillas?: boolean,
   category?: string;
 }
 export class Product {
@@ -19,6 +20,7 @@ export class Product {
     public cost?: number,
     public extra?: number,
     public noSides?: boolean,
+    public noTortillas?: boolean,
     public category?: string
   ) { }
 }

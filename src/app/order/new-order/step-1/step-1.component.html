@@ -9,40 +9,53 @@
   </mat-card-header>
   <mat-card-content>
     <div class="text-center">
-      <h2>Selecciona el plato principal y acompañamientos</h2>
+      <h1>Selecciona el plato principal y acompañamientos</h1>
     </div>
-    <hr>
+    <br>
     <div class="row" *ngIf='menu.products as products'>
       <!-- PLATOS PRINCIPALES -->
-      <div class="col-12 col-sm-6 text-center hover" *ngIf='products | productsByCategory:"Principal" as principales'>
-        <h4>Platos principales</h4>
+      <div class="col-12 col-sm-6 text-center hoverProduct" *ngIf='products | productsByCategory:"Principal" as principales'>
+        <h2>Platos principales</h2>
         <div class="row">
           <!-- PRODUCTS LOOP -->
           <div class='col-12' *ngFor='let product of principales'>
+            <h5>
+              {{ product.name }}
+            </h5>
             <figure>
               <img [src]="product.imageURL" *ngIf='product?.imageURL' class="img-fluid img-thumbnail rounded" (click)='onSelectPrincipal(product)'
-                [ngClass]='principal?.id === product?.id ? "selected":""'> 
-                <!-- PRODUCT IMAGE, NG CLASS TO SHOW AS SELECTED -->
+                [ngClass]='principal?.id === product?.id ? "selected":""'>
+              <!-- PRODUCT IMAGE, NG CLASS TO SHOW AS SELECTED -->
             </figure>
+            <h6>{{ product.description }}</h6>
             <!-- IF NO SIDES EQUALS TRUE -->
-            <p *ngIf='product.noSides'>(¡Este plato principal no lleva acompanamientos!)</p>
-            <p>{{ product.name }}</p>
-            <p>{{ product.description }}</p>
+            <p *ngIf='product.noSides'>
+              <b>
+                <i>(¡Este plato principal no lleva acompanamientos!)</i>
+              </b>
+            </p>
+            <p *ngIf='product.noTortillas'>
+              <b>
+                <i>(¡Este plato principal no lleva tortillas!)</i>
+              </b>
+            </p>
           </div>
         </div>
       </div>
       <!-- END PLATOS PRINCIPALES -->
-      <div class="col-12 col-sm-6 text-center hover" *ngIf='products | productsByCategory:"Acompañamiento" as _acompanamientos'>
+      <div class="col-12 col-sm-6 text-center hoverProduct" *ngIf='products | productsByCategory:"Acompañamiento" as _acompanamientos'>
         <ng-container *ngIf='_acompanamientos.length; else noAcompanamientos'>
-          <h4>Acompañamientos</h4>
+          <h2>Acompañamientos</h2>
           <div class="row">
             <div class='col-12 col-lg-6' *ngFor='let product of _acompanamientos'>
+              <h5>
+                {{ product.name }}
+              </h5>
               <figure>
                 <img [src]="product.imageURL" *ngIf='product?.imageURL' class="img-fluid img-thumbnail rounded" (click)='onSelectAcompanamiento(product)'
                   [ngClass]='(acompanamientos | selected:product:refresh) ? "selected":""'>
               </figure>
-              <p>{{ product.name }}</p>
-              <p>{{ product.description }}</p>
+              <h6>{{ product.description }}</h6>
             </div>
             <div class="col-12">
               <mat-checkbox [formControl]='doubleFlag' (change)='onDoubleAcompanamiento()'>

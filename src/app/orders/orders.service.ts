@@ -93,7 +93,8 @@ export class OrdersService {
             const id = a.payload.doc.id;
             return { id, ...data } as Order;
           })
-        })
+        }),
+        map(orders => orders.sort((a, b) => this.compare(a.date.by, b.date.by, false)))
       );
   }
 
@@ -139,9 +140,11 @@ export class OrdersService {
 
   updateOrderstatus(order: Order, newStatus: string) {
     console.log(order.id, ' set to ', newStatus);
-    
+
     return this.ordersCol.doc<Order>(order.id)
-      .update(order)
+      .update({
+        status: newStatus
+      })
       .then(() => this.notifications.show(`Orden actualizada a ${newStatus}`, 'Ordenes', 'info'));
   }
 

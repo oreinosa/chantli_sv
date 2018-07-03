@@ -9,14 +9,16 @@
   </mat-card-header>
   <mat-card-content>
     <div class="row text-center">
-      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+      <div class="col-12 col-md-6 col-lg-4">
         <h3>Plato principal</h3>
         <figure>
           <img [src]="principal.imageURL" class="img-fluid img-thumbnail rounded">
         </figure>
         <p>{{ principal.name }}</p>
+        <p *ngIf='principal?.noSides'>(¡Este plato principal no lleva acompanamientos!)</p>
+        <p *ngIf='principal?.noTortillas'>(¡Este plato principal no lleva tortillas!)</p>
       </div>
-      <div class="col-12 col-sm-6 col-md-4 col-lg-3" *ngIf='acompanamientos.length'>
+      <div class="col-12 col-md-6 col-lg-4 col-xl-3" *ngIf='acompanamientos.length'>
         <h3>Acompañamientos</h3>
         <div class="row">
           <div class="col-12" *ngFor='let acompanamiento of acompanamientos'>
@@ -27,23 +29,24 @@
           </div>
         </div>
       </div>
-      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+
+      <div class="col-12 col-md-6 col-lg-4">
         <h3>Bebida</h3>
         <figure>
           <img [src]="bebida.imageURL" class="img-fluid img-thumbnail rounded">
         </figure>
         <p>{{ bebida.name }}</p>
       </div>
-      <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-        <h3>Tortillas</h3>
-        <h3>
-          <mat-form-field class='my-3'>
-            <input matInput type="number" [(ngModel)]='tortillas' #tortillasCtrl='ngModel' required min='0' max='4' pattern='^[0-4]$'>
-            <mat-hint style='font-size: 85%'>Máximo 4</mat-hint>
-          </mat-form-field>
-        </h3>
-      </div>
       <div class="col-12">
+        <ng-container *ngIf='!principal?.noTortillas'>
+          <h3 class='text-right'>
+            <mat-form-field class='my-3'>
+              <input matInput type="number" placeholder="Tortillas" [(ngModel)]='tortillas' #tortillasCtrl='ngModel' required min='0' max='4'
+                pattern='^[0-4]$'>
+              <mat-hint style='font-size: 85%'>Máximo 4</mat-hint>
+            </mat-form-field>
+          </h3>
+        </ng-container>
         <h1 class='text-right'>Total :
           <b>{{ menu.price | calTotal:bebida:tortillas | currency }}</b>
         </h1>
@@ -57,7 +60,7 @@
     <button mat-button type='button' (click)='onBack(2)'>
       Atras (Paso 2)
     </button>
-    <button mat-button type='button' (click)='onConfirm(total)' *ngIf='menu.price | calTotal:bebida:tortillas as total' [disabled]='tortillasCtrl.invalid'>
+    <button mat-button type='button' (click)='onConfirm(total)' *ngIf='menu.price | calTotal:bebida:tortillas as total' [disabled]='tortillasCtrl?.invalid'>
       Confirmar
     </button>
   </mat-card-actions>

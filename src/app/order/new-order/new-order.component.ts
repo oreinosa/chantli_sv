@@ -36,23 +36,23 @@ export class NewOrderComponent implements OnInit {
     this.authService
       .user
       .pipe(
-      take(1)
+        take(1)
       )
       .subscribe(user => this.user = user);
 
     this.orderService
       .menuSubject
       .pipe(
-      take(1),
-      tap(menu => menu ? false : this.router.navigate(['menu']))
+        take(1),
+        tap(menu => menu ? false : this.router.navigate(['menu']))
       )
       .subscribe(menu => this.menu = menu);
 
     this.route
       .paramMap
       .pipe(
-      takeUntil(this.ngUnsubscribe),
-      map(params => +params.get('step'))
+        takeUntil(this.ngUnsubscribe),
+        map(params => +params.get('step'))
       )
       .subscribe(step => this.step = step ? step : 1);
 
@@ -104,6 +104,14 @@ export class NewOrderComponent implements OnInit {
         flag: false
       }
     };
+
+    if (products.principal.noSides) {
+      delete order.products.acompanamientos;
+    }
+
+    if (products.principal.noTortillas) {
+      delete order.tortillas;
+    }
 
     this.orderService
       .submitNewOrder(order)

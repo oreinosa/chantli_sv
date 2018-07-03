@@ -31,6 +31,10 @@ export class AddProductComponent extends Add<Product>  {
   }
 
   onSubmit(product: Product): Promise<void> {
+    product.noTortillas === true ? false : delete product.noTortillas;
+    product.noSides === true ? false : delete product.noSides;
+    // console.log(product);
+    
     return this.uploader
       .onSubmit('productos', this.object.name)
       .then(imageURL => product.imageURL = imageURL)

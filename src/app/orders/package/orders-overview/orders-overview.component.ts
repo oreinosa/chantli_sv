@@ -53,7 +53,7 @@ export class OrdersOverviewComponent implements OnInit {
         let products, bebida: string, principal: string, acompanamientos: string[], bebidaIndex: number, principalIndex: number, acompanamientosIndex: number;
         for (let order of this.orders) {
           // TORTILLAS SUM  
-          this.tortillas += order.tortillas;
+          this.tortillas += order.tortillas ? order.tortillas : 0;
 
           // PRINCIPALES, BEBIDA, AND ACOMPANAMIENTOS LABELS
           products = order.products;
@@ -84,7 +84,7 @@ export class OrdersOverviewComponent implements OnInit {
           acompanamientos = products.acompanamientos as string[];
           if (acompanamientos) {
             for (let ac of acompanamientos) {
-              acompanamientosIndex = this.bebidas.findIndex((productCount: ProductCount) => productCount.label === ac);
+              acompanamientosIndex = this.acompanamientos.findIndex((productCount: ProductCount) => productCount.label === ac);
               if (acompanamientosIndex < 0) {
                 this.acompanamientos.push({
                   label: ac,

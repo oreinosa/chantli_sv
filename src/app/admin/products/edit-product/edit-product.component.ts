@@ -32,10 +32,13 @@ export class EditProductComponent extends Edit<Product> {
   }
 
   onSubmit(product: Product): Promise<void> {
-    console.log(product);
+    product.noTortillas === true ? false : delete product.noTortillas;
+    product.noSides === true ? false : delete product.noSides;
+    // console.log(product);
+
     if (this.uploader.image) {
       return this.uploader
-        .onSubmit('products', this.object.name)
+        .onSubmit('productos', this.object.name)
         .then(imageURL => product.imageURL = imageURL)
         .then(() => super.onSubmit(product));
     }

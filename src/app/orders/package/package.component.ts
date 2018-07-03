@@ -83,7 +83,7 @@ export class PackageComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onUpdateStatus(order: Order, newStatus: string) {
     const dialogRef = this.dialog.open(ConfirmStatusChangeComponent, {
-      width: '250px',
+      width: '350px',
       data: {
         newStatus: newStatus,
         order: order
@@ -92,7 +92,15 @@ export class PackageComponent implements OnInit, AfterViewInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.ordersService.updateOrderstatus(order, newStatus);
+        switch (newStatus) {
+          case "Cancelado":
+          case "Cancelado (reembolso)":
+          case "Cancelado (credito)":
+            this.ordersService.cancelOrder(order, newStatus);
+            break;
+          default:
+            this.ordersService.updateOrderstatus(order, newStatus);
+        }
       }
     });
 
