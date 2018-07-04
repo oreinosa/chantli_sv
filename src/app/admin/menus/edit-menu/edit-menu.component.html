@@ -17,14 +17,14 @@
       <div class="col-12 col-sm-4">
         <p>Agregar producto</p>
         <mat-form-field *ngIf='products; else loadingProducts' style='width:100%'>
-          <input matInput placeholder="Productos" [matAutocomplete]="auto" [formControl]="stateCtrl" name='product'>
-          <mat-autocomplete #auto="matAutocomplete" (optionSelected)='selectProduct($event.option.value)'>
-            <mat-option *ngFor="let product of filteredProducts | async" [value]="product.name">
+          <input matInput placeholder="Productos" [matAutocomplete]="auto" [formControl]="productCtrl" name='product'>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)='selectProduct($event.option.value)' [displayWith]='displayProductFn'>
+            <mat-option *ngFor="let product of filteredProducts | async" [value]="product">
               <span>{{ product.name }}</span>
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
-        <button type='button' mat-button (click)='addToSubcollection();stateCtrl.reset()' [disabled]='!selectedSubcollectionObject'>
+        <button type='button' mat-button (click)='addToSubcollection();productCtrl.setValue("")' [disabled]='!selectedSubcollectionObject'>
           <mat-icon>add</mat-icon>
           Agregar
         </button>

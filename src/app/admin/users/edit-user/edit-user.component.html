@@ -1,3 +1,28 @@
-<p>
-edit-user works!
-</p>
+<form #f='ngForm' (ngSubmit)='onSubmit(f.value);'>
+  <ng-container *ngIf='!f?.submitted && object; else loading'>
+    <h4>Editar usuario</h4>
+    <mat-form-field>
+      <input matInput type="text" placeholder="Nombre" [ngModel]='object.name' name='name' id='name' disabled>
+    </mat-form-field>
+    <mat-form-field>
+      <textarea matInput rows='3' placeholder="Email" [ngModel]='object.email' name='email' id='email' disabled></textarea>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select matInput placeholder="Rol" [ngModel]='object.role' name='role' id='role' required>
+        <mat-option value='Cliente'>Cliente</mat-option>
+        <mat-option value='Repartidor'>Repartidor</mat-option>
+        <mat-option value='Admin'>Admin</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-select matInput placeholder="Lugar de trabajo" [ngModel]='object.workplace' name='workplace' id='workplace' disabled>
+        <mat-option *ngFor='let workplace of workplaces | async' [value]='workplace.name'>{{ workplace.name }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-button type='submit' [disabled]='f.invalid'>Editar</button>
+    <button mat-button type='button' routerLink='../../'>Atrás</button>
+  </ng-container>
+  <ng-template #loading>
+    <mat-spinner class="mx-auto"></mat-spinner>
+  </ng-template>
+</form>

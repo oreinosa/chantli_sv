@@ -73,34 +73,33 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
         };
       }),
       switchMap(() => this.selectedUserCtrl.valueChanges),
-      // startWith<string | User>(''),
-      // tap(user => console.log(typeof user, user)),
-      map(user => (typeof user === 'object' && user) ? user.name : user as string),
-      map(user => this.users ? this.filterUsers(user ? user : '') : this.allUsers),
+      startWith(''),
+      map((user: any) => (typeof user === 'object') ? user.name : user),
+      map((user: string) => this.users ? this.filterUsers(user) : this.allUsers.slice()),
       // tap(users => console.log(users))
     );
 
     this.ordersService
       .payingUser.pipe(
-      takeUntil(this.ngUnsubscribe),
-      tap(user => {
-        // console.log('paying user ', user);
-        this.payingUser = user;
-      }),
-      tap(() => (!!this.payingUser || (!this.payingUser && this.allFromWorkplace)) ? false : this.dataSource.data = []),
-      filter(() => (!!this.payingUser || (!this.payingUser && this.allFromWorkplace))),
-      switchMap(user => user ? this.ordersService.getOrdersByUser(user.id) : this.ordersService.getOrdersByWorkplace(this.selectedWorkplace)),
-      tap(orders => console.log(orders)),
-      map(orders => orders.filter(order => {
-        switch (order.status) {
-          case 'Cancelado':
-          case 'Cancelado (reembolso)':
-            return false;
-        }
-        return true;
-      })),
-      // map(orders => orders.filter(order => !order.paid.flag)),
-      takeUntil(this.ngUnsubscribe)
+        takeUntil(this.ngUnsubscribe),
+        tap(user => {
+          // console.log('paying user ', user);
+          this.payingUser = user;
+        }),
+        tap(() => (!!this.payingUser || (!this.payingUser && this.allFromWorkplace)) ? false : this.dataSource.data = []),
+        filter(() => (!!this.payingUser || (!this.payingUser && this.allFromWorkplace))),
+        switchMap(user => user ? this.ordersService.getOrdersByUser(user.id) : this.ordersService.getOrdersByWorkplace(this.selectedWorkplace)),
+        tap(orders => console.log(orders)),
+        map(orders => orders.filter(order => {
+          switch (order.status) {
+            case 'Cancelado':
+            case 'Cancelado (reembolso)':
+              return false;
+          }
+          return true;
+        })),
+        // map(orders => orders.filter(order => !order.paid.flag)),
+        takeUntil(this.ngUnsubscribe)
       )
       .subscribe(orders => this.dataSource.data = orders);
     // .subscribe(orders => this.dataSource.data = (this.payingUser || (!this.payingUser && this.allFromWorkplace)) ? orders : []);

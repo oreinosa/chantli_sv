@@ -149,12 +149,9 @@ export class OrdersService {
   }
 
   cancelOrder(order: Order, cancelStatus: string) {
-    let updatedOrder: Partial<Order> = {
-      status: cancelStatus
-    };
     if (cancelStatus !== "Cancelado") {
-      updatedOrder.paid = firebaseApp.firestore.FieldValue.delete() as any;
-      updatedOrder.cancelled = firebaseApp.firestore.Timestamp.fromDate(new Date());
+      order.paid = firebaseApp.firestore.FieldValue.delete() as any;
+      order.cancelled = firebaseApp.firestore.Timestamp.fromDate(new Date());
     }
     if (cancelStatus !== "Cancelado (reembolso)") {
       this.functions.httpsCallable('cancelOrder')({
@@ -163,7 +160,7 @@ export class OrdersService {
       })
         .subscribe(a => console.log(a), e => console.log('error ', e));
     }
-    return this.updateOrderstatus(updatedOrder, cancelStatus);
+    return this.updateOrderstatus(order, cancelStatus);
   }
 
   updateBalance(id: string, debit: number, credit: number) {

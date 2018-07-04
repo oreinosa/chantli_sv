@@ -65,7 +65,7 @@ export class NavComponent {
         this.links = links;
         this.actions = actions;
         this.user = user;
-      });
+      }, e => console.log(e));
   }
 
   signOut() {

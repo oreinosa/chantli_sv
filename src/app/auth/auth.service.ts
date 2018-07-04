@@ -30,14 +30,14 @@ export class AuthService {
     this.user = this.afAuth
       .authState
       .pipe(
-      switchMap(user => {
-        // console.log('Firebase user : ', user);
-        if (user) {
-          const doc = this.afs.collection<User>('usuarios').doc<User>(user.uid);
-          return doc.valueChanges();
-        }
-        return of(null);
-      })
+        switchMap(user => {
+          // console.log('Firebase user : ', user);
+          if (user) {
+            const doc = this.afs.collection<User>('usuarios').doc<User>(user.uid);
+            return doc.valueChanges();
+          }
+          return of(null);
+        })
       );
   }
 
@@ -67,9 +67,9 @@ export class AuthService {
     return this.afAuth.auth
       .signInWithPopup(_provider)
       .then(
-      credential => this.updateUserData(credential.user)
-        .then(() => this.notificationsService.show(`Hola, ${credential.user.displayName}`, 'Autenticación', 'info')),
-      e => console.log(e))
+        credential => this.updateUserData(credential.user)
+          .then(() => this.notificationsService.show(`Hola, ${credential.user.displayName}`, 'Autenticación', 'info')),
+        e => console.log(e))
   }
 
   signUp(signUp: SignUp) {
@@ -113,7 +113,7 @@ export class AuthService {
   private updateUserData(user, signUp?: SignUp) {
     // Sets user data to firestore on login
     // console.log(user, signUp);
-    const userRef: AngularFirestoreDocument<User> = this.afs.doc(`usuarios/${user.uid}`);
+    const userRef: AngularFirestoreDocument<User> = this.afs.collection('usuarios').doc(user.uid);
     return userRef
       .ref
       .get()
@@ -134,6 +134,6 @@ export class AuthService {
           }
           return userRef.set(data, { merge: true });
         }
-      });
+      }, e => console.log(e));
   }
 }

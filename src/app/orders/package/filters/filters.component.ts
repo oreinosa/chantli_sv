@@ -74,45 +74,45 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
     this.ordersService
       .mode.pipe(
-      takeUntil(this.ngUnsubscribe)
+        takeUntil(this.ngUnsubscribe)
       )
       .subscribe(mode => this.mode = mode);
 
     this.ordersService
       .getUsers()
       .pipe(
-      takeUntil(this.ngUnsubscribe),
+        takeUntil(this.ngUnsubscribe),
     )
       .subscribe(users => this.allUsers = users);
 
     this.workplacesService
       .getAll()
       .pipe(
-      take(1)
+        take(1)
       )
       .subscribe(workplaces => this.workplaces = workplaces);
 
     this.filteredUsers = this.selectedUserCtrl
       .valueChanges
       .pipe(
-      startWith(''),
-      map(user => user ? this.filterUsers(user) : this.users.slice())
+        startWith(''),
+        map(user => user ? this.filterUsers(user) : this.users.slice())
       );
 
     this.monthFilter = new BehaviorSubject(currentMonth);
 
     this.monthFilter
       .pipe(
-      takeUntil(this.ngUnsubscribe),
-      map(month => {
-        let dateRange: DateRange = {
-          from: this.getFirstDayMonth(month),
-          to: this.getLastDayMonth(month)
-        };
-        return dateRange;
-      }),
-      switchMap(({ from, to }) => this.ordersService.getOrders(from, to)),
-      takeUntil(this.ngUnsubscribe),
+        takeUntil(this.ngUnsubscribe),
+        map(month => {
+          let dateRange: DateRange = {
+            from: this.getFirstDayMonth(month),
+            to: this.getLastDayMonth(month)
+          };
+          return dateRange;
+        }),
+        switchMap(({ from, to }) => this.ordersService.getOrders(from, to)),
+        takeUntil(this.ngUnsubscribe),
       // tap(orders => console.log('Orders : ', orders))
     )
       .subscribe(orders => {
@@ -156,11 +156,16 @@ export class FiltersComponent implements OnInit, OnDestroy {
   }
 
   filterByUser() {
-    let name = this.selectedUserCtrl.value;
-    if (name) {
+    let user = this.selectedUserCtrl.value;
+    let id = user.id;
+    if (id) {
       // console.log(`Filter by user : `, name);
-      this.filteredOrders = this.filteredOrders.filter(order => order.user.name === name);
+      this.filteredOrders = this.filteredOrders.filter(order => order.user.id === id);
     }
+  }
+
+  displayUserFn(user?: User): string | undefined {
+    return user ? user.name : undefined;
   }
 
   filterByDateRange() {

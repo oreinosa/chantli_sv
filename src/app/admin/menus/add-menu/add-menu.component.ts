@@ -8,7 +8,7 @@ import { ProductsService } from './../../products/products.service';
 import { Menu } from './../../../shared/classes/menu';
 import { Product } from './../../../shared/classes/product';
 import { Subject, Observable } from 'rxjs';
-import { startWith, map, takeUntil, } from 'rxjs/operators';
+import { startWith, map, takeUntil, tap, } from 'rxjs/operators';
 import { AddSubcollection } from '../../../shared/classes/add-subcollection';
 
 @Component({
@@ -18,7 +18,7 @@ import { AddSubcollection } from '../../../shared/classes/add-subcollection';
 })
 export class AddMenuComponent extends AddSubcollection<Menu, Product> implements OnDestroy {
   private ngUnsubscribe = new Subject();
-  stateCtrl: FormControl;
+  productCtrl: FormControl;
 
   filteredProducts: Observable<Product[]>;
   products: Product[];
@@ -31,11 +31,13 @@ export class AddMenuComponent extends AddSubcollection<Menu, Product> implements
   ) {
     super(menusService, router, route);
 
-    this.stateCtrl = new FormControl();
-    this.filteredProducts = this.stateCtrl.valueChanges
+    this.productCtrl = new FormControl();
+    this.filteredProducts = this.productCtrl.valueChanges
       .pipe(
         startWith(''),
-        map(product => product ? this.filterProducts(product) : this.products.slice())
+        map((product: any) => (typeof product === 'object') ? product.name : product),
+        tap(product => console.log(product)),
+        map((product:string) => product ? this.filterProducts(product) : this.products.slice())
       );
   }
 
@@ -49,14 +51,7 @@ export class AddMenuComponent extends AddSubcollection<Menu, Product> implements
       .getAll()
       .pipe(
         takeUntil(this.ngUnsubscribe),
-        map(products => products.filter(product => product.category === "Principal" || product.category === "Acompañamiento")),
-        map(products => products.sort((a, b) => {
-          if (a.name < b.name)
-            return -1;
-          if (a.name > b.name)
-            return 1;
-          return 0;
-        }))
+        map(products => products.filter(product => product.category === "Principal" || product.category === "Acompañamiento"))
       )
       .subscribe(products => this.products = products);
   }
@@ -66,15 +61,18 @@ export class AddMenuComponent extends AddSubcollection<Menu, Product> implements
     this.ngUnsubscribe.complete();
   }
 
-  selectProduct(name: string) {
-    this.selectedSubcollectionObject = this.filterProducts(name)[0];
-    console.log(this.filterProducts(name));
+  selectProduct(product: Product) {
+    this.selectedSubcollectionObject = this.products.find(_product => _product.id === product.id);
+    console.log(this.selectedSubcollectionObject);
   }
 
   filterProducts(name: string) {
-    // return this.products.filter(product =>
-    //   product.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
-    return this.products.filter(product => product.name.toLowerCase().includes(name.toLowerCase()))
+    // console.log(name);
+    return this.products.filter(_product => _product.name.toLowerCase().includes(name.toLowerCase()))
+  }
+
+  displayProductFn(product?: Product): string {
+    return product ? product.name : '';
   }
 
 }

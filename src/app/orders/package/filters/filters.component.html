@@ -63,8 +63,8 @@
     <ng-container *ngIf='users; else loadingUsers'>
       <mat-form-field class='full-width'>
         <input matInput placeholder="Clientes" [matAutocomplete]="auto" [formControl]="selectedUserCtrl">
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)='applyFilters()'>
-          <mat-option *ngFor="let user of filteredUsers | async" [value]="user.name">
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)='applyFilters()' [displayWith]="displayUserFn"> 
+          <mat-option *ngFor="let user of filteredUsers | async" [value]="user">
             {{ user.name }}
           </mat-option>
         </mat-autocomplete>

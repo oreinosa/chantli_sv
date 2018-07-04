@@ -11,9 +11,9 @@ import { ForgotPasswordComponent } from './forgot-password/forgot-password.compo
 const routes: Routes = [
   { path: 'ingresar', component: SignInComponent },
   { path: 'registrarse', component: SignUpComponent },
-  { path: 'reset-password', component: ForgotPasswordComponent},
+  { path: 'reset-password', component: ForgotPasswordComponent },
   {
-    path: 'perfil', component: ProfileComponent, children: [
+    path: 'perfil', canActivate: [AuthGuard], component: ProfileComponent, children: [
       { path: 'info', component: InformationComponent },
       { path: 'notificaciones', component: SubscriptionsComponent },
       { path: '', pathMatch: 'full', redirectTo: 'info' }
