@@ -1,3 +1,5 @@
+import { OrderModule } from './../order/order.module';
+import { OrderService } from './../order/order.service';
 import { NgModule } from '@angular/core';
 
 import { MyOrdersRoutingModule } from './my-orders-routing.module';
@@ -12,9 +14,15 @@ import { FeedbackOrderComponent } from './feedback-order/feedback-order.componen
 @NgModule({
   imports: [
     SharedModule,
+    OrderModule,
     MyOrdersRoutingModule
   ],
-  declarations: [MyOrdersComponent, EditOrderComponent, CancelOrderComponent, FeedbackOrderComponent],
+  declarations: [
+    MyOrdersComponent,
+    EditOrderComponent,
+    CancelOrderComponent,
+    FeedbackOrderComponent
+  ],
   providers: [MyOrdersService]
 })
 export class MyOrdersModule { }

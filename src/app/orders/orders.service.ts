@@ -22,7 +22,7 @@ export class OrdersService {
 
   private $payingUser = new Subject<User>();
 
-  private $mode = new BehaviorSubject<string>('empacar');
+  private $mode = new BehaviorSubject<string>('pagar');
 
   constructor(
     private fs: AngularFirestore,
@@ -139,17 +139,15 @@ export class OrdersService {
 
 
   updateOrderstatus(order: Order, newStatus: string) {
-    console.log(order.id, ' set to ', newStatus);
-
+    console.log(order, ' set to ', newStatus);
+    order.status = newStatus;
     return this.ordersCol.doc<Order>(order.id)
-      .update({
-        status: newStatus
-      })
+      .update(order)
       .then(() => this.notifications.show(`Orden actualizada a ${newStatus}`, 'Ordenes', 'info'));
   }
 
   cancelOrder(order: Order, cancelStatus: string) {
-    if (cancelStatus !== "Cancelado") {
+    if (order.paid.flag) {
       order.paid = firebaseApp.firestore.FieldValue.delete() as any;
       order.cancelled = firebaseApp.firestore.Timestamp.fromDate(new Date());
     }

@@ -36,8 +36,8 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   selectedWorkplace: string = 'TELUS International';
 
   selectedUserCtrl = new FormControl();
-  users: User[];
-  allUsers: User[];
+  usersByWorkplace: User[] = [];
+  allUsers: User[] = [];
   filteredUsers: Observable<User[]>;
 
   allFromWorkplace: boolean = false;
@@ -73,27 +73,34 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
         };
       }),
       switchMap(() => this.selectedUserCtrl.valueChanges),
-      startWith(''),
-      map((user: any) => (typeof user === 'object') ? user.name : user),
-      map((user: string) => this.users ? this.filterUsers(user) : this.allUsers.slice()),
-      // tap(users => console.log(users))
+      // startWith(''),
+      map((user: any) => (typeof user === 'object' && user) ? user.name : user),
+      map((user: string) => user ? this.filterUsers(user) : this.usersByWorkplace.slice()),
+      tap(users => console.log(users))
     );
 
     this.ordersService
       .payingUser.pipe(
         takeUntil(this.ngUnsubscribe),
         tap(user => {
-          // console.log('paying user ', user);
+          console.log('paying user ', user);
           this.payingUser = user;
+          if (this.dataSource.data.length) this.dataSource.data = [];
+          this.addChange = false;
+          this.totalDue = 0;
+          this.payment = 0;
+          this.change = 0;
+          this.selection.clear();
         }),
-        tap(() => (!!this.payingUser || (!this.payingUser && this.allFromWorkplace)) ? false : this.dataSource.data = []),
         filter(() => (!!this.payingUser || (!this.payingUser && this.allFromWorkplace))),
         switchMap(user => user ? this.ordersService.getOrdersByUser(user.id) : this.ordersService.getOrdersByWorkplace(this.selectedWorkplace)),
         tap(orders => console.log(orders)),
         map(orders => orders.filter(order => {
+          if (order.paid.flag) { return false; }
           switch (order.status) {
             case 'Cancelado':
             case 'Cancelado (reembolso)':
+            case 'Cancelado (credito)':
               return false;
           }
           return true;
@@ -126,14 +133,14 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
 
   filterByWorkplace(workplace: string) {
     // console.log('filter users by workplace ', workplace);
-    this.users = this.allUsers.filter(user => user.workplace === workplace);
-    // console.log(this.users);
+    this.usersByWorkplace = this.allUsers.filter(user => user.workplace === workplace);
+    // console.log(this.usersByWorkplace);
     // this.selectedUserCtrl.setValue(this.selectedUserCtrl.value);
   }
 
   private filterUsers(name: string): User[] {
-    // console.log('filtering from ', this.users);
-    return this.users.filter(user =>
+    // console.log('filtering from ', this.usersByWorkplace);
+    return this.usersByWorkplace.filter(user =>
       user.name.toLowerCase().includes(name.toLowerCase()));
   }
 
@@ -158,11 +165,9 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     let newDebit = currentDebit - this.totalDue;
     let newCredit = this.payingUser.credit;
     if (newCredit && !this.addChange) {
-      let usedCredit = (this.totalDue - this.payment + this.change);
-      console.log('used credit ', usedCredit);
-      newCredit -= usedCredit;
-    }
-    if (this.addChange) {
+      console.log('Remaining credit ', this.change);
+      newCredit = this.change;
+    } else if (this.addChange) {
       newCredit += this.change;
     }
     // console.log(newDebit);
@@ -186,16 +191,21 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
       total += order.price;
     }
     this.totalDue = total;
+    if (this.totalDue <= this.payingUser.credit) { this.payment = 0; }
   }
 
   calculateChange() {
-    this.change = parseFloat(((this.payment + this.payingUser.credit) - this.totalDue).toFixed(2));
+    const sum = (this.payment + this.payingUser.credit) - this.totalDue;
+    const sumString = sum.toFixed(2);
+    const sumFloat = parseFloat(sumString);
+    if (sumFloat <= 0) this.change = 0
+    else this.change = sumFloat;
   }
 
   selectAllFromWorkplace(flag: boolean) {
     this.allFromWorkplace = !flag;
     if (this.allFromWorkplace) {
-      if (this.selectedUserCtrl.value) this.selectedUserCtrl.reset();
+      if (this.selectedUserCtrl.value) this.selectedUserCtrl.setValue('');
       if (this.selectedUserCtrl.enabled) this.selectedUserCtrl.disable();
       this.displayedColumns = ['user', 'price', "date", 'actions'];
     } else {

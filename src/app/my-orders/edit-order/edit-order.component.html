@@ -1,9 +1,76 @@
 <mat-card class='mat-elevation-z0'>
   <mat-card-content>
-    {{ order | json}}
+    <ng-container *ngIf='$menus | async as menus;else currentOrder'>
+      <ng-container *ngIf='step === 0'>
+        <div class="row">
+          <div class="col-12" *ngIf='menus?.length'>
+            <h5 class="text-center">Menús para {{ menus[0].date.toDate() | spanishDate }}</h5>
+          </div>
+          <div class="col-12 col-sm-10 col-md-6 mx-auto" *ngFor='let menu of menus'>
+            <app-day-menu [menu]='menu' (selected)='onOrderMenu($event)'></app-day-menu>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template>
+        <ng-container [ngSwitch]='step'>
+          <app-step-1 [menu]='selectedMenu' [principal]='newOrder?.products?.principal' [acompanamientos]='newOrder?.products?.acompanamientos'
+            (select)='onSelect($event.principal, $event.acompanamientos)' *ngSwitchCase='1'></app-step-1>
+
+          <app-step-2 [menu]='selectedMenu' [bebida]='newOrder?.products?.bebida' (select)='onSelectBebida($event)' *ngSwitchCase='2'></app-step-2>
+
+          <app-step-3 [menu]='selectedMenu' [principal]='newOrder?.products?.principal' [acompanamientos]='newOrder?.products?.acompanamientos'
+            [bebida]='newOrder?.products?.bebida' (confirm)='onConfirm($event?.tortillas, $event?.total)' *ngSwitchCase='3'></app-step-3>
+
+          <app-step-4 *ngSwitchCase='4'></app-step-4>
+        </ng-container>
+      </ng-template>
+    </ng-container>
+    <ng-template #currentOrder>
+      <ng-container *ngIf='order;else loadingOrder'>
+        <h3>Detalles de tu orden:</h3>
+        <div class="row">
+          <div class="col-12 col-sm-6">
+            <h5>
+              <b>Plato principal </b>
+              <br> {{ order.products.principal }}
+            </h5>
+            <h5 *ngIf='order.products?.acompanamientos as acompanamientos'>
+              <b>Acompanamientos </b>
+              <br>
+              <ng-container *ngFor='let ac of acompanamientos; isLast as last'>
+                {{ ac }}
+                <br *ngIf='!isLast'>
+              </ng-container>
+            </h5>
+            <h5>
+              <b>Bebida </b>
+              <br> {{ order.products.bebida }}
+            </h5>
+            <h5 *ngIf='order?.tortillas'>
+              {{ order.tortillas + ' tortilla' + ( order.tortillas > 1 ? 's' : '')}}
+            </h5>
+          </div>
+          <div class="col-12 col-sm-6">
+            <h5>
+              Ordenado para {{ order.date.for.toDate() | spanishDate }}
+            </h5>
+            <h5>
+              Ordenado el {{ order.date.by.toDate() | spanishDate }}
+            </h5>
+            <h5>
+              Precio {{ order.price | currency }}
+            </h5>
+          </div>
+        </div>
+      </ng-container>
+    </ng-template>
+
+    <ng-template #loadingOrder>
+      <mat-spinner class="col-12 mx-auto"></mat-spinner>
+    </ng-template>
   </mat-card-content>
   <mat-card-actions>
-    <button type='button' mat-button>
+    <button type='button' mat-button (click)='getMenus(order)'>
       <!-- <mat-icon>edit</mat-icon> -->
       Editar
     </button>

@@ -12,6 +12,7 @@ import { OrdersModeComponent } from './orders-mode/orders-mode.component';
 import { WorkplacesService } from 'src/app/admin/workplaces/workplaces.service';
 import { OrdersOverviewComponent } from './package/orders-overview/orders-overview.component';
 import { ConfirmStatusChangeComponent } from './package/confirm-status-change/confirm-status-change.component';
+import { SalesComponent } from './sales/sales.component';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import { ConfirmStatusChangeComponent } from './package/confirm-status-change/co
     FiltersComponent,
     OrdersModeComponent,
     OrdersOverviewComponent,
-    ConfirmStatusChangeComponent
+    ConfirmStatusChangeComponent,
+    SalesComponent
   ],
   providers: [OrdersService, WorkplacesService],
   entryComponents: [

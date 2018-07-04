@@ -91,16 +91,16 @@
               <button mat-button type='button' *ngIf='status == "Empacado"' (click)='onUpdateStatus(element, "Entregado")'>
                 Entregar
               </button>
-              <ng-container *ngIf='element?.paid?.flag; else onlyCancel'>
-                <button mat-button type='button' *ngIf='(status == "Nueva orden" || status == "Cancelado")' (click)='onUpdateStatus(element, "Cancelado (reembolso)")'>
+              <ng-container *ngIf='element?.paid?.flag && (status == "Empacado" || status == "Nueva orden"); else onlyCancel'>
+                <button mat-button type='button'  (click)='onUpdateStatus(element, "Cancelado (reembolso)")'>
                   Cancelar y reembolsar
                 </button>
-                <button mat-button type='button' *ngIf='(status == "Nueva orden" || status == "Cancelado")' (click)='onUpdateStatus(element, "Cancelado (credito)")'>
+                <button mat-button type='button'  (click)='onUpdateStatus(element, "Cancelado (credito)")'>
                   Cancelar y dar credito
                 </button>
               </ng-container>
               <ng-template #onlyCancel>
-                <button mat-button type='button' *ngIf='(status == "Nueva orden")' (click)='onUpdateStatus(element, "Cancelado")'>
+                <button mat-button type='button' (click)='onUpdateStatus(element, "Cancelado")'>
                   Cancelar
                 </button>
               </ng-template>

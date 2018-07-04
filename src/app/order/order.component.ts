@@ -1,3 +1,4 @@
+import { AuthService } from './../auth/auth.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { takeUntil, tap, switchMap, map, share } from 'rxjs/operators';
 import { Subject, Observable } from 'rxjs';
@@ -6,6 +7,7 @@ import { OrderService } from './order.service';
 import { Menu } from './../shared/classes/menu';
 import { Component, OnInit } from '@angular/core';
 import { DOW } from '../shared/classes/daysOfTheWeek';
+import { User } from '../shared/classes/user';
 
 @Component({
   selector: 'app-order',
@@ -18,6 +20,8 @@ export class OrderComponent implements OnInit {
   selectedMenus: Menu[];
   DOW: string[];
   dow: number;
+
+  $user: Observable<User>;
 
   monday: Date;
   friday: Date;
@@ -32,12 +36,15 @@ export class OrderComponent implements OnInit {
     private breakpointObserver: BreakpointObserver,
     private orderService: OrderService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private auth: AuthService,
   ) {
     this.DOW = DOW.map(dow => dow.toLowerCase()).filter(dow => !(dow == "domingo" || dow == "sábado"))
   }
 
   ngOnInit() {
+    this.$user = this.auth.user;
+
     this.orderService
       .getWeekMenus().pipe(
         takeUntil(this.ngUnsubscribe))

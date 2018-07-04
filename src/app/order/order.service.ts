@@ -39,8 +39,29 @@ export class OrderService {
       .then(doc => this.notificationsService.show("Orden exitosa!", 'Nueva orden', "success"));
   }
 
-  getWeekMenus(): Observable<Menu[]> {
-    let d = new Date();
+  getMenus(from: Date, to: Date) {
+    this.menusCol = this.af.collection<Menu>('menus',
+      ref =>
+        ref
+          .where('date', '>=', from)
+          .where('date', '<=', to)
+    );
+
+    return this.menusCol
+      .snapshotChanges()
+      .pipe(
+        map(actions => {
+          return actions.map(a => {
+            let data = a.payload.doc.data();
+            const id = a.payload.doc.id;
+            return { id, ...data } as Menu;
+          });
+        })
+      );
+  }
+
+  getWeekMenus(currentDay?: Date): Observable<Menu[]> {
+    let d = currentDay ? new Date(currentDay) : new Date();
     // d.setMonth(1);
     // d.setDate(15);
     console.log('today is ', d);
@@ -53,25 +74,16 @@ export class OrderService {
     this.$monday = this.getMonday(d);
     this.$friday = this.getFriday(d);
 
-    this.menusCol = this.af.collection<Menu>('menus',
-      ref =>
-        ref
-          // .where('active', '==', true)
-          .where('date', '>=', this.monday)
-          .where('date', '<=', this.friday)
-    );
+    return this.getMenus(this.$monday, this.$friday);
 
-    return this.menusCol
-      .snapshotChanges()
-      .pipe(
-      map(actions => {
-        return actions.map(a => {
-          let data = a.payload.doc.data();
-          const id = a.payload.doc.id;
-          return { id, ...data } as Menu;
-        });
-      })
-      );
+  }
+
+  getMenusByDay(date: Date) {
+    let from = new Date(date);
+    let to = new Date(date);
+    from.setHours(1, 0, 0);
+    to.setHours(23, 0, 0);
+    return this.getMenus(from, to);
   }
 
   getBebidas() {
@@ -79,30 +91,15 @@ export class OrderService {
     return this.bebidasCol
       .snapshotChanges()
       .pipe(
-      map(actions => {
-        return actions.map(a => {
-          const data = a.payload.doc.data();
-          const id = a.payload.doc.id;
-          return { id, ...data } as Product;
-        });
-      })
+        map(actions => {
+          return actions.map(a => {
+            const data = a.payload.doc.data();
+            const id = a.payload.doc.id;
+            return { id, ...data } as Product;
+          });
+        })
       );
   }
-
-  // getWeekMenu(id: string): Observable<Menu> {
-  //   this.menusCol = this.af.collection<Menu>('menus');
-  //   return this.menusCol
-  //     .doc(id)
-  //     .snapshotChanges()
-  //     .map(action => {
-  //       if (action.payload.exists) {
-  //         let data = action.payload.data();
-  //         data['id'] = action.payload.id;
-  //         return data as Menu;
-  //       }
-  //       return null;
-  //     });
-  // }
 
   selectMenu(menu: Menu) {
     this.menuSubject.next(menu);

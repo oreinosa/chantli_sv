@@ -11,7 +11,7 @@
           <!-- WORKPLACES FILTER -->
           <div class="col-12 col-sm-6 col-md-4">
             <mat-form-field class='full-width'>
-              <mat-select placeholder='Lugar de trabajo' [(ngModel)]='selectedWorkplace' (selectionChange)='filterByWorkplace(selectedWorkplace);selectedUserCtrl.setValue(null);selectPayingUser(null);selectAllFromWorkplace(true)'>
+              <mat-select placeholder='Lugar de trabajo' [(ngModel)]='selectedWorkplace' (selectionChange)='filterByWorkplace(selectedWorkplace);selectedUserCtrl.setValue("");selectPayingUser(null);selectAllFromWorkplace(true)'>
                 <mat-option *ngFor='let workplace of workplaces' [value]='workplace.name'>{{ workplace.name }}</mat-option>
               </mat-select>
             </mat-form-field>
@@ -56,7 +56,7 @@
                 <input matInput type="number" placeholder='Total a pagar' [(ngModel)]='totalDue' readonly>
               </mat-form-field>
               <mat-form-field class='full-width'>
-                <input matInput type="number" placeholder='Paga con' [(ngModel)]='payment' (change)='calculateChange()' min='0' step='0.1'>
+                <input matInput type="number" placeholder='Paga con' [(ngModel)]='payment' (change)='calculateChange()' min='0' step='0.1' [disabled]='(totalDue <= payingUser.credit)'>
               </mat-form-field>
               <mat-form-field class="full-width">
                 <input matInput type="number" placeholder='Credito' [ngModel]='payingUser.credit' readonly>
@@ -64,8 +64,11 @@
               <mat-form-field class='full-width'>
                 <input matInput type="number" placeholder='Cambio' [(ngModel)]='change' readonly>
               </mat-form-field>
-              <p *ngIf='change > 0'>
+              <p *ngIf='change > 0 && this.payment > 0'>
                 <mat-checkbox [(ngModel)]='addChange'>¿Agregar cambio como crédito?</mat-checkbox>
+              </p>
+              <p *ngIf='credit > 0 && this.payment == 0'>
+                Nuevo credito {{ (totalDue - credit) | currency }}
               </p>
               <button mat-button type='button' (click)='onPay()' [disabled]='totalDue > (payment + payingUser?.credit)'>Pagar</button>
             </div>
@@ -85,12 +88,12 @@
             <!-- Checkbox Column -->
             <ng-container matColumnDef="select">
               <mat-header-cell *matHeaderCellDef>
-                <mat-checkbox (change)="($event ? masterToggle() : null);calculateTotalDue()" [checked]="selection.hasValue() && isAllSelected()"
+                <mat-checkbox (change)="($event ? masterToggle() : null);calculateTotalDue();calculateChange();" [checked]="selection.hasValue() && isAllSelected()"
                   [indeterminate]="selection.hasValue() && !isAllSelected()">
                 </mat-checkbox>
               </mat-header-cell>
               <mat-cell *matCellDef="let row">
-                <mat-checkbox (click)="$event.stopPropagation()" (change)="($event ? selection.toggle(row) : null);calculateTotalDue()" [checked]="selection.isSelected(row)">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="($event ? selection.toggle(row) : null);calculateTotalDue();calculateChange();" [checked]="selection.isSelected(row)">
                 </mat-checkbox>
               </mat-cell>
             </ng-container>

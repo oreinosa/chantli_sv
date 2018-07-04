@@ -13,6 +13,7 @@ import { NotificationsService } from '../notifications/notifications.service';
 })
 export class MyOrdersService {
   myOrdersCollection: AngularFirestoreCollection<Order>;
+  // editingStep = new BehaviorSubject<number>(0);
 
   private $action = new BehaviorSubject<{ name: string, object: Order }>({ name: "lista", object: null });
 
@@ -45,6 +46,13 @@ export class MyOrdersService {
 
   onAction(name: string, object: Order): void {
     this.$action.next({ name, object });
+  }
+
+  editOrder(order: Order) {
+    return this.myOrdersCollection
+      .doc(order.id)
+      .update(order)
+      .then(() => this.notifications.show('Orden editada', 'Mis órdenes', 'success'));
   }
 
   cancelOrder(order: Order, cancelStatus: string) {

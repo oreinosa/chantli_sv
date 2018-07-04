@@ -26,6 +26,13 @@ import { OrderComponent } from './order.component';
     NewOrderComponent,
     OrderComponent
   ],
+  exports: [
+    DayMenuComponent,
+    Step1Component,
+    Step2Component,
+    Step3Component,
+    Step4Component,
+  ],
   providers: [OrderService, MenusService]
 })
 export class OrderModule { }

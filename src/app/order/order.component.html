@@ -4,6 +4,11 @@
       <h1>Menu de la semana</h1>
       <h3 *ngIf='monday && friday'>Del {{ monday | spanishDate:"short" }} al {{ friday | spanishDate:"short" }}</h3>
       <h4>Selecciona el día que quieres ordenar</h4>
+      <ng-container *ngIf='$user | async as user'>
+        <h5 *ngIf='user?.credit'>
+          <i>Tienes {{ user.credit | currency }} de crédito</i>
+        </h5>
+      </ng-container>
     </mat-card>
   </div>
   <ng-container *ngIf='menus; else loading'>

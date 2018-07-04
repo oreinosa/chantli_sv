@@ -86,6 +86,7 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
+    this.action = null;
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

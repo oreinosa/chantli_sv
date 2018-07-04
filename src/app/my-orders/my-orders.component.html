@@ -31,10 +31,8 @@
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <div class="action-container row">
-          <div class="col-12 col-md-10 col-lg-6 mr-auto">
-            <router-outlet></router-outlet>
-          </div>
+        <div class="action-container ">
+          <router-outlet></router-outlet>
         </div>
         <ng-container *ngIf='action.name === "lista" && user'>
           <div class="balance-container">
@@ -101,8 +99,8 @@
                     (click)='onAction("editar",element)'>
                     <mat-icon>edit</mat-icon>
                   </button>
-                  <button type='button' mat-icon-button matTooltip='Cancelar' *ngIf='(element.status ==  "Nueva orden")'
-                    [routerLink]='["cancelar",element.id]' (click)='onAction("cancelar",element)'>
+                  <button type='button' mat-icon-button matTooltip='Cancelar' *ngIf='(element.status ==  "Nueva orden")' [routerLink]='["cancelar",element.id]'
+                    (click)='onAction("cancelar",element)'>
                     <mat-icon>cancel</mat-icon>
                   </button>
                   <button type='button' mat-icon-button matTooltip='Comentario' *ngIf='element.status === "Entregado"' [routerLink]='["comentario",element.id]'
