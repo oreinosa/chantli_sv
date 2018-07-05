@@ -5,23 +5,23 @@ import { SwUpdate } from '@angular/service-worker';
 
 @Injectable()
 export class UpdateService {
-  constructor(private swUpdate: SwUpdate, private snackbar: MatSnackBar) {
-    if (this.swUpdate.isEnabled) {
-      console.log('Nope');
-      this.swUpdate.available.subscribe(evt => {
-        const snack = this.snackbar.open('Actualización disponible!', 'Actualizar');
+  // constructor(private swUpdate: SwUpdate, private snackbar: MatSnackBar) {
+    // if (this.swUpdate.isEnabled) {
+    //   console.log('Nope');
+    //   this.swUpdate.available.subscribe(evt => {
+    //     const snack = this.snackbar.open('Actualización disponible!', 'Actualizar');
 
-        snack
-          .onAction()
-          .subscribe(() => {
-            window.location.reload();
-          });
+    //     snack
+    //       .onAction()
+    //       .subscribe(() => {
+    //         window.location.reload();
+    //       });
 
-        setTimeout(() => {
-          snack.dismiss();
-        }, 6000);
-      });
-    }
+    //     setTimeout(() => {
+    //       snack.dismiss();
+    //     }, 6000);
+    //   });
+    // }
 
-  }
+  // }
 }
