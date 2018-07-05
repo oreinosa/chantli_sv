@@ -31,7 +31,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AdminGuard } from './auth/admin.guard';
 import { AuthGuard } from './auth/auth.guard';
 import { WorkplaceGuard } from './auth/workplace.guard';
-
+import { UpdateService } from './update.service';
 
 @NgModule({
   imports: [

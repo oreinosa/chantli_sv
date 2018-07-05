@@ -119,6 +119,7 @@ export class EditOrderComponent extends MyOrder {
       if (difference > 0 || (difference < 0 && this.user.credit >= Math.abs(difference))) {
         console.log(difference);
         if (this.order.paid.flag) updatedUser.credit = this.user.credit + difference;
+        else updatedUser.debit = this.user.debit - difference;
       } else {
         updatedUser.debit = this.user.debit - difference;
       }

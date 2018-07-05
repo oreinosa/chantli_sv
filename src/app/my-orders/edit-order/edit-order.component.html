@@ -4,7 +4,7 @@
       <h1>Editando orden</h1>
     </mat-card-title>
     <mat-card-subtitle>
-      <h3>{{ order.id }}</h3>
+      <h3>{{ order?.id }}</h3>
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
@@ -35,12 +35,15 @@
         <app-step-4 [editing]='true' *ngSwitchCase='4'></app-step-4>
       </ng-container>
     </ng-template>
+    <ng-container *ngIf='!order'>
+      <mat-spinner class="col-12 mx-auto"></mat-spinner>
+    </ng-container>
   </mat-card-content>
   <mat-card-actions *ngIf='step === 0' align='center'>
-    <button mat-button type='button' routerLink='../../'>
+    <button mat-button type='button' routerLink='../../' [disabled]='!order'>
       Volver a detalles de la orden
     </button>
-    <button mat-button type='button' (click)='onCancel()'>
+    <button mat-button type='button' (click)='onCancel()' [disabled]='!order'>
       Volver a mis ordenes
     </button>
   </mat-card-actions>

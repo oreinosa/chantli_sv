@@ -11,7 +11,7 @@ export class NotificationsService {
     // console.log('notifications service');
   }
 
-  show(body: string, title: string = 'Notificación', type: string = 'info', timeout: number = 1500) : void{
+  show(body: string, title: string = 'Notificación', type: string = 'info', timeout: number = 2500) : void{
     let icon, background;
     switch (type) {
       case 'info':

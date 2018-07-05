@@ -42,7 +42,7 @@
                 <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
                 <mat-cell *matCellDef="let element">
                   <p> {{ element.date.for.toDate() | spanishDate }}</p>
-                  <p>Ordenado el {{ element.date.by.toDate() | spanishDate }}</p>
+                  <p>Ordenado el {{ element.date.by.toDate() | spanishDate:"longTime" }}</p>
                 </mat-cell>
               </ng-container>
 
@@ -69,12 +69,12 @@
                   <ng-container *ngIf='!element?.cancelled;else cancelledDate'>
                     <mat-icon [ngClass]='!!element?.paid?.flag ? "paid" : "pending"'>{{ !!element?.paid?.flag ? "check_circle" : "highlight_off"}}</mat-icon>
                     <p *ngIf='element?.paid?.by?.toDate() as date'>
-                      {{ date | spanishDate }}
+                      {{ date | spanishDate:"longTime" }}
                     </p>
                   </ng-container>
                   <ng-template #cancelledDate>
                     <p>
-                      Cancelado el {{ element.cancelled.toDate() | spanishDate }}
+                      Cancelado el {{ element.cancelled.toDate() | spanishDate:"longTime" }}
                     </p>
                   </ng-template>
 

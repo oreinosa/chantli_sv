@@ -48,31 +48,41 @@
           </h3>
         </ng-container>
         <ng-container *ngIf='(menu.price | calTotal:bebida:tortillas) as totalDue'>
-          <h1 class='text-right'>
-            <ng-container *ngIf='editing && previousPrice !== totalDue; else justTotal'>
-              <span style='font-size: 50%' *ngIf='paid'>
-                Nota:
-                <br> Debido a que esta orden ya estaba cancelada
+          <ng-container *ngIf='editing && previousPrice !== totalDue; else justTotal'>
+            <h5 class='text-right'>
+              <i>
+                <b>Nota :</b>
+                <br> Debido a que esta orden
                 <ng-container *ngIf='previousPrice > totalDue'>
-                  y este plato vale {{ (previousPrice - totalDue) | currency }} menos se te agregará esa cantidad de crédito
+                  <ng-container *ngIf='paid;else notPaid'>
+                    ya estaba pagada y este plato vale {{ (previousPrice - totalDue) | currency }} menos se te agregará esa cantidad de crédito
+                  </ng-container>
+                  <ng-template #notPaid>
+                    no está pagada aún y este plato vale {{ (previousPrice - totalDue) | currency }} menos se te deducirá esa cantidad de tu
+                    total pendiente
+                  </ng-template>
                 </ng-container>
                 <ng-container *ngIf='previousPrice < totalDue'>
-                  y este plato vale {{ (totalDue - previousPrice) | currency}} más se deducirá esta cantidad de tu crédito (en caso de ser
-                  suficiente) o se agregará a tu total pendiente
+                  vale {{ (totalDue - previousPrice) | currency}} más se deducirá esta cantidad de tu crédito (en caso de ser suficiente) o
+                  se agregará a tu total pendiente
                 </ng-container>
-              </span>
+              </i>
+            </h5>
+            <h1 class='text-right'>
               <br> Total
               <del>
                 <b [ngStyle]='{color: (previousPrice > totalDue  ? "lightcoral" : "lightgreen")}'>{{ previousPrice | currency}}</b>
               </del>
               <span> -> </span>
               <b [ngStyle]='{color: (previousPrice > totalDue  ? "lightgreen" : "lightcoral")}'>{{ totalDue | currency }}</b>
-            </ng-container>
-            <ng-template #justTotal>
+            </h1>
+          </ng-container>
+          <ng-template #justTotal>
+            <h1 class='text-right'>
               Total
               <b>{{ totalDue | currency }}</b>
-            </ng-template>
-          </h1>
+            </h1>
+          </ng-template>
         </ng-container>
       </div>
     </div>
