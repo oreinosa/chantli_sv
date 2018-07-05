@@ -37,19 +37,5 @@
         ]
       }
     }
-  ],
-  "dataGroups": [
-    {
-      "name": "freshnessOnline",
-      "urls": [
-        "/menus",
-        "/ordenes",
-        "/usuarios"
-      ],
-      "cacheConfig": {
-        "timeout": "20s",
-        "strategy": "freshness"
-      }
-    }
   ]
 }
