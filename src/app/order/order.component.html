@@ -5,8 +5,19 @@
       <h3 *ngIf='monday && friday'>Del {{ monday | spanishDate:"short" }} al {{ friday | spanishDate:"short" }}</h3>
       <h4>Selecciona el día que quieres ordenar</h4>
       <ng-container *ngIf='$user | async as user'>
-        <h5 *ngIf='user?.credit'>
-          <i>Tienes {{ user.credit | currency }} de crédito</i>
+        <h5>
+          <i>
+            <ng-container *ngIf='user.credit <= 0;else noCredit'> No tienes crédito :( </ng-container>
+            <ng-template #noCredit>Tienes {{ user.credit | currency }} de crédito :)
+            </ng-template>
+          </i>
+        </h5>
+        <h5>
+          <i>
+            <ng-container *ngIf='user.debit > 0;else noDebit'>Tienes {{ user.debit | currency }} de pendiente de pago</ng-container>
+            <ng-template #noDebit>No tienes pagos pendientes
+            </ng-template>
+          </i>
         </h5>
       </ng-container>
     </mat-card>

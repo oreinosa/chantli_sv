@@ -1,3 +1,4 @@
+import { fadeIn } from './../../../shared/animations';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { OrderService } from '../../order.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -7,9 +8,14 @@ import { Menu } from '../../../shared/classes/menu';
 @Component({
   selector: 'app-step-3',
   templateUrl: './step-3.component.html',
-  styleUrls: ['./step-3.component.css']
+  styleUrls: ['./step-3.component.css'],
+  animations: [fadeIn]
 })
 export class Step3Component implements OnInit {
+  @Input() editing: boolean = false;
+  @Input() previousPrice: number;
+  @Input() paid: boolean;
+
   @Output() confirm = new EventEmitter<{ tortillas: number, total: number }>();
   @Input() menu: Menu;
   @Input() principal: Product;

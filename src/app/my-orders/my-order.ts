@@ -6,18 +6,17 @@ import { MyOrdersService } from './my-orders.service';
 import { Router } from '@angular/router/src/router';
 
 export abstract class MyOrder implements OnInit, OnDestroy {
-  private ngUnsubscribe = new Subject();
+  ngUnsubscribe = new Subject();
   order: Order;
 
   constructor(
-    public myOrderService: MyOrdersService,
+    public myOrdersService: MyOrdersService,
     public router: Router
   ) { }
 
   ngOnInit(): void {
-    this.myOrderService.action.pipe(
+    this.myOrdersService.action.pipe(
       takeUntil(this.ngUnsubscribe),
-      map(action => action.object),
       tap(order => !!order ? false : this.onBack()),
       filter(order => !!order),
     )
@@ -27,14 +26,13 @@ export abstract class MyOrder implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-    this.myOrderService.onAction('lista', null);
   }
 
   abstract onSubmit(...args): void;
 
   onCancel(): void {
-    this.myOrderService.onAction('lista', null);
-    // this.onBack();
+    this.myOrdersService.onAction(null);
+    this.onBack();
   }
 
   onBack(): void {

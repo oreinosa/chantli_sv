@@ -15,6 +15,8 @@ export class OrderService {
   private ordersCol: AngularFirestoreCollection<Order>;
   menuSubject = new BehaviorSubject<Menu>(null);
 
+  private $selectedDow: BehaviorSubject<number>;
+
   private $monday: Date;
   private $friday: Date;
 
@@ -23,6 +25,18 @@ export class OrderService {
     private notificationsService: NotificationsService,
     private router: Router
   ) {
+    const date = new Date();
+    let day = date.getDay();
+    if (day === 0 || day === 6) { day = 1; }
+    this.$selectedDow = new BehaviorSubject<number>(day);
+  }
+
+  get selectedDow(): Observable<number> {
+    return this.$selectedDow.asObservable();
+  }
+
+  setSelectedDow(dow: number) {
+    this.$selectedDow.next(dow);
   }
 
   get monday(): Date {

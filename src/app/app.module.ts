@@ -24,7 +24,7 @@ import { environment } from '../environments/environment';
 
 import { HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule, SwPush, SwUpdate } from '@angular/service-worker';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBarModule } from '@angular/material';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -51,29 +51,14 @@ import { WorkplaceGuard } from './auth/workplace.guard';
     AuthModule,
     AdminModule,
     AppRoutingModule,
+    MatSnackBarModule,
     ServiceWorkerModule.register('/combined-worker.js', { enabled: environment.production }),
     BrowserAnimationsModule
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
-  providers: [AuthService, AuthGuard, WorkplaceGuard, AdminGuard]
+  providers: [UpdateService, AuthService, AuthGuard, WorkplaceGuard, AdminGuard]
 })
 
 export class AppModule {
-
-  constructor(update: SwUpdate, push: SwPush, snackbar: MatSnackBar) {
-    update.available.subscribe(update => {
-      console.log('update available');
-      const snack = snackbar.open('Actualización disponible', 'Actualizar');
-
-      snack.onAction()
-        .subscribe(() => {
-          window.location.reload();
-        });
-    });
-    push.messages.subscribe(msg => {
-      console.log(msg);
-      snackbar.open(JSON.stringify(msg));
-    });
-  }
 }

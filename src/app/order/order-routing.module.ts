@@ -8,7 +8,7 @@ import { DOW } from '../shared/classes/daysOfTheWeek';
 
 const routes: Routes = [
   { path: 'menu', component: OrderComponent },
-  { path: 'menu/nueva-orden/:id', pathMatch: 'full', redirectTo: 'menu/nueva-orden/:id/paso/1' },
+  { path: 'menu/nueva-orden/:id', pathMatch: 'full', redirectTo: 'menu' },
   { path: 'menu/nueva-orden/:id/paso/:step', component: NewOrderComponent, canActivate: [AuthGuard, WorkplaceGuard] },
 ];
 

@@ -7,34 +7,18 @@
         </mat-card-title>
         <mat-card-subtitle>
           <h6>
-            <ng-container [ngSwitch]='action.name'>
-              <ng-container *ngSwitchCase='"lista"'>
-                Mostrando las últimas
-                <mat-form-field style='max-width: 50px;' class='mx-2'>
-                  <mat-select (selectionChange)='onSelectLimit($event.value)' [value]='5'>
-                    <mat-option *ngFor='let limit of limits' [value]='limit'>{{ limit }}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-                órdenes
-              </ng-container>
-              <ng-container *ngSwitchCase='"editar"'>
-                Editando orden {{ action.object.id }}
-              </ng-container>
-              <ng-container *ngSwitchCase='"cancelar"'>
-                Cancelar orden {{ action.object.id }}
-              </ng-container>
-              <ng-container *ngSwitchCase='"comentario"'>
-                Comentando sobre orden {{ action.object.id }}
-              </ng-container>
-            </ng-container>
+            Mostrando las últimas
+            <mat-form-field style='max-width: 50px;' class='mx-2'>
+              <mat-select (selectionChange)='onSelectLimit($event.value)' [value]='5'>
+                <mat-option *ngFor='let limit of limits' [value]='limit'>{{ limit }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            órdenes
           </h6>
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <div class="action-container ">
-          <router-outlet></router-outlet>
-        </div>
-        <ng-container *ngIf='action.name === "lista" && user'>
+        <ng-container *ngIf='user'>
           <div class="balance-container">
             <h3>Total pendiente : {{ user?.debit | currency }}</h3>
             <h3>Total credito : {{ user?.credit | currency }}</h3>
@@ -82,12 +66,18 @@
               <ng-container matColumnDef="paid">
                 <mat-header-cell *matHeaderCellDef> Pago </mat-header-cell>
                 <mat-cell *matCellDef="let element" class='text-center'>
-                  <p>
+                  <ng-container *ngIf='!element?.cancelled;else cancelledDate'>
                     <mat-icon [ngClass]='!!element?.paid?.flag ? "paid" : "pending"'>{{ !!element?.paid?.flag ? "check_circle" : "highlight_off"}}</mat-icon>
-                  </p>
-                  <p *ngIf='element?.paid?.by?.toDate() as date'>
-                    {{ date | spanishDate }}
-                  </p>
+                    <p *ngIf='element?.paid?.by?.toDate() as date'>
+                      {{ date | spanishDate }}
+                    </p>
+                  </ng-container>
+                  <ng-template #cancelledDate>
+                    <p>
+                      Cancelado el {{ element.cancelled.toDate() | spanishDate }}
+                    </p>
+                  </ng-template>
+
                 </mat-cell>
               </ng-container>
 
@@ -95,16 +85,13 @@
               <ng-container matColumnDef="actions">
                 <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
                 <mat-cell *matCellDef="let element">
-                  <button type='button' mat-icon-button matTooltip='Editar' *ngIf='element.status === "Nueva orden"' [routerLink]='["editar",element.id]'
-                    (click)='onAction("editar",element)'>
+                  <button type='button' mat-icon-button matTooltip='Editar' *ngIf='element.status === "Nueva orden"' (click)='onAction("editar",element)'>
                     <mat-icon>edit</mat-icon>
                   </button>
-                  <button type='button' mat-icon-button matTooltip='Cancelar' *ngIf='(element.status ==  "Nueva orden")' [routerLink]='["cancelar",element.id]'
-                    (click)='onAction("cancelar",element)'>
+                  <button type='button' mat-icon-button matTooltip='Cancelar' *ngIf='(element.status ==  "Nueva orden")' (click)='onAction("cancelar",element)'>
                     <mat-icon>cancel</mat-icon>
                   </button>
-                  <button type='button' mat-icon-button matTooltip='Comentario' *ngIf='element.status === "Entregado"' [routerLink]='["comentario",element.id]'
-                    (click)='onAction("comentar",element)'>
+                  <button type='button' mat-icon-button matTooltip='Comentario' *ngIf='element.status === "Entregado"' (click)='onAction("comentar",element)'>
                     <mat-icon>feedback</mat-icon>
                   </button>
                 </mat-cell>

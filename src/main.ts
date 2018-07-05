@@ -9,4 +9,14 @@ if (environment.production) {
 }
 
 platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.log(err));
+  // .then(() => {
+  //   if ('serviceWorker' in navigator) {
+  //     navigator.serviceWorker.register('combined-worker.js');
+  //   }
+  // })
+  // .then((registration) => {
+  //   console.log('SW registered');
+  // })
+  .catch((err) => {
+    console.log('SW error', err);
+  });

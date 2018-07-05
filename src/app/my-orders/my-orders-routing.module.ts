@@ -1,3 +1,4 @@
+import { OrderDetailsComponent } from './order-details/order-details.component';
 import { FeedbackOrderComponent } from './feedback-order/feedback-order.component';
 import { EditOrderComponent } from './edit-order/edit-order.component';
 import { NgModule } from '@angular/core';
@@ -7,13 +8,11 @@ import { AuthGuard } from '../auth/auth.guard';
 import { CancelOrderComponent } from 'src/app/my-orders/cancel-order/cancel-order.component';
 
 const routes: Routes = [
-  {
-    path: 'mis-ordenes', component: MyOrdersComponent, canActivate: [AuthGuard], children: [
-      { path: 'editar/:id', component: EditOrderComponent },
-      { path: 'cancelar/:id', component: CancelOrderComponent },
-      { path: 'comentario/:id', component: FeedbackOrderComponent }
-    ]
-  }
+  { path: 'mis-ordenes', component: MyOrdersComponent, canActivate: [AuthGuard] },
+  { path: 'mis-ordenes/editar/:id', component: OrderDetailsComponent },
+  { path: 'mis-ordenes/editar/:id/paso/:step', component: EditOrderComponent },
+  { path: 'mis-ordenes/cancelar/:id', component: CancelOrderComponent },
+  { path: 'mis-ordenes/comentario/:id', component: FeedbackOrderComponent }
 ];
 
 @NgModule({

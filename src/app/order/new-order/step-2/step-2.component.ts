@@ -1,3 +1,4 @@
+import { fadeIn } from './../../../shared/animations';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Menu } from '../../../shared/classes/menu';
 import { Product } from '../../../shared/classes/product';
@@ -8,9 +9,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-step-2',
   templateUrl: './step-2.component.html',
-  styleUrls: ['./step-2.component.css']
+  styleUrls: ['./step-2.component.css'],
+  animations: [fadeIn]
 })
 export class Step2Component implements OnInit {
+  @Input() editing: boolean = false;
+
   @Input() menu: Menu;
   @Input() bebida: Product;
   @Output() select = new EventEmitter<Product>();

@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card *ngIf='menu' @fadeIn [ngClass]='editing ? "mat-elevation-z0" : ""'>
   <mat-card-header>
     <mat-card-title>
       <h4>Confirmando orden...</h4>

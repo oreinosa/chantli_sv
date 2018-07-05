@@ -1,11 +1,11 @@
 import { AuthService } from './../auth/auth.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { takeUntil, tap, switchMap, map, share } from 'rxjs/operators';
+import { takeUntil, tap, switchMap, map, share, take } from 'rxjs/operators';
 import { Subject, Observable } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OrderService } from './order.service';
 import { Menu } from './../shared/classes/menu';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DOW } from '../shared/classes/daysOfTheWeek';
 import { User } from '../shared/classes/user';
 
@@ -14,7 +14,7 @@ import { User } from '../shared/classes/user';
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss']
 })
-export class OrderComponent implements OnInit {
+export class OrderComponent implements OnInit, OnDestroy {
   private ngUnsubscribe = new Subject();
   menus: Menu[];
   selectedMenus: Menu[];
@@ -45,23 +45,28 @@ export class OrderComponent implements OnInit {
   ngOnInit() {
     this.$user = this.auth.user;
 
-    this.orderService
-      .getWeekMenus().pipe(
-        takeUntil(this.ngUnsubscribe))
-      .subscribe(data => {
+    this.orderService.getWeekMenus().pipe(
+      takeUntil(this.ngUnsubscribe),
+      tap(data => {
         this.menus = data;
         this.monday = this.orderService.monday;
         this.friday = this.orderService.friday;
-        const date = new Date();
-        let day = date.getDay();
-        if (day === 0 || day === 6) { day = 1; }
-        this.dow = day;
+      }),
+      switchMap(() => this.orderService.selectedDow),
+      takeUntil(this.ngUnsubscribe))
+      .subscribe(dow => {
+        this.dow = dow;
         this.selectedMenus = this.menus.filter(menu => menu.date.toDate().getDay() === this.dow);
       });
   }
 
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
+
   onSelectDay(dow: number) {
-    this.dow = dow;
+    this.orderService.setSelectedDow(dow);
     this.selectedMenus = this.menus.filter(menu => menu.date.toDate().getDay() === this.dow);
   }
 

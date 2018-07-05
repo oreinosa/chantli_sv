@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Menu } from '../../../shared/classes/menu';
 import { Product } from '../../../shared/classes/product';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { fadeIn } from '../../../shared/animations';
 
@@ -12,6 +12,7 @@ import { fadeIn } from '../../../shared/animations';
   animations: [fadeIn]
 })
 export class Step1Component implements OnInit {
+  @Input() editing: boolean = false;
   @Input() menu: Menu;
   @Output() select = new EventEmitter<{ principal: Product, acompanamientos?: Product[] }>();
   @Input() principal: Product;
@@ -22,7 +23,7 @@ export class Step1Component implements OnInit {
   doubleFlag: FormControl = new FormControl(false);
   // noSides: boolean = false;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
     if (this.menu) {
@@ -84,8 +85,8 @@ export class Step1Component implements OnInit {
     }
   }
 
-  onCancel() {
-    this.router.navigate(['menu']);
+  onCancel(backRoute: string = "../../") {
+    this.router.navigate([backRoute], { relativeTo: this.route });
   }
 
   onSelect() {

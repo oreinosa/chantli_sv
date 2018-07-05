@@ -15,7 +15,7 @@ export class MyOrdersService {
   myOrdersCollection: AngularFirestoreCollection<Order>;
   // editingStep = new BehaviorSubject<number>(0);
 
-  private $action = new BehaviorSubject<{ name: string, object: Order }>({ name: "lista", object: null });
+  private $action = new BehaviorSubject<Order>(null);
 
   constructor(
     private af: AngularFirestore,
@@ -25,7 +25,7 @@ export class MyOrdersService {
   }
 
   getMyOrders(limit: number = 10, user: User): Observable<Order[]> {
-    this.myOrdersCollection = this.af.collection<Order>('ordenes', ref => ref.where('user.id', '==', user.id).orderBy('date.by', 'desc').limit(limit));
+    this.myOrdersCollection = this.af.collection<Order>('ordenes', ref => ref.where('user.id', '==', user.id).orderBy('date.for', 'desc').limit(limit));
 
     return this.myOrdersCollection
       .snapshotChanges().pipe(
@@ -40,18 +40,19 @@ export class MyOrdersService {
       );
   }
 
-  get action(): Observable<{ name: string, object: Order }> {
+  get action(): Observable<Order> {
     return this.$action.asObservable();
   }
 
-  onAction(name: string, object: Order): void {
-    this.$action.next({ name, object });
+  onAction(object: Order): void {
+    this.$action.next(object);
   }
 
-  editOrder(order: Order) {
+  editOrder(orderId: string, editedOrder: Order, user?: User) {
     return this.myOrdersCollection
-      .doc(order.id)
-      .update(order)
+      .doc(orderId)
+      .update(editedOrder)
+      .then(() => user ? this.af.collection<User>('usuarios').doc(user.id).update(user) : undefined)
       .then(() => this.notifications.show('Orden editada', 'Mis órdenes', 'success'));
   }
 

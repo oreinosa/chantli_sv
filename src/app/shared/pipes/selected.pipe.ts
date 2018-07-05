@@ -6,7 +6,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class SelectedPipe implements PipeTransform {
 
   transform(objects: any[], object?: any, refresh?: boolean): boolean {
-    return objects.findIndex(_object => _object['id'] === object['id']) >= 0;
+    if (object && objects && objects.length) {
+      return objects.findIndex(_object => _object['id'] === object['id']) >= 0;
+    }
+    return false;
   }
 
 }

@@ -1,4 +1,4 @@
-<mat-card *ngIf='menu'>
+<mat-card *ngIf='menu' @fadeIn [ngClass]='editing ? "mat-elevation-z0" : ""'>
   <mat-card-header>
     <mat-card-title>
       <h1>Ordenando para {{ menu.date.toDate() | date:"EEEE" | dow }}</h1>
@@ -32,6 +32,9 @@
     </div>
   </mat-card-content>
   <mat-card-actions align='end'>
+    <button mat-button type='button' (click)='onBack(0)' *ngIf='editing'>
+      Volver a menús
+    </button>
     <button mat-button type='button' (click)='onBack()'>
       Atras
     </button>

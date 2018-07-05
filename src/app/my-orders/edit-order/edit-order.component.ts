@@ -1,3 +1,4 @@
+import { AuthService } from './../../auth/auth.service';
 import { NewOrder } from './../../shared/classes/new-order';
 import { OrderService } from './../../order/order.service';
 import { Menu } from './../../shared/classes/menu';
@@ -7,10 +8,11 @@ import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MyOrdersService } from './../my-orders.service';
 import { MyOrder } from '../my-order';
-import { tap } from 'rxjs/operators';
+import { tap, map, filter, switchMap, takeUntil } from 'rxjs/operators';
 import { Product } from '../../shared/classes/product';
 
 import * as firebaseApp from 'firebase/app';
+import { User } from '../../shared/classes/user';
 
 @Component({
   selector: 'app-edit-order',
@@ -23,47 +25,59 @@ export class EditOrderComponent extends MyOrder {
   selectedMenu: Menu;
   editingOrder: NewOrder;
 
+  user: User;
+
   onSubmit(): void {
     throw new Error("Method not implemented.");
   }
 
   constructor(
     private orderService: OrderService,
-    myOrderService: MyOrdersService,
+    myOrdersService: MyOrdersService,
     router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private auth: AuthService
   ) {
-    super(myOrderService, router);
+    super(myOrdersService, router);
   }
 
   ngOnInit() {
-    super.ngOnInit();
-    // this.myOrderService.editingStep.pipe(
-    //   tap(step => console.log('Step ', step)))
-    //   .subscribe(step => this.step = step);
+    this.auth.user.pipe(
+      takeUntil(this.ngUnsubscribe))
+      .subscribe(user => this.user = user);
+
+    this.route.paramMap.pipe(
+      map(paramMap => +paramMap.get('step')),
+      tap(step => console.log('Step ', step)))
+      .subscribe(step => this.step = step);
+
+    this.$menus = this.myOrdersService.action.pipe(
+      takeUntil(this.ngUnsubscribe),
+      tap(action => console.log(action)),
+      tap(order => !!order ? false : this.onBack()),
+      filter(order => !!order),
+      tap(order => this.order = order),
+      map(order => order.date.for.toDate()),
+      switchMap(day => this.orderService.getMenusByDay(day)),
+    );
 
     this.editingOrder = new NewOrder({ principal: null, acompanamientos: [], bebida: null });
   }
 
-  getMenus(order: Order) {
-    let date = order.date.for.toDate();
-    this.$menus = this.orderService.getMenusByDay(date);
-  }
-
   onOrderMenu(menu: Menu) {
-    this.step = 1;
     this.selectedMenu = menu;
+    this.router.navigate(['../', 1], { relativeTo: this.route });
   }
 
   onSelect(principal: Product, acompanamientos: Product[]) {
     this.editingOrder.products.principal = principal;
     this.editingOrder.products.acompanamientos = acompanamientos;
-    this.step = 2;
+    this.router.navigate(['../', 2], { relativeTo: this.route });
   }
 
   onSelectBebida(bebida: Product) {
     this.editingOrder.products.bebida = bebida;
-    this.step = 3;
+    this.router.navigate(['../', 3], { relativeTo: this.route });
   }
 
   onConfirm(tortillas: number, price: number) {
@@ -72,7 +86,7 @@ export class EditOrderComponent extends MyOrder {
     let orderedBy = firebaseApp.firestore.Timestamp.fromDate(new Date());
     // orderedBy.setUTCHours(12, 0, 0);
 
-    let order: Order = {
+    let editedOrder: Order = {
       products: {
         principal: products.principal.name,
         acompanamientos: acompanamientos,
@@ -87,16 +101,33 @@ export class EditOrderComponent extends MyOrder {
     };
 
     if (products.principal.noSides) {
-      delete order.products.acompanamientos;
+      delete editedOrder.products.acompanamientos;
     }
 
     if (products.principal.noTortillas) {
-      delete order.tortillas;
+      delete editedOrder.tortillas;
     }
 
-    this.myOrderService
-      .editOrder(order)
-      .then(() => this.router.navigate(['mis-ordenes']));
+    let updatedUser: User = {
+      id: this.user.id
+    };
+    let previousPrice = this.order.price;
+    if (previousPrice !== price) {
+      let difference = (previousPrice - price);
+      difference = parseFloat(difference.toFixed(2));
+
+      if (difference > 0 || (difference < 0 && this.user.credit >= Math.abs(difference))) {
+        console.log(difference);
+        if (this.order.paid.flag) updatedUser.credit = this.user.credit + difference;
+      } else {
+        updatedUser.debit = this.user.debit - difference;
+      }
+
+    }
+
+    this.myOrdersService.editOrder(this.order.id, editedOrder, updatedUser)
+      .then(() => this.router.navigate(['mis-ordenes']))
+      .then(() => this.myOrdersService.onAction(null));
   }
 
 }
