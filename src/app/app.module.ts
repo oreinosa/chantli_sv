@@ -57,7 +57,7 @@ import { UpdateService } from './update.service';
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
-  providers: [AuthService, AuthGuard, WorkplaceGuard, AdminGuard]
+  providers: [UpdateService, AuthService, AuthGuard, WorkplaceGuard, AdminGuard]
 })
 
 export class AppModule {

@@ -53,7 +53,7 @@ export class MyOrdersService {
       .doc(orderId)
       .update(editedOrder)
       .then(() => user ? this.af.collection<User>('usuarios').doc(user.id).update(user).then(() =>
-        this.notifications.show(`Balance actualizado : \n Pendiente : $${user.debit} \n Crédito $${user.credit}`, 'Mis órdenes', 'success')) : undefined)
+        this.notifications.show(`Balance actualizado :  Pendiente : $${user.debit} - Crédito $${user.credit}`, 'Mis órdenes', 'success')) : undefined)
       .then(() => this.notifications.show('Orden editada', 'Mis órdenes', 'success'));
   }
 

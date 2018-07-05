@@ -109,7 +109,9 @@ export class EditOrderComponent extends MyOrder {
     }
 
     let updatedUser: User = {
-      id: this.user.id
+      id: this.user.id,
+      credit: this.user.credit,
+      debit: this.user.debit
     };
     let previousPrice = this.order.price;
     if (previousPrice !== price) {
@@ -118,10 +120,10 @@ export class EditOrderComponent extends MyOrder {
 
       if (difference > 0 || (difference < 0 && this.user.credit >= Math.abs(difference))) {
         console.log(difference);
-        if (this.order.paid.flag) updatedUser.credit = this.user.credit + difference;
-        else updatedUser.debit = this.user.debit - difference;
+        if (this.order.paid.flag) updatedUser.credit += difference;
+        else updatedUser.debit -= difference;
       } else {
-        updatedUser.debit = this.user.debit - difference;
+        updatedUser.debit -= difference;
       }
 
     }

@@ -85,13 +85,16 @@
               <ng-container matColumnDef="actions">
                 <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
                 <mat-cell *matCellDef="let element">
-                  <button type='button' mat-icon-button matTooltip='Editar' *ngIf='element.status === "Nueva orden"' (click)='onAction("editar",element)'>
+                  <button type='button' mat-icon-button matTooltip='Editar' *ngIf='element.status === "Nueva orden"' (click)='onAction("editar",element)'
+                    [disabled]='offline'>
                     <mat-icon>edit</mat-icon>
                   </button>
-                  <button type='button' mat-icon-button matTooltip='Cancelar' *ngIf='(element.status ==  "Nueva orden")' (click)='onAction("cancelar",element)'>
+                  <button type='button' mat-icon-button matTooltip='Cancelar' *ngIf='(element.status ==  "Nueva orden")' (click)='onAction("cancelar",element)'
+                    [disabled]='offline'>
                     <mat-icon>cancel</mat-icon>
                   </button>
-                  <button type='button' mat-icon-button matTooltip='Comentario' *ngIf='element.status === "Entregado"' (click)='onAction("comentar",element)'>
+                  <button type='button' mat-icon-button matTooltip='Comentario' *ngIf='element.status === "Entregado"' (click)='onAction("comentar",element)'
+                    [disabled]='offline'>
                     <mat-icon>feedback</mat-icon>
                   </button>
                 </mat-cell>

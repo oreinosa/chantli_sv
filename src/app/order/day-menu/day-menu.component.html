@@ -1,6 +1,6 @@
 <ng-container *ngIf='(menu.id | getMenuProducts | async) as products; else loadingProducts'>
   <div class="menu-container">
-    <mat-card [ngClass]='DOW' *ngIf='(menu.date.toDate() | date:"EEEE" | dow) as DOW'>
+    <mat-card>
       <mat-card-header>
         <mat-card-title>
           <h2>Precio {{ menu.price | currency }}</h2>
@@ -34,7 +34,7 @@
         </div>
       </mat-card-content>
       <mat-card-actions align='end'>
-        <button mat-button type='button' (click)='onSelect(products)' [disabled]='!menu.available'>Ordenar para {{ DOW }}</button>
+        <button mat-button type='button' (click)='onSelect(products)' [disabled]='!menu.available'>Ordenar para {{ menu?.date.toDate().getDay() | dow }}</button>
       </mat-card-actions>
     </mat-card>
   </div>

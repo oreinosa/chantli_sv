@@ -10,6 +10,7 @@ import { Order } from '../shared/classes/order';
 import { take, takeUntil, tap, switchMap, startWith, map } from 'rxjs/operators';
 import { Subject, Observable, BehaviorSubject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UpdateService } from '../update.service';
 
 @Component({
   selector: 'app-my-orders',
@@ -31,14 +32,23 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
+  offline: boolean = false;
+
   constructor(
     private myOrdersService: MyOrdersService,
     private auth: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private updateService: UpdateService
   ) { }
 
   ngOnInit() {
+    this.updateService
+      .online$.pipe(
+        takeUntil(this.ngUnsubscribe),
+    )
+      .subscribe(flag => this.offline = !flag);
+
     this.thisHour = this.today.getHours();
 
     this.dataSource.sort = this.sort;
