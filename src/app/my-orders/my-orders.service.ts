@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Order } from '../shared/classes/order';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { User } from '../shared/classes/user';
 import * as firebaseApp from 'firebase/app';

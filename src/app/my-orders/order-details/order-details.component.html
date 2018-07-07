@@ -1,4 +1,4 @@
-<mat-card *ngIf='order'>
+<mat-card class='mat-elevation-z0' *ngIf='order'>
   <mat-card-header>
     <mat-card-title>
       <h1>Detalles de tu orden</h1>
@@ -49,7 +49,7 @@
     </ng-template>
   </mat-card-content>
   <mat-card-actions>
-    <button type='button' mat-button (click)='getMenus()' [disabled]='!order'>
+    <button type='button' mat-button (click)='onSubmit()' [disabled]='!order'>
       <!-- <mat-icon>edit</mat-icon> -->
       <ng-container *ngIf='order;else loadingOrderDate'>
         Ver menús para {{ order.date.for.toDate() | spanishDate }}

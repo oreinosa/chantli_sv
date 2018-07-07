@@ -71,8 +71,6 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   onOrderMenu(menu: Menu) {
-    this.orderService.selectMenu(menu);
-    const day = this.DOW[this.dow - 1];
     this.router.navigate(['menu', 'nueva-orden', menu.id, 'paso', 1]);
   }
 }

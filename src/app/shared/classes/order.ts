@@ -21,6 +21,7 @@ export class Order {
       flag?: boolean,
       by?: firebase.firestore.Timestamp,
     },
+    public updated?: firebase.firestore.Timestamp,
     public cancelled?: firebase.firestore.Timestamp
   ) { }
 }

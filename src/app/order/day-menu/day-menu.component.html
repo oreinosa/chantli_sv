@@ -14,7 +14,7 @@
             <h4 class='text-center'>Platos principales</h4>
             <ul>
               <li *ngFor='let product of principales'>
-                <h5>{{ product.name }}</h5>
+                <h5 [ngStyle]='{"text-decoration": product?.notAvailable ? "line-through" : "none"}'>{{ product.name }}</h5>
               </li>
             </ul>
           </div>
@@ -34,7 +34,7 @@
         </div>
       </mat-card-content>
       <mat-card-actions align='end'>
-        <button mat-button type='button' (click)='onSelect(products)' [disabled]='!menu.available'>Ordenar para {{ menu?.date.toDate().getDay() | dow }}</button>
+        <button mat-button type='button' (click)='onSelect()' [disabled]='!menu.available'>Ordenar para {{ menu?.date.toDate().getDay() | dow }}</button>
       </mat-card-actions>
     </mat-card>
   </div>

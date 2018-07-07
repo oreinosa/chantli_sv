@@ -27,10 +27,6 @@ export class EditOrderComponent extends MyOrder {
 
   user: User;
 
-  onSubmit(): void {
-    throw new Error("Method not implemented.");
-  }
-
   constructor(
     private orderService: OrderService,
     myOrdersService: MyOrdersService,
@@ -47,13 +43,14 @@ export class EditOrderComponent extends MyOrder {
       .subscribe(user => this.user = user);
 
     this.route.paramMap.pipe(
+      takeUntil(this.ngUnsubscribe),
       map(paramMap => +paramMap.get('step')),
       tap(step => console.log('Step ', step)))
       .subscribe(step => this.step = step);
 
     this.$menus = this.myOrdersService.action.pipe(
       takeUntil(this.ngUnsubscribe),
-      tap(action => console.log(action)),
+      // tap(action => console.log(action)),
       tap(order => !!order ? false : this.onBack()),
       filter(order => !!order),
       tap(order => this.order = order),
@@ -80,7 +77,7 @@ export class EditOrderComponent extends MyOrder {
     this.router.navigate(['../', 3], { relativeTo: this.route });
   }
 
-  onConfirm(tortillas: number, price: number) {
+  onSubmit(tortillas: number, price: number) {
     let products = this.editingOrder.products;
     let acompanamientos: string[] = products.acompanamientos.map(product => product.name);
     let orderedBy = firebaseApp.firestore.Timestamp.fromDate(new Date());
@@ -94,10 +91,7 @@ export class EditOrderComponent extends MyOrder {
       },
       tortillas: tortillas,
       price: price,
-      date: {
-        for: this.selectedMenu.date,
-        by: orderedBy
-      },
+      updated: orderedBy
     };
 
     if (products.principal.noSides) {

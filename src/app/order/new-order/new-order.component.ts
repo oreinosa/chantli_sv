@@ -10,7 +10,7 @@ import { Order } from '../../shared/classes/order';
 import { AuthService } from '../../auth/auth.service';
 import { User } from '../../shared/classes/user';
 import { NotificationsService } from '../../notifications/notifications.service';
-import { take, tap, takeUntil, map } from 'rxjs/operators';
+import { take, tap, takeUntil, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-new-order',
@@ -40,21 +40,15 @@ export class NewOrderComponent implements OnInit {
       )
       .subscribe(user => this.user = user);
 
-    this.orderService
-      .menuSubject
-      .pipe(
-        take(1),
-        tap(menu => menu ? false : this.router.navigate(['menu']))
-      )
-      .subscribe(menu => this.menu = menu);
-
     this.route
       .paramMap
       .pipe(
         takeUntil(this.ngUnsubscribe),
-        map(params => +params.get('step'))
+        tap(params => this.step = +params.get("step")),
+        switchMap(params => this.orderService.getMenu(params.get('id'))),
+        tap(menu => !!menu ? false : this.router.navigate(['menu']))
       )
-      .subscribe(step => this.step = step ? step : 1);
+      .subscribe(menu => this.menu = menu);
 
     this.newOrder = new NewOrder({ principal: null, acompanamientos: [], bebida: null });
   }
@@ -62,7 +56,6 @@ export class NewOrderComponent implements OnInit {
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-    this.orderService.selectMenu(null);
   }
 
   onSelect(principal: Product, acompanamientos: Product[]) {

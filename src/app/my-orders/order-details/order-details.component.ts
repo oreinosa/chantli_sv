@@ -12,11 +12,6 @@ import { Order } from '../../shared/classes/order';
 })
 export class OrderDetailsComponent extends MyOrder {
 
-
-  onSubmit(...args: any[]): void {
-    throw new Error("Method not implemented.");
-  }
-
   constructor(
     private orderService: OrderService,
     myOrderService: MyOrdersService,
@@ -27,7 +22,7 @@ export class OrderDetailsComponent extends MyOrder {
   }
 
 
-  getMenus() {
+  onSubmit() {
     this.router.navigate(['paso', 0], { relativeTo: this.route });
   }
 

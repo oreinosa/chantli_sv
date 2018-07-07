@@ -48,7 +48,7 @@ export class NavComponent {
               );
             case 'Cliente':
               actions.push(
-                { route: 'mis-ordenes', label: 'Mis ordenes', icon: 'shopping_cart' },
+                { route: 'mis-ordenes', label: 'Mis órdenes', icon: 'shopping_cart' },
               );
             default:
               actions.push(

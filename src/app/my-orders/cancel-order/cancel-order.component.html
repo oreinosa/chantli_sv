@@ -15,17 +15,6 @@
       Para : {{ order.date.for.toDate() | spanishDate }}
     </p>
     <p>
-      <span>
-        {{ order.products.principal }}
-      </span>
-      <span *ngFor='let ac of order.products?.acompanamientos; last as isLast; first as isFirst'>
-        , {{ ac }}
-      </span>
-      <span>
-        , {{ order.products.bebida }}
-      </span>
-    </p>
-    <p>
       <b> Precio : {{ order.price | currency }} </b>
     </p>
     <p *ngIf='order?.paid?.flag'>

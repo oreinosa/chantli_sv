@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card class='mat-elevation-z0'>
   <mat-card-header>
     <mat-card-title>
       <h1>Editando orden</h1>
@@ -29,7 +29,7 @@
           *ngSwitchCase='2'></app-step-2>
 
         <app-step-3 [editing]='true' [paid]='order.paid.flag' [previousPrice]='order.price' [menu]='selectedMenu' [principal]='editingOrder?.products?.principal'
-          [acompanamientos]='editingOrder?.products?.acompanamientos' [bebida]='editingOrder?.products?.bebida' (confirm)='onConfirm($event?.tortillas, $event?.total)'
+          [acompanamientos]='editingOrder?.products?.acompanamientos' [bebida]='editingOrder?.products?.bebida' (confirm)='onSubmit($event?.tortillas, $event?.total)'
           *ngSwitchCase='3'></app-step-3>
 
         <app-step-4 [editing]='true' *ngSwitchCase='4'></app-step-4>

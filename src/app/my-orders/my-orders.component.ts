@@ -7,10 +7,10 @@ import { AuthService } from '../auth/auth.service';
 import { User } from '../shared/classes/user';
 import { Order } from '../shared/classes/order';
 
-import { take, takeUntil, tap, switchMap, startWith, map } from 'rxjs/operators';
+import { take, takeUntil, tap, switchMap, startWith, map, filter } from 'rxjs/operators';
 import { Subject, Observable, BehaviorSubject } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UpdateService } from '../update.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Component({
   selector: 'app-my-orders',
@@ -23,38 +23,28 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
   displayedColumns = ["products", "date", "price", "status", "paid", "actions"]
   loaded = false;
 
-  today = new Date();
-  thisHour: number;
-
   user: User;
   limitSubject: BehaviorSubject<number>;
   limits: number[] = [];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  offline: boolean = false;
+  showList: boolean = true;
 
   constructor(
     private myOrdersService: MyOrdersService,
     private auth: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private updateService: UpdateService
-  ) { }
+    private notifications: NotificationsService
+  ) {
+  }
 
   ngOnInit() {
-    this.updateService
-      .online$.pipe(
-        takeUntil(this.ngUnsubscribe),
-    )
-      .subscribe(flag => this.offline = !flag);
 
-    this.thisHour = this.today.getHours();
 
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-
-    this.myOrdersService.onAction(null);
 
     this.auth
       .user.pipe(
@@ -79,10 +69,18 @@ export class MyOrdersComponent implements OnInit, OnDestroy {
         ),
         tap(orders => {
           console.log(orders);
+          if (this.dataSource.data.length) { this.notifications.show("Lista de órdenes actualizada!", "Mis órdenes", "info") }
           this.dataSource.data = orders;
+          this.myOrdersService.onAction(null);
         })
       )
       .subscribe(() => this.loaded = true);
+
+    this.myOrdersService.action.pipe(
+      takeUntil(this.ngUnsubscribe),
+      map(action => !!action ? false : true)
+    )
+      .subscribe(flag => this.showList = flag);
   }
 
   private compare(a, b, isAsc) {

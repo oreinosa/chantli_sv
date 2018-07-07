@@ -15,8 +15,7 @@ export class DayMenuComponent implements OnInit {
   ngOnInit() {
   }
 
-  onSelect(products: Product[]){
-    this.menu.products = products;
+  onSelect(){
     this.selected.emit(this.menu);
   }
 

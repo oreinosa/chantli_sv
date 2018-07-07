@@ -14,6 +14,7 @@ import { fadeIn } from '../../../shared/animations';
 export class Step1Component implements OnInit {
   @Input() editing: boolean = false;
   @Input() menu: Menu;
+  @Input() products: Product[];
   @Output() select = new EventEmitter<{ principal: Product, acompanamientos?: Product[] }>();
   @Input() principal: Product;
   @Input() acompanamientos: Product[];
@@ -26,12 +27,6 @@ export class Step1Component implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    if (this.menu) {
-      let acompanamientos = this.menu.products.filter(product => product.category === "Acompañamiento");
-      if (!acompanamientos.length) {
-        this.doubleFlag.disable();
-      }
-    }
   }
 
   onSelectPrincipal(principal: Product) {

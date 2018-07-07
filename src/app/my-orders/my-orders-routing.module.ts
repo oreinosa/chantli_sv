@@ -8,11 +8,14 @@ import { AuthGuard } from '../auth/auth.guard';
 import { CancelOrderComponent } from 'src/app/my-orders/cancel-order/cancel-order.component';
 
 const routes: Routes = [
-  { path: 'mis-ordenes', component: MyOrdersComponent, canActivate: [AuthGuard] },
-  { path: 'mis-ordenes/editar/:id', component: OrderDetailsComponent },
-  { path: 'mis-ordenes/editar/:id/paso/:step', component: EditOrderComponent },
-  { path: 'mis-ordenes/cancelar/:id', component: CancelOrderComponent },
-  { path: 'mis-ordenes/comentario/:id', component: FeedbackOrderComponent }
+  {
+    path: 'mis-ordenes', component: MyOrdersComponent, canActivate: [AuthGuard], children: [
+      { path: 'editar/:id', component: OrderDetailsComponent },
+      { path: 'editar/:id/paso/:step', component: EditOrderComponent },
+      { path: 'cancelar/:id', component: CancelOrderComponent },
+      { path: 'comentar/:id', component: FeedbackOrderComponent }
+    ]
+  },
 ];
 
 @NgModule({

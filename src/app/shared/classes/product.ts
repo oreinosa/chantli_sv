@@ -1,15 +1,15 @@
-export interface Product {
-  id?: string;
-  name?: string;
-  description?: string;
-  imageURL?: string;
-  price?: number;
-  cost?: number;
-  extra?: number;
-  noSides?: boolean,
-  noTortillas?: boolean,
-  category?: string;
-}
+// export interface Product {
+//   id?: string;
+//   name?: string;
+//   description?: string;
+//   imageURL?: string;
+//   price?: number;
+//   cost?: number;
+//   extra?: number;
+//   noSides?: boolean,
+//   noTortillas?: boolean,
+//   category?: string;
+// }
 export class Product {
   constructor(
     public id?: string,
@@ -21,6 +21,7 @@ export class Product {
     public extra?: number,
     public noSides?: boolean,
     public noTortillas?: boolean,
-    public category?: string
+    public category?: string,
+    public notAvailable?: boolean
   ) { }
 }

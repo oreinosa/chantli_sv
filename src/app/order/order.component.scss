@@ -1,49 +1,30 @@
 @import 'src/_colors';
 
-.title, .dow{
-  padding-left : 0;
-  padding-right: 0;
+.title, .select-day{
+  padding-top: 15px;
+  padding-bottom: 15px;
   margin-top: -15px;
   margin-bottom: 25px;
-  /* outline: 10px solid #009688; */
-}
-.dow{
-  margin-top: -27px;
-}
-.title .mat-card, .dow .mat-card{
   background-color: $primary;
   color: white!important;
   text-align : center;
+  /* outline: 10px solid #009688; */
 }
-.dow .mat-card{
-  border-bottom: 1px solid rgba(0,0,0,.12);
+.select-day{
+  margin-top: -27px;
 }
-.dow .mat-card a{
-  opacity: 1;
-  color: white!important;  
-}
-.dow .mat-card a:hover{
-  text-decoration: none;  
-}
-.toolbar-flex {
-  flex: 1 0.5 auto;
-}
-.mat-tab-link.active{
-  border-bottom: 2px solid $accent;
-  background-color: rgba(0,0,0,.08);
+.arrow-button .mat-icon{
+  vertical-align: baseline;
 }
 .mat-tab-link{
-  /* transition: 3s; */
+  color: white!important;  
+  text-decoration: none;
 }
-// .currentCredit{
-//   right: 50%;
-//   position: fixed;
-//   z-index: 2;
-//   h6{
-//     font-size: 150%;
-//     color: white;
-//   }
-// }
+.mat-tab-label-active{
+  font-weight: bolder;
+  color: black!important;
+}
+
 .mobile  {
   .active{
     background-color: inherit;    

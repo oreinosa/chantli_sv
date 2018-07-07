@@ -32,6 +32,7 @@ import { AdminGuard } from './auth/admin.guard';
 import { AuthGuard } from './auth/auth.guard';
 import { WorkplaceGuard } from './auth/workplace.guard';
 import { UpdateService } from './update.service';
+import { OfflineComponent } from './core/offline/offline.component';
 
 @NgModule({
   imports: [
@@ -57,6 +58,7 @@ import { UpdateService } from './update.service';
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
+  entryComponents: [OfflineComponent],
   providers: [UpdateService, AuthService, AuthGuard, WorkplaceGuard, AdminGuard]
 })
 

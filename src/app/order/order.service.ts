@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Menu } from '../shared/classes/menu';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Router } from '@angular/router';
@@ -11,9 +11,10 @@ import { map } from 'rxjs/operators';
 @Injectable()
 export class OrderService {
   private menusCol: AngularFirestoreCollection<Menu>;
+  private menuDoc: AngularFirestoreDocument<Menu>;
   private bebidasCol: AngularFirestoreCollection<Product>;
   private ordersCol: AngularFirestoreCollection<Order>;
-  menuSubject = new BehaviorSubject<Menu>(null);
+  // menuSubject = new BehaviorSubject<Menu>(null);
 
   private $selectedDow: BehaviorSubject<number>;
 
@@ -29,6 +30,8 @@ export class OrderService {
     let day = date.getDay();
     if (day === 0 || day === 6) { day = 1; }
     this.$selectedDow = new BehaviorSubject<number>(day);
+
+    this.menusCol = this.af.collection<Menu>('menus');
   }
 
   get selectedDow(): Observable<number> {
@@ -100,6 +103,15 @@ export class OrderService {
     return this.getMenus(from, to);
   }
 
+  getMenu(id: string) {
+    this.menuDoc = this.menusCol.doc(id);
+    return this.menuDoc.valueChanges().pipe(
+      map(menu => {
+        menu.id = id;
+        return menu;
+      }));
+  }
+
   getBebidas() {
     this.bebidasCol = this.af.collection('productos', ref => ref.where('category', '==', 'Bebida'));
     return this.bebidasCol
@@ -115,9 +127,9 @@ export class OrderService {
       );
   }
 
-  selectMenu(menu: Menu) {
-    this.menuSubject.next(menu);
-  }
+  // selectMenu(menu: Menu) {
+  //   this.menuSubject.next(menu);
+  // }
 
   private getMonday(d: Date): Date {
     d = new Date(d);
