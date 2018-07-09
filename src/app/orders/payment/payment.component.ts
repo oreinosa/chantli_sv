@@ -27,18 +27,20 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   payingUser: User;
   paying: boolean;
 
-  totalDue: number = 0;
-  payment: number = 0;
-  change: number = 0;
-  addChange: boolean;
+  totalDue: number = 0; // total due (sum of selected missing payments)
+  payment: number = 0; // amount paid by the user
+  usedCredit: number = 0; // credit used to pay
+  change: number = 0; // remaining of totalDue - payment - usedCredit
 
-  workplaces: Workplace[];
-  selectedWorkplace: string = 'TELUS International';
+  addChangeCtrl: FormControl = new FormControl(false); // add change flag 
 
-  selectedUserCtrl = new FormControl();
-  usersByWorkplace: User[] = [];
-  allUsers: User[] = [];
-  filteredUsers: Observable<User[]>;
+  workplaces: Workplace[]; // all workplaces from app
+  selectedWorkplace: FormControl = new FormControl('TELUS International'); // selected workplace 
+
+  selectedUserCtrl = new FormControl(); // selected paying user
+  usersByWorkplace: User[] = []; // list of users from the selected workplace 
+  allUsers: User[] = []; // all users from the app
+  filteredUsers: Observable<User[]>; // users shown in the autocomplete component
 
   allFromWorkplace: boolean = false;
 
@@ -160,16 +162,29 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
   onPay() {
     this.paying = true;
     let selectedOrders: Order[] = this.selection.selected;
+    let currentCredit = this.payingUser.credit;
+    let newCredit = currentCredit;
+    if (currentCredit < this.totalDue) {
+      if (this.addChange) {
+        newCredit = this.change;
+      } else {
+        newCredit = 0;
+      }
+    } else {
+      newCredit -= this.totalDue;
+    }
+
+    // let newCredit = this.payingUser.credit;
+    // if (newCredit < this.totalDue && !this.addChange) {
+    //   console.log('Remaining credit ', this.change);
+    //   newCredit = this.change;
+    // } else if (newCredit <= 0 && this.addChange) {
+    //   newCredit += this.change;
+    // }
+    // console.log(newDebit);
     let currentDebit: number = this.payingUser.debit;
     let newDebit = currentDebit - this.totalDue;
-    let newCredit = this.payingUser.credit;
-    if (newCredit && !this.addChange) {
-      console.log('Remaining credit ', this.change);
-      newCredit = this.change;
-    } else if (this.addChange) {
-      newCredit += this.change;
-    }
-    // console.log(newDebit);
+
     return this.ordersService
       .payOrders(selectedOrders)
       .then(() => this.ordersService.updateBalance(this.payingUser.id, newDebit, newCredit))
