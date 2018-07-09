@@ -10,20 +10,19 @@
 							<img src="/assets/logo.png" alt="logo" class="img-fluid">
 						</div>
 						<div class="form-content my-3">
-							<ng-container *ngIf='!f?.submitted; else loading'>
-								<mat-form-field class="full-width">
-									<input matInput type="email" placeholder='Correo electrónico' id='email' [(ngModel)]='signIn.email' name='email' required
-									 email>
-								</mat-form-field>
-								<mat-form-field class="full-width">
-									<input matInput type="password" placeholder='Constraseña' id='password' [(ngModel)]='signIn.password' name='password' required>
-								</mat-form-field>
-							</ng-container>
-							<ng-template #loading>
-								<mat-spinner class='mx-auto'></mat-spinner>
-							</ng-template>
+							<mat-form-field class="full-width">
+								<input matInput type="email" placeholder='Correo electrónico' id='email' [(ngModel)]='signIn.email' name='email' [readonly]='f?.submitted'
+								 required email>
+							</mat-form-field>
+							<mat-form-field class="full-width">
+								<input matInput type="password" placeholder='Constraseña' id='password' [(ngModel)]='signIn.password' name='password' [readonly]='f?.submitted'
+								 required>
+							</mat-form-field>
 						</div>
-						<button mat-button type='submit' [disabled]='f?.submitted'>Ingresar</button>
+						<button mat-button type='submit' [disabled]='f?.invalid' *ngIf='!f.submitted;else loadingSubmit'>Ingresar</button>
+						<ng-template #loadingSubmit>
+							<mat-spinner class='mx-auto' diameter='35'></mat-spinner>
+						</ng-template>
 						<button mat-button type='button' (click)='onSignInSocial("google")' [disabled]='f?.submitted'>Ingresa con tu cuenta Google</button>
 					</div>
 					<hr>

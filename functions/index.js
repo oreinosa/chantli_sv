@@ -17,10 +17,11 @@ exports.aggregateBalance = functions.firestore
         const user = userDoc.data();
         let debit = user.debit;
         let credit = user.credit;
-        console.log(credit, 'vs', price);
+        // console.log(credit, 'vs', price);
+        console.log(`Calculando nuevo debito/credito de ${user.name}(${user.id})`);
         if (credit >= price) {
           credit -= price;
-          console.log(`New credit : $${credit}`);
+          console.log(`Nuevo credito : $${credit}`);
           return orderDoc.ref
             .update({
               paid: {
@@ -33,7 +34,7 @@ exports.aggregateBalance = functions.firestore
             }));
         } else {
           debit += price;
-          console.log(`New debit : $${debit}`);
+          console.log(`Nuevo debito : $${debit}`);
           return userRef
             .update({
               debit: debit
@@ -78,7 +79,7 @@ exports.cancelOrder = functions
                   .update({
                     debit: newDebit
                   })
-                  .then(() => `Nuevo debit : ${newDebit}`);
+                  .then(() => `Nuevo debito : ${newDebit}`);
             }
           })
           .catch(err => console.log(err));

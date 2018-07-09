@@ -51,9 +51,7 @@ export class AuthService {
 
   signInEmail(signIn: SignIn) {
     return this.afAuth.auth
-      .signInWithEmailAndPassword(signIn.email, signIn.password)
-      .catch(e => this.notificationsService.show('Correo electrónico o contraseaña incorrecta', 'Error', 'danger'))
-      .then((credential: firebaseApp.auth.UserCredential) => this.notificationsService.show(`Hola, ${credential.user.displayName}`, 'Autenticación', 'info'));
+      .signInWithEmailAndPassword(signIn.email, signIn.password);
   }
 
   signInSocial(provider: string) {
@@ -66,28 +64,22 @@ export class AuthService {
 
     return this.afAuth.auth
       .signInWithPopup(_provider)
-      .then(
-        credential => this.updateUserData(credential.user)
-          .then(() => this.notificationsService.show(`Hola, ${credential.user.displayName}`, 'Autenticación', 'info')),
-        e => console.log(e))
+      .then(credential => this.updateUserData(credential.user).then(() => credential.user));
   }
 
   signUp(signUp: SignUp) {
     return this.afAuth
       .auth
       .createUserWithEmailAndPassword(signUp.email, signUp.password)
-      .catch(e => this.notificationsService.show('Correo electrónico ya esta en uso', 'Error', 'danger'))
-      .then(credential => {
+      .then((credential: firebaseApp.auth.UserCredential) => {
         console.log(credential);
-        if (credential) {
-          credential.user.updateProfile({ // UPDATE FIREBASE USER CREDENTIALS
-            displayName: signUp.name,
-            photoURL: 'https://devchantlisv.page.link/empty-picture'
-          })
-            .then(() => this.updateUserData(credential.user, signUp))
-            .then(() => this.notificationsService.show(`Bienvenido, ${signUp.name}`, 'Autenticación', 'success'))
-        }
-      }) // UPDATE FIRESTORE USER DATA
+        credential.user.updateProfile({ // UPDATE FIREBASE USER CREDENTIALS
+          displayName: signUp.name,
+          photoURL: 'https://devchantlisv.page.link/empty-picture'
+        })
+          .then(() => this.updateUserData(credential.user, signUp))
+      });
+
   }
 
   signOut() {
@@ -106,8 +98,9 @@ export class AuthService {
   updateWorkplace(workplace: string, user: User) {
     return this.afs
       .doc<User>(`usuarios/${user.id}`)
-      .update({ workplace: workplace })
-      .then(() => this.notificationsService.show('Lugar de trabajo actualizado!', undefined, 'success'));
+      .update({
+        workplace: workplace
+      });
   }
 
   private updateUserData(user, signUp?: SignUp) {

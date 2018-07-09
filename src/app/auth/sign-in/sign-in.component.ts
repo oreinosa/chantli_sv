@@ -3,6 +3,7 @@ import { SignIn } from '../../shared/classes/sign-in';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
+import { NotificationsService } from '../../notifications/notifications.service';
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
@@ -12,7 +13,8 @@ export class SignInComponent implements OnInit {
   signIn: SignIn;
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private notificationsService: NotificationsService
   ) { }
 
   ngOnInit() {
@@ -28,14 +30,23 @@ export class SignInComponent implements OnInit {
     console.log(signIn);
     this.authService
       .signInEmail(signIn)
-      .then(() => { this.router.navigate(['menu']) })
-      .catch(() => form.resetForm());
+      .then(credential => {
+        this.notificationsService.show(`Hola, ${credential.user.displayName}`, 'Autenticación', 'info');
+        this.router.navigate(['menu'])
+      })
+      .catch(() => {
+        this.notificationsService.show('Correo electrónico o contraseaña incorrecta', 'Error', 'danger');
+        form.resetForm();
+      });
   }
 
   onSignInSocial(provider: string) {
     this.authService
       .signInSocial(provider)
-      .then(() => this.router.navigate(['menu']))
+      .then(credential => {
+        this.notificationsService.show(`Hola, ${credential.displayName}`, 'Autenticación', 'info');
+        this.router.navigate(['menu']);
+      })
   }
 
 }

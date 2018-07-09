@@ -18,6 +18,8 @@ export class OrderService {
 
   private $selectedDow: BehaviorSubject<number>;
 
+  private today: Date;
+
   private $monday: Date;
   private $friday: Date;
 
@@ -26,9 +28,19 @@ export class OrderService {
     private notificationsService: NotificationsService,
     private router: Router
   ) {
-    const date = new Date();
-    let day = date.getDay();
-    if (day === 0 || day === 6) { day = 1; }
+    this.today = new Date();
+
+    let day = this.today.getDay();
+    // d.setMonth(1);
+    // d.setDate(8);
+    console.log('today is ', this.today);
+    if (day === 0 || day === 6) {
+      day = 1;
+    }
+
+    this.$monday = this.getMonday(this.today);
+    this.$friday = this.getFriday(this.today);
+
     this.$selectedDow = new BehaviorSubject<number>(day);
 
     this.menusCol = this.af.collection<Menu>('menus');
@@ -77,22 +89,8 @@ export class OrderService {
       );
   }
 
-  getWeekMenus(currentDay?: Date): Observable<Menu[]> {
-    let d = currentDay ? new Date(currentDay) : new Date();
-    // d.setMonth(1);
-    // d.setDate(15);
-    console.log('today is ', d);
-
-    // d.setDate(29);
-    // console.log('Today date : ', d);
-    // console.log('Monday : ', this.getMonday(d));
-    // console.log('Friday : ', this.getFriday(d));
-
-    this.$monday = this.getMonday(d);
-    this.$friday = this.getFriday(d);
-
+  getWeekMenus(): Observable<Menu[]> {
     return this.getMenus(this.$monday, this.$friday);
-
   }
 
   getMenusByDay(date: Date) {
@@ -127,19 +125,11 @@ export class OrderService {
       );
   }
 
-  // selectMenu(menu: Menu) {
-  //   this.menuSubject.next(menu);
-  // }
-
   private getMonday(d: Date): Date {
     d = new Date(d);
     var day = d.getDay(),
       diff = d.getDate() - day + 1;
-    if (day == 6) {
-      diff += 7;
-    } else if (day == 0) {
-      // diff -= 7;
-    }
+    if (day == 6) diff += 7;
     d.setDate(diff);
     d.setHours(0, 0, 0);
     console.log(d);
@@ -151,9 +141,7 @@ export class OrderService {
     var day = d.getDay(),
       diff = d.getDate() - day + 5;
     if (day == 6) diff += 7;
-    // if (day == 6 || day == 0) {
-    // diff += day == 6 ? 3 : 7;
-    // }
+
     d.setDate(diff);
     d.setHours(23, 0, 0);
     console.log(d);

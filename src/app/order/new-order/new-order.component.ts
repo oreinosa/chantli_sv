@@ -106,6 +106,15 @@ export class NewOrderComponent implements OnInit {
       delete order.tortillas;
     }
 
+    // if (this.user.credit) {
+    //   if (this.user.credit >= price) {
+    //     order.paid = {
+    //       flag: true,
+    //       by: orderedBy
+    //     }
+    //   }
+    // }
+
     this.orderService
       .submitNewOrder(order)
       .then(() => this.router.navigate(['menu']));

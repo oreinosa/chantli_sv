@@ -60,7 +60,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // this.today.setMonth(6);
-    this.today.setDate(9);
+    // this.today.setDate(9);
 
     let currentYear = this.today.getFullYear();
     let currentMonth = this.today.getMonth();

@@ -14,7 +14,7 @@
             <h4 class='text-center'>Platos principales</h4>
             <ul>
               <li *ngFor='let product of principales'>
-                <h5 [ngStyle]='{"text-decoration": product?.notAvailable ? "line-through" : "none"}'>{{ product.name }}</h5>
+                <h5 [ngClass]='product?.notAvailable ? "not-available" : "available"'>{{ product.name }}</h5>
               </li>
             </ul>
           </div>
@@ -23,7 +23,7 @@
               <h4 class='text-center'>Acompañamientos</h4>
               <ul>
                 <li *ngFor='let product of acompanamientos'>
-                  <h5>{{ product.name }}</h5>
+                  <h5 [ngClass]='product?.notAvailable ? "not-available" : "available"'>{{ product.name }}</h5>
                 </li>
               </ul>
             </ng-container>

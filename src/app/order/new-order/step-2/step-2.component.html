@@ -1,6 +1,6 @@
 <mat-card *ngIf='menu' @fadeIn [ngClass]='editing ? "mat-elevation-z0" : ""'>
   <mat-card-header>
-    <mat-card-title>
+    <mat-card-title *ngIf='!editing'>
       <h1>Ordenando para {{ menu.date.toDate().getDay() | dow }}</h1>
     </mat-card-title>
     <mat-card-subtitle>
