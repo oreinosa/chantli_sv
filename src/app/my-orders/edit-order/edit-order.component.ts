@@ -102,13 +102,14 @@ export class EditOrderComponent extends MyOrder {
       delete editedOrder.tortillas;
     }
 
-    let updatedUser: User = {
-      id: this.user.id,
-      credit: this.user.credit,
-      debit: this.user.debit
-    };
+    let updatedUser: User;
     let previousPrice = this.order.price;
     if (previousPrice !== price) {
+      updatedUser = {
+        id: this.user.id,
+        credit: this.user.credit,
+        debit: this.user.debit
+      };
       let difference = (previousPrice - price);
       difference = parseFloat(difference.toFixed(2));
 
@@ -119,12 +120,11 @@ export class EditOrderComponent extends MyOrder {
       } else {
         updatedUser.debit -= difference;
       }
-
     }
 
     this.myOrdersService.editOrder(this.order.id, editedOrder, updatedUser)
-      .then(() => this.router.navigate(['mis-ordenes']))
-      .then(() => this.myOrdersService.onAction(null));
+      .then(() => this.onCancel());
+
   }
 
 }

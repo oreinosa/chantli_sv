@@ -149,11 +149,12 @@ export class OrdersService {
   cancelOrder(order: Order, cancelStatus: string) {
     if (order.paid.flag) {
       order.paid = firebaseApp.firestore.FieldValue.delete() as any;
-      order.cancelled = firebaseApp.firestore.Timestamp.fromDate(new Date());
     }
+    order.cancelled = firebaseApp.firestore.Timestamp.fromDate(new Date());
     if (cancelStatus !== "Cancelado (reembolso)") {
       this.functions.httpsCallable('cancelOrder')({
-        orderId: order.id,
+        userId: order.user.id,
+        price: order.price,
         action: cancelStatus
       })
         .subscribe(a => console.log(a), e => console.log('error ', e));

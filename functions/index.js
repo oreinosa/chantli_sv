@@ -1,10 +1,10 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-admin.initializeApp(functions.config().firebase);
+admin.initializeApp();
 
 exports.aggregateBalance = functions.firestore
   .document('ordenes/{orderId}')
-  .onCreate(orderDoc => {
+  .onCreate((orderDoc) => {
     const order = orderDoc.data();
     const userId = order.user.id;
     const price = order.price;
@@ -13,8 +13,8 @@ exports.aggregateBalance = functions.firestore
     // get all comments and aggregate
     return userRef
       .get()
-      .then(userDoc => {
-        const user = userDoc.data();
+      .then((snapshot, context) => {
+        const user = snapshot.data();
         let debit = user.debit;
         let credit = user.credit;
         // console.log(credit, 'vs', price);
@@ -47,100 +47,93 @@ exports.aggregateBalance = functions.firestore
 exports.cancelOrder = functions
   .https
   .onCall((data, context) => {
-    const orderId = data.orderId; // order id 
+    const userId = data.userId; // order id 
+    const price = data.price; // amount that will be added/substracted from credit/debit
     const action = data.action; // "cancelar" o "reembolsar" o "credito"
-    console.log(action, ' order ', orderId);
-    const orderRef = admin.firestore().collection('ordenes').doc(orderId)
+    console.log(action);
+    const userRef = admin.firestore().collection('usuarios').doc(userId);
 
-    return orderRef
+    return userRef
       .get()
-      .then(orderDoc => {
-        const order = orderDoc.data();
-        console.log('order data ', order);
-        const userRef = admin.firestore().collection('usuarios').doc(order.user.id);
-
-        return userRef
-          .get()
-          .then(userDoc => {
-            const user = userDoc.data();
-            switch (action) {
-              case "Cancelado (credito)":
-                const currentCredit = user.credit;
-                const newCredit = (currentCredit + order.price);
-                return userRef
-                  .update({
-                    credit: newCredit
-                  })
-                  .then(() => `Nuevo credito : ${newCredit}`);
-              case "Cancelado":
-                const currentDebit = user.debit;
-                const newDebit = (currentDebit - order.price);
-                return userRef
-                  .update({
-                    debit: newDebit
-                  })
-                  .then(() => `Nuevo debito : ${newDebit}`);
-            }
-          })
-          .catch(err => console.log(err));
+      .then(userDoc => {
+        const user = userDoc.data();
+        switch (action) {
+          case "Cancelado (credito)":
+            const currentCredit = user.credit;
+            const newCredit = (currentCredit + price);
+            return userRef
+              .update({
+                credit: newCredit
+              })
+              .then(() => `Nuevo credito : ${newCredit}`);
+          case "Cancelado":
+            const currentDebit = user.debit;
+            const newDebit = (currentDebit - price);
+            return userRef
+              .update({
+                debit: newDebit
+              })
+              .then(() => `Nuevo debito : ${newDebit}`);
+        }
       })
+
       .catch(err => console.log(err));
   });
 
-exports.notifyArrival = functions.firestore
-  .document('/llegadas/{arrivalId}')
-  .onWrite((change, context) => {
+// exports.notifyArrival = functions.firestore
+//   .document('/llegadas/{arrivalId}')
+//   .onWrite((change, context) => {
 
-    const arrival = change.after.data();
+//     const arrival = change.after.data();
 
-    const message = {
-      notification: {
-        title: `Alerta! (${change.after.id})`,
-        body: arrival.message + `(${arrival.timestamp})`,
-      },
-      data: {
-        test: 'test'
-      },
-      topic: 'arrival'
-    };
+//     const message = {
+//       notification: {
+//         title: `Alerta! (${change.after.id})`,
+//         body: arrival.message + `(${arrival.timestamp})`,
+//       },
+//       data: {
+//         test: 'test'
+//       },
+//       topic: 'arrival'
+//     };
 
-    return admin
-      .messaging()
-      .send(message)
-      .then(payload => {
-        console.log('Successfully sent message:', payload);
-      })
-      .catch(error => {
-        console.log('Error sending message:', error);
-      })
-  });
+//     return admin
+//       .messaging()
+//       .send(message)
+//       .then(payload => {
+//         console.log('Successfully sent message:', payload);
+//       })
+//       .catch(error => {
+//         console.log('Error sending message:', error);
+//       })
+//   });
 
-exports.subscribeToTopic = functions
-  .https
-  .onCall((data, context) => {
-    const topic = data.topic;
-    const tokens = data.tokens;
-    console.log(tokens);
-    // Subscribe the devices corresponding to the registration tokens to the
-    // topic
-    return admin
-      .messaging()
-      .subscribeToTopic(tokens, topic)
-      .then(function (response) {
-        // See the MessagingTopicManagementResponse reference documentation
-        // for the contents of response.
-        const message = 'Successfully subscribed to topic: ' + response.successCount;
-        console.log(response);
-        return {
-          response: message
-        }
-        // res.status(200).end();
-      })
-      .catch(function (error) {
-        console.log('Error subscribing to topic:', error);
-        // res.status(400).end();
-        return {
-          response: error
-        }
-      });
-  });
+// exports.subscribeToTopic = functions
+//   .https
+//   .onCall((data, context) => {
+//     const topic = data.topic;
+//     const tokens = data.tokens;
+//     console.log(tokens);
+//     // Subscribe the devices corresponding to the registration tokens to the
+//     // topic
+//     return admin
+//       .messaging()
+//       .subscribeToTopic(tokens, topic)
+//       .then(function (response) {
+//         // See the MessagingTopicManagementResponse reference documentation
+//         // for the contents of response.
+//         const message = 'Successfully subscribed to topic: ' + response.successCount;
+//         console.log(response);
+//         return {
+//           response: message
+//         }
+//         // res.status(200).end();
+//       })
+//       .catch(function (error) {
+//         console.log('Error subscribing to topic:', error);
+//         // res.status(400).end();
+//         return {
+//           response: error
+//         }
+//       });
+//   });

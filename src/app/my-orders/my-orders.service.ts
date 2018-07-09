@@ -52,28 +52,34 @@ export class MyOrdersService {
     return this.myOrdersCollection
       .doc(orderId)
       .update(editedOrder)
-      .then(() => user ? this.af.collection<User>('usuarios').doc(user.id).update(user).then(() =>
-        this.notifications.show(`Balance actualizado :  Pendiente : $${user.debit} - Crédito $${user.credit}`, 'Mis órdenes', 'success')) : undefined)
+      .then(() => {
+        if (user) {
+          this.af
+            .collection<User>('usuarios')
+            .doc(user.id)
+            .update(user)
+            .then(() => this.notifications.show(`Balance actualizado :  Pendiente : $${user.debit} - Crédito $${user.credit}`, 'Mis órdenes', 'success'))
+        }
+      })
       .then(() => this.notifications.show('Orden editada', 'Mis órdenes', 'success'));
   }
 
   cancelOrder(order: Order, cancelStatus: string) {
-    let updatedOrder: Partial<Order> = {
-      status: cancelStatus,
-      cancelled: firebaseApp.firestore.Timestamp.fromDate(new Date())
-    };
-    if (cancelStatus !== "Cancelado") {
-      updatedOrder.paid = firebaseApp.firestore.FieldValue.delete() as any;
+    if (order.paid.flag) {
+      order.paid = firebaseApp.firestore.FieldValue.delete() as any;
     }
+    order.cancelled = firebaseApp.firestore.Timestamp.fromDate(new Date());
+
     this.functions.httpsCallable('cancelOrder')({
-      orderId: order.id,
+      userId: order.user.id,
+      price: order.price,
       action: cancelStatus
     })
       .subscribe(a => console.log(a), e => console.log('error ', e));
 
     return this.myOrdersCollection
       .doc(order.id)
-      .update(updatedOrder)
+      .update(order)
       .then(() => this.notifications.show('Orden cancelada', 'Mis órdenes', 'info'));
   }
 }
