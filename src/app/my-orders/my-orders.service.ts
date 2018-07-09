@@ -69,7 +69,7 @@ export class MyOrdersService {
       order.paid = firebaseApp.firestore.FieldValue.delete() as any;
     }
     order.cancelled = firebaseApp.firestore.Timestamp.fromDate(new Date());
-
+    order.status = cancelStatus;
     this.functions.httpsCallable('cancelOrder')({
       userId: order.user.id,
       price: order.price,
