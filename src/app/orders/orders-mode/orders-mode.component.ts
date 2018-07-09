@@ -2,6 +2,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Unsubscribe } from './../../shared/classes/unsubscribe';
 // import { OrdersService } from './../orders.service';
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 interface Mode {
   icon: string;
@@ -14,11 +15,13 @@ interface Mode {
   styleUrls: ['./orders-mode.component.css']
 })
 export class OrdersModeComponent extends Unsubscribe implements OnInit {
-  @Output() selectMode = new EventEmitter<string>();
+  @Output('selectMode') selectModeEmitter = new EventEmitter<string>();
   actionIndex: number = 0;
   actions: Mode[];
 
   constructor(
+    private router: Router,
+    private route: ActivatedRoute
     // private ordersService: OrdersService
   ) { super() }
 
@@ -33,6 +36,11 @@ export class OrdersModeComponent extends Unsubscribe implements OnInit {
     //   takeUntil(this.ngUnsubscribe)
     // )
     //   .subscribe(mode => console.log(mode));
+  }
+
+  selectMode(action: string) {
+    this.selectModeEmitter.emit(action);
+    this.router.navigate(['./', action], { relativeTo: this.route });
   }
 
 }

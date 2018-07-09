@@ -34,8 +34,15 @@ export class EditMenuComponent extends EditSubcollection<Menu, Product> {
       .pipe(
         startWith(''),
         map((product: any) => (typeof product === 'object') ? product.name : product),
-        tap(product => console.log(product)),
-        map((product:string) => product ? this.filterProducts(product) : this.products.slice())
+        // tap(product => console.log(product)),
+        map((product: string) => product ? this.filterProducts(product) : this.products.slice()),
+        map(products => products.sort((a, b) => {
+          if (a.name < b.name)
+            return -1;
+          if (a.name > b.name)
+            return 1;
+          return 0;
+        }))
       );
   }
 
@@ -53,7 +60,7 @@ export class EditMenuComponent extends EditSubcollection<Menu, Product> {
 
   selectProduct(product: Product) {
     this.selectedSubcollectionObject = this.products.find(_product => _product.id === product.id);
-    console.log(this.selectedSubcollectionObject);
+    // console.log(this.selectedSubcollectionObject);
   }
 
   filterProducts(name: string) {
@@ -71,6 +78,11 @@ export class EditMenuComponent extends EditSubcollection<Menu, Product> {
 
   displayProductFn(product?: Product): string {
     return product ? product.name : '';
+  }
+
+  toggleNotAvailable(menuId: string, flag: boolean) {
+    this.menusService.toggleNotAvailable(this.object.id, menuId, flag)
+      .then();
   }
 
 }

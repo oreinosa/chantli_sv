@@ -36,8 +36,15 @@ export class AddMenuComponent extends AddSubcollection<Menu, Product> implements
       .pipe(
         startWith(''),
         map((product: any) => (typeof product === 'object') ? product.name : product),
-        tap(product => console.log(product)),
-        map((product:string) => product ? this.filterProducts(product) : this.products.slice())
+        // tap(product => console.log(product)),
+        map((product: string) => product ? this.filterProducts(product) : this.products.slice()),
+        map(products => products.sort((a, b) => {
+          if (a.name < b.name)
+            return -1;
+          if (a.name > b.name)
+            return 1;
+          return 0;
+        }))
       );
   }
 
@@ -63,7 +70,7 @@ export class AddMenuComponent extends AddSubcollection<Menu, Product> implements
 
   selectProduct(product: Product) {
     this.selectedSubcollectionObject = this.products.find(_product => _product.id === product.id);
-    console.log(this.selectedSubcollectionObject);
+    // console.log(this.selectedSubcollectionObject);
   }
 
   filterProducts(name: string) {

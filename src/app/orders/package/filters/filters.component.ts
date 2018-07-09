@@ -60,7 +60,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // this.today.setMonth(6);
-    // this.today.setDate(31);
+    this.today.setDate(9);
 
     let currentYear = this.today.getFullYear();
     let currentMonth = this.today.getMonth();
@@ -96,6 +96,7 @@ export class FiltersComponent implements OnInit, OnDestroy {
       .valueChanges
       .pipe(
         startWith(''),
+        map((user: any) => (typeof user === 'object' && user) ? user.name : user),
         map(user => user ? this.filterUsers(user) : this.users.slice())
       );
 

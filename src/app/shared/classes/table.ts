@@ -43,7 +43,7 @@ export class Table<T> implements OnInit {
         tap(data => this.loaded = false)
       )
       .subscribe(data => {
-        console.log('Table data : ', data)
+        console.log(`${this.service.collectionName} data : `, data)
         this.data = data;
         this.loaded = true;
         this.sortData();

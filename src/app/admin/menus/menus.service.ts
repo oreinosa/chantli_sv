@@ -61,4 +61,14 @@ export class MenusService extends DAOSubcollection<Menu, Product> {
       .then(() => this.notificationsService
         .show(`Menu ${id} ${flag ? "disponible" : "cerrado"}`, 'Menús', `${flag ? "success" : "warning"}`));
   }
+
+  toggleNotAvailable(menuId: string, productId: string, flag: boolean): Promise<void> {
+    return this.objectCollection
+      .doc(menuId)
+      .collection('productos')
+      .doc(productId)
+      .set({ notAvailable: flag }, { merge: true })
+      .then(() => this.notificationsService
+        .show(`Producto ${productId} de menu ${menuId} ${flag ? "disponible" : "se acabó"}`, 'Menús', `${flag ? "success" : "warning"}`));
+  }
 }

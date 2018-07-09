@@ -56,7 +56,7 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
     this.filteredUsers = this.ordersService.getUsers().pipe(
       takeUntil(this.ngUnsubscribe),
       tap(users => {
-        console.log(users);
+        // console.log(users);
         this.allUsers = users;
         this.filterByWorkplace(this.selectedWorkplace);
         if (this.payingUser) {
@@ -73,10 +73,9 @@ export class PaymentComponent implements OnInit, AfterViewInit, OnDestroy {
         };
       }),
       switchMap(() => this.selectedUserCtrl.valueChanges),
-      // startWith(''),
       map((user: any) => (typeof user === 'object' && user) ? user.name : user),
       map((user: string) => user ? this.filterUsers(user) : this.usersByWorkplace.slice()),
-      tap(users => console.log(users))
+      // tap(users => console.log(users))
     );
 
     this.ordersService

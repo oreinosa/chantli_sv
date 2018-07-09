@@ -4,9 +4,9 @@ import { OrdersService } from './../../orders.service';
 import { Order } from './../../../shared/classes/order';
 import { Component, OnInit, Input } from '@angular/core';
 
-interface ProductCount {
+interface Count {
   label?: string;
-  count?: number;
+  amount?: number;
 }
 
 @Component({
@@ -17,9 +17,10 @@ interface ProductCount {
 export class OrdersOverviewComponent implements OnInit {
   private ngUnsubscribe = new Subject();
   orders: Order[];
-  principales: ProductCount[] = [];
-  acompanamientos: ProductCount[] = [];
-  bebidas: ProductCount[] = [];
+  principales: Count[] = [];
+  acompanamientos: Count[] = [];
+  bebidas: Count[] = [];
+  statuses: Count[] = [];
   tortillas: number = 0;
 
   $loading: boolean = true;
@@ -34,10 +35,7 @@ export class OrdersOverviewComponent implements OnInit {
         takeUntil(this.ngUnsubscribe),
         tap(orders => {
           this.$loading = true;
-          this.tortillas = 0;
-          this.principales = [];
-          this.acompanamientos = [];
-          this.bebidas = [];
+          this.initOverview();
           this.orders = orders;
           // console.log(orders);
           this.generateOverview();
@@ -46,12 +44,42 @@ export class OrdersOverviewComponent implements OnInit {
       .subscribe(orders => this.$loading = false);
   }
 
+  initOverview(): void {
+    this.tortillas = 0;
+    this.principales = [];
+    this.acompanamientos = [];
+    this.bebidas = [];
+    this.statuses = [
+      { label: 'Nueva orden', amount: 0 },
+      { label: 'Empacado', amount: 0 },
+      { label: 'Entregado', amount: 0 },
+      { label: 'Cancelado', amount: 0 },
+      { label: 'Cancelado (credito)', amount: 0 },
+      { label: 'Cancelado (reembolso)', amount: 0 },
+    ];
+  }
+
   generateOverview(): void {
     if (this.orders) {
       if (this.orders.length) {
 
-        let products, bebida: string, principal: string, acompanamientos: string[], bebidaIndex: number, principalIndex: number, acompanamientosIndex: number;
+        let products, bebida: string, principal: string, acompanamientos: string[], status: string;
+        let bebidaIndex: number, principalIndex: number, acompanamientosIndex: number, statusIndex: number;
+
         for (let order of this.orders) {
+          status = order.status;
+
+          statusIndex = this.statuses.findIndex((count: Count) => count.label === status);
+          if (statusIndex < 0) {
+            this.statuses.push({
+              label: status,
+              amount: 1
+            });
+          } else {
+            ++this.statuses[statusIndex].amount;
+          }
+
+
           // TORTILLAS SUM  
           this.tortillas += order.tortillas ? order.tortillas : 0;
 
@@ -59,39 +87,39 @@ export class OrdersOverviewComponent implements OnInit {
           products = order.products;
           principal = products.principal as string;
 
-          principalIndex = this.principales.findIndex((productCount: ProductCount) => productCount.label === principal);
+          principalIndex = this.principales.findIndex((Count: Count) => Count.label === principal);
           if (principalIndex < 0) {
             this.principales.push({
               label: principal,
-              count: 1
+              amount: 1
             });
           } else {
-            this.principales[principalIndex].count = ++this.principales[principalIndex].count;
+            this.principales[principalIndex].amount = ++this.principales[principalIndex].amount;
           }
 
           bebida = products.bebida as string;
-          bebidaIndex = this.bebidas.findIndex((productCount: ProductCount) => productCount.label === bebida);
+          bebidaIndex = this.bebidas.findIndex((Count: Count) => Count.label === bebida);
           if (bebidaIndex < 0) {
             this.bebidas.push({
               label: bebida,
-              count: 1
+              amount: 1
             });
           } else {
-            this.bebidas[bebidaIndex].count = ++this.bebidas[bebidaIndex].count;
+            this.bebidas[bebidaIndex].amount = ++this.bebidas[bebidaIndex].amount;
           }
 
 
           acompanamientos = products.acompanamientos as string[];
           if (acompanamientos) {
             for (let ac of acompanamientos) {
-              acompanamientosIndex = this.acompanamientos.findIndex((productCount: ProductCount) => productCount.label === ac);
+              acompanamientosIndex = this.acompanamientos.findIndex((Count: Count) => Count.label === ac);
               if (acompanamientosIndex < 0) {
                 this.acompanamientos.push({
                   label: ac,
-                  count: 1
+                  amount: 1
                 });
               } else {
-                this.acompanamientos[acompanamientosIndex].count = ++this.acompanamientos[acompanamientosIndex].count;
+                this.acompanamientos[acompanamientosIndex].amount = ++this.acompanamientos[acompanamientosIndex].amount;
               }
             }
           }

@@ -29,7 +29,7 @@ export class EditSubcollection<T, S> extends Edit<T> implements OnInit, OnDestro
         filter(object => !!object),
         switchMap(() => this.service.getSubcollection(this.object['id'])),
         takeUntil(this.ngUnsubscribe),
-        tap(subCollection => console.log(subCollection))
+        // tap(subCollection => console.log(subCollection))
       )
       .subscribe(subCollection => this.object[this.service.subCollectionName] = subCollection.slice());
   }

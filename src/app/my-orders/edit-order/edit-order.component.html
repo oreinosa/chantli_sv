@@ -21,18 +21,26 @@
       </ng-container>
     </ng-container>
     <ng-template #editingOrderTemplate>
-      <ng-container [ngSwitch]='step'>
-        <app-step-1 [editing]='true' [menu]='selectedMenu' [principal]='editingOrder?.products?.principal' [acompanamientos]='editingOrder?.products?.acompanamientos'
-          (select)='onSelect($event.principal, $event.acompanamientos)' *ngSwitchCase='1'></app-step-1>
+      <ng-container *ngIf='(selectedMenu.id | getMenuProducts | async) as products'>
+        <ng-container *ngIf='products?.length; else loadingProducts'>
+          <ng-container [ngSwitch]='step'>
+            <app-step-1 [editing]='true' [menu]='selectedMenu' [products]='products' [principal]='editingOrder?.products?.principal'
+              [acompanamientos]='editingOrder?.products?.acompanamientos' (select)='onSelect($event.principal, $event.acompanamientos)'
+              *ngSwitchCase='1'></app-step-1>
 
-        <app-step-2 [editing]='true' [menu]='selectedMenu' [bebida]='editingOrder?.products?.bebida' (select)='onSelectBebida($event)'
-          *ngSwitchCase='2'></app-step-2>
+            <app-step-2 [editing]='true' [menu]='selectedMenu' [bebida]='editingOrder?.products?.bebida' (select)='onSelectBebida($event)'
+              *ngSwitchCase='2'></app-step-2>
 
-        <app-step-3 [editing]='true' [paid]='order.paid.flag' [previousPrice]='order.price' [menu]='selectedMenu' [principal]='editingOrder?.products?.principal'
-          [acompanamientos]='editingOrder?.products?.acompanamientos' [bebida]='editingOrder?.products?.bebida' (confirm)='onSubmit($event?.tortillas, $event?.total)'
-          *ngSwitchCase='3'></app-step-3>
+            <app-step-3 [editing]='true' [paid]='order.paid.flag' [previousPrice]='order.price' [menu]='selectedMenu' [principal]='editingOrder?.products?.principal'
+              [acompanamientos]='editingOrder?.products?.acompanamientos' [bebida]='editingOrder?.products?.bebida' (confirm)='onSubmit($event?.tortillas, $event?.total)'
+              *ngSwitchCase='3'></app-step-3>
 
-        <app-step-4 [editing]='true' *ngSwitchCase='4'></app-step-4>
+            <app-step-4 [editing]='true' *ngSwitchCase='4'></app-step-4>
+          </ng-container>
+        </ng-container>
+        <ng-template #loadingProducts>
+          <h2>Cargando productos...</h2>
+        </ng-template>
       </ng-container>
     </ng-template>
     <ng-container *ngIf='!order'>

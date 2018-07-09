@@ -34,6 +34,10 @@ export class Step2Component implements OnInit {
     this.router.navigate(['../', 1], { relativeTo: this.route });
   }
 
+  onSelectBebida(bebida: Product) {
+    this.bebida = bebida;
+  }
+
   onSelect() {
     this.select.emit(this.bebida);
   }

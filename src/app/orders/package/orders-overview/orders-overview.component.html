@@ -1,45 +1,62 @@
 <ng-container *ngIf='!$loading; else loading'>
-  <div class="row">
+  <div class="row text-center">
     <ng-container *ngIf='orders?.length'>
-      <div class="col-12 col-sm-6 col-lg-3">
+      <div class="col-12 col-md-6 col-lg-4">
         <h6>
           <b>
-            Principales
+            Estados de órdenes
           </b>
         </h6>
-        <p *ngFor='let principal of principales'>
-          {{ principal?.count }} x {{ principal?.label }}  
+        <p class='status-count' *ngFor='let status of statuses; isLast as last'>
+          {{ status?.amount }} x {{ status?.label }}
         </p>
-      </div>
-      <div class="col-12 col-sm-6 col-lg-3">
         <h6>
-          <b>
-            Acompañamientos
-          </b>
+          <b>Total : {{ orders?.length }}</b>
         </h6>
-        <p *ngFor='let ac of acompanamientos'>
-          {{ ac?.count }} x {{ ac?.label }}  
-          </p>
       </div>
-      <div class="col-12 col-sm-6 col-lg-3">
-        <h6>
-          <b>
-            Bebidas
-          </b>
-        </h6>
-        <p *ngFor='let bebida of bebidas'>
-          {{ bebida?.count }} x {{ bebida?.label }}  
-          </p>
-      </div>
-      <div class="col-12 col-sm-6 col-lg-3">
-        <h6>
-          <b>
-            Tortillas
-          </b>
-        </h6>
-        <p>
-          {{ tortillas }}
-        </p>
+      <div class="col-12 col-md-6 col-lg-8">
+        <div class="row">
+          <div class="col-12 col-sm-6 col-lg-3">
+            <h6>
+              <b>
+                Principales
+              </b>
+            </h6>
+            <p *ngFor='let principal of principales'>
+              {{ principal?.amount }} x {{ principal?.label }}
+            </p>
+          </div>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <h6>
+              <b>
+                Acompañamientos
+              </b>
+            </h6>
+            <p *ngFor='let ac of acompanamientos'>
+              {{ ac?.amount }} x {{ ac?.label }}
+            </p>
+          </div>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <h6>
+              <b>
+                Bebidas
+              </b>
+            </h6>
+            <p *ngFor='let bebida of bebidas'>
+              {{ bebida?.amount }} x {{ bebida?.label }}
+            </p>
+          </div>
+          <div class="col-12 col-sm-6 col-lg-3">
+            <h6>
+              <b>
+                Tortillas
+              </b>
+            </h6>
+            <p>
+              {{ tortillas }}
+            </p>
+          </div>
+        </div>
       </div>
     </ng-container>
   </div>

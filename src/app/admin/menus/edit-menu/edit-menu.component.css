@@ -1,3 +1,11 @@
 .mat-form-field{
   width: 100%;
 }
+.available{
+}
+.not-available{
+  text-decoration: line-through;
+}
+.product-name{
+  display: inline-block;
+}

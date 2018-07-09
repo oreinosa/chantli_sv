@@ -22,7 +22,7 @@ export class OrdersService {
 
   private $payingUser = new Subject<User>();
 
-  private $mode = new BehaviorSubject<string>('pagar');
+  private $mode = new BehaviorSubject<string>('empacar');
 
   constructor(
     private fs: AngularFirestore,

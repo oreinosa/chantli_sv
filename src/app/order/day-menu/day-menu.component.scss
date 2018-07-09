@@ -4,9 +4,13 @@
 }
 .mat-card{
   background-color: $accent;
-  color: white!important;
+  font-weight: 500;
+  // color: white!important;
   .mat-card-subtitle{
-    color: white!important;  
+    // color: white!important;  
+  }
+  .mat-card-content{
+    min-height: 130px;
   }
 }
 

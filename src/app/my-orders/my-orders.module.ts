@@ -11,6 +11,7 @@ import { EditOrderComponent } from './edit-order/edit-order.component';
 import { CancelOrderComponent } from './cancel-order/cancel-order.component';
 import { FeedbackOrderComponent } from './feedback-order/feedback-order.component';
 import { OrderDetailsComponent } from './order-details/order-details.component';
+import { ListOrderComponent } from './list-order/list-order.component';
 
 @NgModule({
   imports: [
@@ -23,7 +24,8 @@ import { OrderDetailsComponent } from './order-details/order-details.component';
     EditOrderComponent,
     CancelOrderComponent,
     FeedbackOrderComponent,
-    OrderDetailsComponent
+    OrderDetailsComponent,
+    ListOrderComponent
   ],
   providers: [MyOrdersService]
 })

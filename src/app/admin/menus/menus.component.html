@@ -36,7 +36,7 @@
                       <b>Platos principales</b>
                     </p>
                     <ul>
-                      <li *ngFor='let product of products | productsByCategory:"Principal"'>
+                      <li *ngFor='let product of products | productsByCategory:"Principal"' [ngStyle]='{"text-decoration": (product?.notAvailable ? "line-through" : "none")}'>
                         {{ product.name }}
                       </li>
                     </ul>
@@ -46,7 +46,7 @@
                       <b>Acompañamientos</b>
                     </p>
                     <ul>
-                      <li *ngFor='let product of products | productsByCategory:"Acompañamiento"'>
+                      <li *ngFor='let product of products | productsByCategory:"Acompañamiento"' [ngStyle]='{"text-decoration": (product?.notAvailable ? "line-through" : "none")}'>
                         {{ product.name }}
                       </li>
                     </ul>
